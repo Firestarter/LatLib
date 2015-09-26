@@ -14,31 +14,33 @@ public class LMJsonUtils
 	public static boolean jsonPrettyPrinting = false;
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
 	
-	public static void register(Class<?> c, Object o)
+	public static final void register(Class<?> c, Object o)
 	{
 		typeAdapters.put(c, o);
 		gson = null;
 	}
 	
-	private static void updateGson()
+	static
 	{
-		GsonBuilder gb = new GsonBuilder();
-		
-		gb.registerTypeHierarchyAdapter(IntList.class, new IntList.Serializer());
-		gb.registerTypeHierarchyAdapter(IntMap.class, new IntMap.Serializer());
-		gb.registerTypeHierarchyAdapter(UUID.class, new UUIDSerializer());
-		
-		for(int i = 0; i < typeAdapters.size(); i++)
-			gb.registerTypeAdapter(typeAdapters.keys.get(i), typeAdapters.values.get(i));
-		
-		gson = gb.create();
-		gb.setPrettyPrinting();
-		gson_pretty = gb.create();
+		register(IntList.class, new IntList.Serializer());
+		register(IntMap.class, new IntMap.Serializer());
+		register(UUID.class, new UUIDTypeAdapterLM());
 	}
 	
 	public static Gson getGson()
 	{
-		if(gson == null || gson_pretty == null) updateGson();
+		if(gson == null || gson_pretty == null)
+		{
+			GsonBuilder gb = new GsonBuilder();
+			
+			for(int i = 0; i < typeAdapters.size(); i++)
+				gb.registerTypeAdapter(typeAdapters.keys.get(i), typeAdapters.values.get(i));
+			
+			gson = gb.create();
+			gb.setPrettyPrinting();
+			gson_pretty = gb.create();
+		}
+		
 		return jsonPrettyPrinting ? gson_pretty : gson;
 	}
 	
