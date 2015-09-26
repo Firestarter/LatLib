@@ -13,12 +13,13 @@ public class LMJsonUtils
 	private static Gson gson_pretty = null;
 	public static boolean jsonPrettyPrinting = false;
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
+	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<TypeAdapterFactory>();
 	
 	public static final void register(Class<?> c, Object o)
-	{
-		typeAdapters.put(c, o);
-		gson = null;
-	}
+	{ typeAdapters.put(c, o); gson = null; gson_pretty = null; }
+	
+	public static final void registerFactory(TypeAdapterFactory f)
+	{ typeAdapterFactories.add(f); gson = null; gson_pretty = null; }
 	
 	static
 	{
@@ -35,6 +36,11 @@ public class LMJsonUtils
 			
 			for(int i = 0; i < typeAdapters.size(); i++)
 				gb.registerTypeAdapter(typeAdapters.keys.get(i), typeAdapters.values.get(i));
+			
+			for(int i = 0; i < typeAdapterFactories.size(); i++)
+				gb.registerTypeAdapterFactory(typeAdapterFactories.get(i));
+			
+			System.out.println(typeAdapters + " + " + typeAdapterFactories);
 			
 			gson = gb.create();
 			gb.setPrettyPrinting();

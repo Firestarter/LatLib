@@ -272,30 +272,6 @@ public class LMStringUtils
 		return sb.toString();
 	}
 	
-	public static String formatTime(long secs, boolean wrap)
-	{
-		long secs1 = secs;
-		if(secs < 0L) secs1 = -secs1;
-		if(wrap) secs1 %= DAY24;
-		
-		long h = (secs1 / 3600L);
-		if(wrap) h %= 24L;
-		
-		long m = (secs1 / 60L) % 60L;
-		long s = secs1 % 60L;
-		
-		StringBuilder sb = new StringBuilder();
-		if(h < 10) sb.append('0');
-		sb.append(h);
-		sb.append(':');
-		if(m < 10) sb.append('0');
-		sb.append(m);
-		sb.append(':');
-		if(s < 10) sb.append('0');
-		sb.append(s);
-		return sb.toString();
-	}
-	
 	public static String formatInt(int i)
 	{ return formatInt(i, 1); }
 	
