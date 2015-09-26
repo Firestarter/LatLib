@@ -15,7 +15,7 @@ public class LMStringUtils
 	{
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String s = null; while((s = br.readLine()) != null) sb.append(s);
+		String s = null; while((s = br.readLine()) != null) { sb.append(s); sb.append('\n'); }
 		return sb.toString();
 	}
 	
