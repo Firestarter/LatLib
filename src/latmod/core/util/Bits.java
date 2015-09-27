@@ -1,5 +1,7 @@
 package latmod.core.util;
 
+import java.util.UUID;
+
 /** Made by LatvianModder */
 public class Bits
 {
@@ -85,59 +87,72 @@ public class Bits
 	
 	// - //
 	
-	public static int toUShort(byte[] b)
+	public static int toUShort(byte[] b, int off)
 	{
-		int ch1 = b[0] & FF;
-		int ch2 = b[1] & FF;
+		int ch1 = b[off + 0] & FF;
+		int ch2 = b[off + 1] & FF;
 		return (ch1 << 8) + (ch2 << 0);
 	}
 	
-	public static int toInt(byte[] b)
+	public static int toInt(byte[] b, int off)
 	{
-		int ch1 = b[0] & FF;
-		int ch2 = b[1] & FF;
-		int ch3 = b[2] & FF;
-		int ch4 = b[3] & FF;
+		int ch1 = b[off + 0] & FF;
+		int ch2 = b[off + 1] & FF;
+		int ch3 = b[off + 2] & FF;
+		int ch4 = b[off + 3] & FF;
 		return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0);
 	}
 	
-	public static long toLong(byte[] b)
+	public static long toLong(byte[] b, int off)
 	{
-		return (((long)b[0] << 56)
-		+ ((long)(b[1] & FF) << 48)
-		+ ((long)(b[2] & FF) << 40)
-		+ ((long)(b[3] & FF) << 32)
-		+ ((long)(b[4] & FF) << 24)
-		+ ((b[5] & FF) << 16)
-		+ ((b[6] & FF) << 8)
-		+ ((b[7] & FF) << 0));
+		return (((long)b[off + 0] << 56)
+		+ ((long)(b[off + 1] & FF) << 48)
+		+ ((long)(b[off + 2] & FF) << 40)
+		+ ((long)(b[off + 3] & FF) << 32)
+		+ ((long)(b[off + 4] & FF) << 24)
+		+ ((b[off + 5] & FF) << 16)
+		+ ((b[off + 6] & FF) << 8)
+		+ ((b[off + 7] & FF) << 0));
+	}
+	
+	public static UUID toUUID(byte[] b, int off)
+	{
+		long msb = toLong(b, off);
+		long lsb = toLong(b, off + 8);
+		return new UUID(msb, lsb);
 	}
 	
 	// - //
 	
-	public static void fromUShort(byte[] b, int v)
+	public static void fromUShort(byte[] b, int off, int v)
 	{
-		b[0] = (byte)(v >>> 8);
-		b[1] = (byte)(v >>> 0);
+		b[off + 0] = (byte)(v >>> 8);
+		b[off + 1] = (byte)(v >>> 0);
 	}
 	
-	public static void fromInt(byte[] b, int v)
+	public static void fromInt(byte[] b, int off, int v)
 	{
-		b[0] = (byte)(v >>> 24);
-		b[1] = (byte)(v >>> 16);
-		b[2] = (byte)(v >>> 8);
-		b[3] = (byte)(v >>> 0);
+		b[off + 0] = (byte)(v >>> 24);
+		b[off + 1] = (byte)(v >>> 16);
+		b[off + 2] = (byte)(v >>> 8);
+		b[off + 3] = (byte)(v >>> 0);
 	}
 	
-	public static void fromLong(byte[] b, long v)
+	public static void fromLong(byte[] b, int off, long v)
 	{
-		b[0] = (byte)(v >>> 56);
-		b[1] = (byte)(v >>> 48);
-		b[2] = (byte)(v >>> 40);
-		b[3] = (byte)(v >>> 32);
-		b[4] = (byte)(v >>> 24);
-		b[5] = (byte)(v >>> 16);
-		b[6] = (byte)(v >>> 8);
-		b[7] = (byte)(v >>> 0);
+		b[off + 0] = (byte)(v >>> 56);
+		b[off + 1] = (byte)(v >>> 48);
+		b[off + 2] = (byte)(v >>> 40);
+		b[off + 3] = (byte)(v >>> 32);
+		b[off + 4] = (byte)(v >>> 24);
+		b[off + 5] = (byte)(v >>> 16);
+		b[off + 6] = (byte)(v >>> 8);
+		b[off + 7] = (byte)(v >>> 0);
+	}
+	
+	public static void fromUUID(byte[] b, int off, UUID uuid)
+	{
+		fromLong(b, off, uuid.getMostSignificantBits());
+		fromLong(b, off + 8, uuid.getLeastSignificantBits());
 	}
 }

@@ -13,6 +13,14 @@ public class Converter
 		ai[i] = b[i] & 0xFF; return ai;
 	}
 	
+	public static int[] toInts(short[] b)
+	{
+		if(b == null) return null;
+		int ai[] = new int[b.length];
+		for(int i = 0; i < ai.length; i++)
+		ai[i] = b[i]; return ai;
+	}
+	
 	public static byte[] toBytes(int[] b)
 	{
 		if(b == null) return null;

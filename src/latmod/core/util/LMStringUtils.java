@@ -341,14 +341,12 @@ public class LMStringUtils
 	public static UUID fromString(String s)
 	{ return UUID.fromString(s.replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5")); }
 	
-	public static byte[] toBytes(String s, boolean utf)
+	public static byte[] toBytes(String s)
 	{
 		if(s == null) return null;
 		else if(s.length() == 0) return new byte[0];
 		else
 		{
-			//if(utf) {}
-			
 			byte[] b = new byte[s.length()];
 			for(int i = 0; i < b.length; i++)
 				b[i] = (byte)s.charAt(i);
@@ -356,14 +354,12 @@ public class LMStringUtils
 		}
 	}
 	
-	public static String fromBytes(byte[] b, boolean utf)
+	public static String fromBytes(byte[] b)
 	{
 		if(b == null) return null;
 		else if(b.length == 0) return "";
 		else
 		{
-			//if(utf) {}
-			
 			char[] c = new char[b.length];
 			for(int i = 0; i < b.length; i++)
 				c[i] = (char)(b[i] & 0xFF);

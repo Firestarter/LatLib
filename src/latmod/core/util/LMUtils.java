@@ -1,7 +1,7 @@
 package latmod.core.util;
 import java.lang.reflect.Constructor;
 import java.net.*;
-import java.util.Comparator;
+import java.util.*;
 
 /** Made by LatvianModder */
 public class LMUtils
@@ -32,10 +32,10 @@ public class LMUtils
 		return (E) c.newInstance();
 	}
 	
-	public static FastList<Package> getAllPackages()
+	public static Package[] getAllPackages()
 	{
-		FastList<Package> p = FastList.asList(Package.getPackages());
-		p.sort(packageComparator);
+		Package[] p = Package.getPackages();
+		Arrays.sort(p, packageComparator);
 		return p;
 	}
 	

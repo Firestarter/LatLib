@@ -40,7 +40,7 @@ public class LMJsonUtils
 			for(int i = 0; i < typeAdapterFactories.size(); i++)
 				gb.registerTypeAdapterFactory(typeAdapterFactories.get(i));
 			
-			System.out.println(typeAdapters + " + " + typeAdapterFactories);
+			//System.out.println(typeAdapters + " + " + typeAdapterFactories);
 			
 			gson = gb.create();
 			gb.setPrettyPrinting();
@@ -93,20 +93,4 @@ public class LMJsonUtils
 	
 	public static <E> Type getListType(Type E)
 	{ return new TypeToken<List<E>>() {}.getType(); }
-	
-	public static String formatJson(String s, boolean array)
-	{
-		if(s == null) return null;
-		s = s.trim();
-		
-		char c0 = array ? '[' : '{';
-		char c1 = array ? ']' : '}';
-		
-		if(s.length() < 2) return c0 + "" + c1;
-		StringBuilder sb = new StringBuilder();
-		if(s.charAt(0) != c0) sb.append(c0);
-		sb.append(s);
-		if(s.charAt(s.length() - 1) != c1) sb.append(c1);
-		return sb.toString();
-	}
 }
