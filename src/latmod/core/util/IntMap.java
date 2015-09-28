@@ -130,7 +130,7 @@ public class IntMap
 			
 			for(Map.Entry<String, JsonElement> e : o.entrySet())
 			{
-				Integer i = MathHelperLM.decode(e.getKey());
+				Integer i = Converter.decode(e.getKey());
 				if(i != null) map.put(i.intValue(), e.getValue().getAsInt());
 			}
 			

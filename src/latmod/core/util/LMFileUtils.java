@@ -26,6 +26,8 @@ public class LMFileUtils
 	
 	public static File newFile(File f)
 	{
+		if(f == null) return null;
+		
 		try
 		{
 			if(!f.exists())

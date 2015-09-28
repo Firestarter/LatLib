@@ -116,8 +116,26 @@ public class Converter
 		return il;
 	}
 	
-	public static int toIntDecoded(String s)
+	public static int decodeInt(String s)
 	{ return Integer.decode(s); }
+	
+	public static Integer decode(String s)
+	{
+		try { Integer i = Integer.decode(s); return i; }
+		catch(Exception e) { } return null;
+	}
+	
+	public static boolean canParseInt(String s)
+	{
+		try { Integer.parseInt(s); return true; }
+		catch(Exception e) { } return false;
+	}
+	
+	public static boolean canParseDouble(String s)
+	{
+		try { Double.parseDouble(s); return true; }
+		catch(Exception e) { } return false;
+	}
 	
 	public static Integer toInt(String text)
 	{

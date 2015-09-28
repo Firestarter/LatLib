@@ -181,18 +181,6 @@ public class MathHelperLM
 	public static float toSmallFloat(float d)
 	{ long i = (int)(d * 100F); return i / 100F; }
 	
-	public static Integer decode(String s)
-	{
-		try { Integer i = Integer.decode(s); return i; }
-		catch(Exception e) { } return null;
-	}
-	
-	public static boolean canParseInt(String s)
-	{
-		try { Integer.parseInt(s); return true; }
-		catch(Exception e) { } return false;
-	}
-	
 	public static double map(double val, double min1, double max1, double min2, double max2)
 	{ return min2 + (max2 - min2) * ((val - min1) / (max1 - min1)); }
 	
