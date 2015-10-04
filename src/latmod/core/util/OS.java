@@ -7,12 +7,10 @@ public enum OS
 	OSX,
 	OTHER;
 	
-	private static OS current = null;
+	public static final OS current = get();
+	public static final boolean is64 = System.getProperty("sun.arch.data.model").equals("64");
 	
-	public static OS get()
-	{ return (current == null) ? (current = get0()) : current; }
-	
-	private static OS get0()
+	private static OS get()
 	{
 		String s = System.getProperty("os.name");
 		if(s == null || s.isEmpty()) return OTHER;

@@ -34,7 +34,7 @@ public class Converter
 		if(i == null) return null;
 		Integer ai[] = new Integer[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = Integer.valueOf(i[j]); return ai;
 	}
 	
 	public static int[] toInts(Integer[] i)
@@ -42,7 +42,23 @@ public class Converter
 		if(i == null) return null;
 		int ai[] = new int[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = i[j].intValue(); return ai;
+	}
+	
+	public static Float[] fromFloats(float[] i)
+	{
+		if(i == null) return null;
+		Float ai[] = new Float[i.length];
+		for(int j = 0; j < ai.length; j++)
+		ai[j] = Float.valueOf(i[j]); return ai;
+	}
+	
+	public static float[] toFloats(Float[] i)
+	{
+		if(i == null) return null;
+		float ai[] = new float[i.length];
+		for(int j = 0; j < ai.length; j++)
+		ai[j] = i[j].floatValue(); return ai;
 	}
 	
 	public static Double[] fromDoubles(double[] i)
@@ -50,7 +66,7 @@ public class Converter
 		if(i == null) return null;
 		Double ai[] = new Double[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = Double.valueOf(i[j]); return ai;
 	}
 	
 	public static double[] toDoubles(Double[] i)
@@ -58,7 +74,7 @@ public class Converter
 		if(i == null) return null;
 		double ai[] = new double[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = i[j].doubleValue(); return ai;
 	}
 	
 	public static Byte[] fromBytes(byte[] i)
@@ -66,7 +82,7 @@ public class Converter
 		if(i == null) return null;
 		Byte ai[] = new Byte[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = Byte.valueOf(i[j]); return ai;
 	}
 	
 	public static byte[] toBytes(Byte[] i)
@@ -74,7 +90,7 @@ public class Converter
 		if(i == null) return null;
 		byte ai[] = new byte[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = i[j].byteValue(); return ai;
 	}
 	
 	public static double[] toDoubles(float... f)
@@ -90,7 +106,7 @@ public class Converter
 		if(i == null) return null;
 		Boolean ai[] = new Boolean[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = Boolean.valueOf(i[j]); return ai;
 	}
 	
 	public static boolean[] toBooleans(Boolean[] i)
@@ -98,7 +114,7 @@ public class Converter
 		if(i == null) return null;
 		boolean ai[] = new boolean[i.length];
 		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j]; return ai;
+		ai[j] = i[j].booleanValue(); return ai;
 	}
 	
 	public static void toBools(boolean[] bools, IntList idx, boolean isTrue)

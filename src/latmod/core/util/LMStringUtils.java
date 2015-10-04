@@ -215,7 +215,10 @@ public class LMStringUtils
 	public static String firstUppercase(String s)
 	{
 		if(s == null || s.length() == 0) return s;
-		return Character.toUpperCase(s.charAt(0)) + (s.length() > 1 ? s.substring(1) : "");
+		char c = Character.toUpperCase(s.charAt(0));
+		if(s.length() == 1) return Character.toString(c);
+		StringBuilder sb = new StringBuilder();
+		sb.append(c); sb.append(s.substring(1)); return sb.toString();
 	}
 	
 	public static boolean areStringsEqual(String s0, String s1)
@@ -243,18 +246,27 @@ public class LMStringUtils
 	
 	public static boolean contains(String[] s, String s1)
 	{
+		if(s == null || s1 == null || s.length == 0) return false;
 		for(int i = 0; i < s.length; i++)
 			if(s[i] != null && (s[i] == s1 || s[i].equals(s1)))
 				return true;
 		return false;
 	}
 	
-	public static String substring(String s, String pre, String post, boolean ignoreSpace)
+	public static String substring(String s, String pre, String post)
 	{
 		int preI = s.indexOf(pre);
 		int postI = s.lastIndexOf(post);
 		String s1 = s.substring(preI + 1, postI);
-		return ignoreSpace ? s1.trim() : s1;
+		return s1;
+	}
+	
+	public static String substring(String s, char pre, char post)
+	{
+		int preI = s.indexOf(pre);
+		int postI = s.lastIndexOf(post);
+		String s1 = s.substring(preI + 1, postI);
+		return s1;
 	}
 	
 	public static String removeAllWhitespace(String s)
@@ -266,7 +278,7 @@ public class LMStringUtils
 		{
 			char c = s.charAt(i);
 			if(!Character.isWhitespace(c))
-			sb.append(c);
+				sb.append(c);
 		}
 		
 		return sb.toString();
@@ -277,20 +289,24 @@ public class LMStringUtils
 	
 	public static String formatInt(int i, int z)
 	{
-		String s0 = "" + i;
+		String s0 = Integer.toString(i);
 		if(z <= 0) return s0;
 		z += 1;
 		
-		StringBuilder s = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		
-		for(int j = 0; j < z - s0.length(); j++)
-			s.append('0');
+		int l = z - s0.length();
+		for(int j = 0; j < l; j++)
+			sb.append('0');
 		
-		s.append(i);
-		return s.toString();
+		sb.append(i);
+		return sb.toString();
 	}
 	
 	public static String getTimeString(long millis)
+	{ return getTimeString(millis, true); }
+	
+	public static String getTimeString(long millis, boolean days)
 	{
 		long secs = millis / 1000L;
 		StringBuilder sb = new StringBuilder();
@@ -299,7 +315,7 @@ public class LMStringUtils
 		long m = (secs / 60L) % 60L;
 		long s = secs % 60L;
 		
-		if(secs >= DAY24)
+		if(days && secs >= DAY24)
 		{
 			sb.append(secs / DAY24);
 			//sb.append("d ");
@@ -339,7 +355,20 @@ public class LMStringUtils
     { long hi = 1L << (digits * 4); return Long.toHexString(hi | (val & (hi - 1))).substring(1); }
 	
 	public static UUID fromString(String s)
-	{ return UUID.fromString(s.replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5")); }
+	{
+		if(s.indexOf('-') != -1) return UUID.fromString(s);
+		
+		int l = s.length();
+		StringBuilder sb = new StringBuilder(32);
+		for(int i = 0; i < l; i++)
+		{
+			sb.append(s.charAt(i));
+			if(i == 7 || i == 11 || i == 15 || i == 19)
+				sb.append('-');
+		}
+		
+		return UUID.fromString(sb.toString());
+	}
 	
 	public static byte[] toBytes(String s)
 	{

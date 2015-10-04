@@ -14,6 +14,7 @@ public class LMJsonUtils
 	public static boolean jsonPrettyPrinting = false;
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
 	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<TypeAdapterFactory>();
+	private static boolean inited = false;
 	
 	public static final void register(Class<?> c, Object o)
 	{ typeAdapters.put(c, o); gson = null; gson_pretty = null; }
@@ -21,15 +22,19 @@ public class LMJsonUtils
 	public static final void registerFactory(TypeAdapterFactory f)
 	{ typeAdapterFactories.add(f); gson = null; gson_pretty = null; }
 	
-	static
-	{
-		register(IntList.class, new IntList.Serializer());
-		register(IntMap.class, new IntMap.Serializer());
-		register(UUID.class, new UUIDTypeAdapterLM());
-	}
-	
 	public static Gson getGson()
 	{
+		if(!inited)
+		{
+			inited = true;
+			
+			register(IntList.class, new IntList.Serializer());
+			register(IntMap.class, new IntMap.Serializer());
+			register(UUID.class, new UUIDTypeAdapterLM());
+			
+			registerFactory(new EnumSerializerLM());
+		}
+		
 		if(gson == null || gson_pretty == null)
 		{
 			GsonBuilder gb = new GsonBuilder();

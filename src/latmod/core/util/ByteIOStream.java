@@ -23,29 +23,30 @@ public final class ByteIOStream
 	public ByteIOStream()
 	{ this(16); }
 	
-	public byte[] toByteArray(boolean compressed)
+	public byte[] toByteArray()
 	{
-		if(compressed)
-		{
-			//FIXME:
-			/*
-			try
-			{
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				GZIPOutputStream os = new GZIPOutputStream(new BufferedOutputStream(bos));
-				os.write(toByteArray(false));
-				os.close();
-				return bos.toByteArray();
-			}
-			catch(Exception e)
-			{ e.printStackTrace(); }
-			*/
-		}
-		
 		if(pos == bytes.length) return bytes;
 		byte[] b = new byte[pos];
 		System.arraycopy(bytes, 0, b, 0, pos);
 		return b;
+	}
+	
+	public byte[] toCompressedByteArray()
+	{
+		/*
+		try
+		{
+			BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(toByteArray()));
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			LMUtils.moveBytes(is, new GZIPOutputStream(new BufferedOutputStream(os)), true);
+			return os.toByteArray();
+		}
+		catch(Exception e)
+		{ e.printStackTrace(); }
+		
+		return null;
+		*/
+		return toByteArray();
 	}
 	
 	public void expand(int c)
@@ -58,32 +59,37 @@ public final class ByteIOStream
 		}
 	}
 	
-	public void setData(byte[] b, boolean compressed)
+	public void setData(byte[] b)
 	{
 		bytes = b;
 		pos = 0;
-		
-		if(compressed && b != null)
+	}
+	
+	public void setCompressedData(byte[] b)
+	{
+		/*
+		setData(new byte[0]);
+		if(b != null && b.length > 0)
 		{
-			//FIXME:
-			/*
 			try
 			{
 				GZIPInputStream is = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(b)));
-				b = new byte[is.available()];
-				is.read(b);
-				is.close();
-				writeRawBytes(b);
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				LMUtils.moveBytes(is, new BufferedOutputStream(os), true);
+				setData(os.toByteArray());
 			}
 			catch(Exception e)
 			{ e.printStackTrace(); }
-			*/
-		}
+		}*/
+		setData(b);
 	}
 	
 	public String toString()
+	{ return toString(false); }
+	
+	public String toString(boolean compressed)
 	{
-		byte[] b = toByteArray(true);
+		byte[] b = compressed ? toCompressedByteArray() : toByteArray();
 		StringBuilder sb = new StringBuilder();
 		sb.append("[ (");
 		sb.append(b.length);
@@ -135,11 +141,11 @@ public final class ByteIOStream
 	{
 		int l = readUShort();
 		
-		if(utf_bytes == null || utf_chars == null || utf_bytes.length < l)
-		{
+		if(utf_bytes == null || utf_bytes.length < l)
 			utf_bytes = new byte[l * 2];
+		
+		if(utf_chars == null || utf_chars.length < l)
 			utf_chars = new char[l * 2];
-		}
 		
 		int c, c2, c3, c1 = 0, cac = 0;
 		

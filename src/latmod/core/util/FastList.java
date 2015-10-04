@@ -58,16 +58,16 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 		return false;
 	}
 	
-	private void expand()
+	private void expand(int i)
 	{
-		E[] o = (E[])new Object[objects.length + incr];
+		E[] o = (E[])new Object[objects.length + i];
 		System.arraycopy(objects, 0, o, 0, size);
 		objects = o;
 	}
 	
 	public boolean add(E e)
 	{
-		if(size == objects.length) expand();
+		if(size == objects.length) expand(incr);
 		objects[size++] = e;
 		return true;
 	}
@@ -248,14 +248,25 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	public boolean addAll(Collection<? extends E> l)
 	{ if(l != null && l.size() > 0) addAll(l.toArray()); return true; }
 	
+	public boolean addAll(FastList<? extends E> l)
+	{
+		if(l != null && l.size > 0)
+		{
+			int s = l.size;
+			expand(Math.max(incr, s));
+			System.arraycopy(l.objects, 0, objects, size, s);
+			size += s;
+		}
+		
+		return true;
+	}
+	
 	public void addAll(Object[] e)
 	{
 		if(e != null && e.length > 0)
 		{
-			//TODO: Improve me
 			int s = e.length;
-			int incr0 = incr; incr = size + s;
-			expand(); incr = incr0;
+			expand(Math.max(incr, s));
 			System.arraycopy(e, 0, objects, size, s);
 			size += s;
 		}

@@ -1,4 +1,5 @@
 package latmod.core.util;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.*;
 import java.util.*;
@@ -102,4 +103,15 @@ public class LMUtils
 	
 	public static long millis()
 	{ return System.currentTimeMillis(); }
+	
+	public static void moveBytes(InputStream is, OutputStream os, boolean close) throws Exception
+	{
+		byte[] buffer = new byte[1024];
+		int len;
+		while ((len = is.read(buffer, 0, buffer.length)) > 0)
+			os.write(buffer, 0, len);
+		os.flush();
+		
+		if(close) { is.close(); os.close(); }
+	}
 }
