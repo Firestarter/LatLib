@@ -11,7 +11,7 @@ public class LMStringUtils
 	public static final String STRIP_SEP = ", ";
 	public static final String ALLOWED_TEXT_CHARS = "!@#$%^&*()_+ -=\\/,.<>?\'\"[]{}|;:`~";
 	
-	public static String toString(InputStream is) throws Exception
+	public static String readString(InputStream is) throws Exception
 	{
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -28,7 +28,7 @@ public class LMStringUtils
 		al.add(s1[i].trim()); return al;
 	}
 	
-	public static String toString(List<String> l)
+	public static String fromStringList(List<String> l)
 	{
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < l.size(); i++)
@@ -36,7 +36,7 @@ public class LMStringUtils
 		return sb.toString();
 	}
 	
-	public static FastList<String> toStringList(InputStream is) throws Exception
+	public static FastList<String> readStringList(InputStream is) throws Exception
 	{
 		FastList<String> l = new FastList<String>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -257,16 +257,14 @@ public class LMStringUtils
 	{
 		int preI = s.indexOf(pre);
 		int postI = s.lastIndexOf(post);
-		String s1 = s.substring(preI + 1, postI);
-		return s1;
+		return s.substring(preI + 1, postI);
 	}
 	
 	public static String substring(String s, char pre, char post)
 	{
 		int preI = s.indexOf(pre);
 		int postI = s.lastIndexOf(post);
-		String s1 = s.substring(preI + 1, postI);
-		return s1;
+		return s.substring(preI + 1, postI);
 	}
 	
 	public static String removeAllWhitespace(String s)
@@ -343,16 +341,20 @@ public class LMStringUtils
 		long msb = id.getMostSignificantBits();
 		long lsb = id.getLeastSignificantBits();
 		StringBuilder sb = new StringBuilder(32);
-		sb.append(digits(msb >> 32, 8));
-		sb.append(digits(msb >> 16, 4));
-		sb.append(digits(msb, 4));
-		sb.append(digits(lsb >> 48, 4));
-		sb.append(digits(lsb, 12));
+		digitsUUID(sb, msb >> 32, 8);
+		digitsUUID(sb, msb >> 16, 4);
+		digitsUUID(sb, msb, 4);
+		digitsUUID(sb, lsb >> 48, 4);
+		digitsUUID(sb, lsb, 12);
 		return sb.toString();
 	}
 	
-    private static String digits(long val, int digits)
-    { long hi = 1L << (digits * 4); return Long.toHexString(hi | (val & (hi - 1))).substring(1); }
+    private static void digitsUUID(StringBuilder sb, long val, int digits)
+    {
+    	long hi = 1L << (digits * 4);
+    	String s = Long.toHexString(hi | (val & (hi - 1)));
+    	sb.append(s, 1, s.length());
+    }
 	
 	public static UUID fromString(String s)
 	{

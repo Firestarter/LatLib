@@ -11,7 +11,7 @@ public class LMJsonUtils
 {
 	private static Gson gson = null;
 	private static Gson gson_pretty = null;
-	public static boolean jsonPrettyPrinting = false;
+	private static boolean jsonPrettyPrinting = false;
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
 	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<TypeAdapterFactory>();
 	private static boolean inited = false;
@@ -55,6 +55,9 @@ public class LMJsonUtils
 		return jsonPrettyPrinting ? gson_pretty : gson;
 	}
 	
+	public static void setPretty(boolean b)
+	{ jsonPrettyPrinting = b; }
+	
 	public static <T> T fromJson(String s, Type t)
 	{
 		if(s == null || s.length() < 2) return null;
@@ -64,7 +67,7 @@ public class LMJsonUtils
 	public static <T> T fromJsonFile(File f, Type t)
 	{
 		if(!f.exists()) return null;
-		try { return fromJson(LMStringUtils.toString(new FileInputStream(f)), t); }
+		try { return fromJson(LMStringUtils.readString(new FileInputStream(f)), t); }
 		catch(Exception e) { e.printStackTrace(); return null; }
 	}
 	
@@ -76,20 +79,19 @@ public class LMJsonUtils
 	
 	public static boolean toJsonFile(File f, Object o)
 	{
-		jsonPrettyPrinting = true;
+		setPretty(true);
 		String s = toJson(o);
-		jsonPrettyPrinting = false;
+		setPretty(false);
 		if(s == null) return false;
 		
 		try
 		{
-			BufferedWriter writer = new BufferedWriter(new FileWriter(LMFileUtils.newFile(f)));
-			writer.write(s);
-			writer.close();
+			LMFileUtils.save(f, s);
 			return true;
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
+		
 		return false;
 	}
 	

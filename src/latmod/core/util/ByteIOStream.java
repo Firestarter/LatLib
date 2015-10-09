@@ -33,20 +33,9 @@ public final class ByteIOStream
 	
 	public byte[] toCompressedByteArray()
 	{
-		/*
-		try
-		{
-			BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(toByteArray()));
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			LMUtils.moveBytes(is, new GZIPOutputStream(new BufferedOutputStream(os)), true);
-			return os.toByteArray();
-		}
-		catch(Exception e)
-		{ e.printStackTrace(); }
-		
+		try { return ByteCompressor.compress(toByteArray()); }
+		catch(Exception e) { e.printStackTrace(); }
 		return null;
-		*/
-		return toByteArray();
 	}
 	
 	public void expand(int c)
@@ -60,28 +49,12 @@ public final class ByteIOStream
 	}
 	
 	public void setData(byte[] b)
-	{
-		bytes = b;
-		pos = 0;
-	}
+	{ bytes = b; pos = 0; }
 	
 	public void setCompressedData(byte[] b)
 	{
-		/*
-		setData(new byte[0]);
-		if(b != null && b.length > 0)
-		{
-			try
-			{
-				GZIPInputStream is = new GZIPInputStream(new BufferedInputStream(new ByteArrayInputStream(b)));
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				LMUtils.moveBytes(is, new BufferedOutputStream(os), true);
-				setData(os.toByteArray());
-			}
-			catch(Exception e)
-			{ e.printStackTrace(); }
-		}*/
-		setData(b);
+		try { setData(ByteCompressor.decompress(b)); }
+		catch(Exception e) { e.printStackTrace(); setData(null); }
 	}
 	
 	public String toString()

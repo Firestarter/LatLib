@@ -87,7 +87,7 @@ public class LMUtils
 	
 	public static String getExternalAddress()
 	{
-		try { return LMStringUtils.toString(new URL("http://checkip.amazonaws.com").openStream()); }
+		try { return LMStringUtils.readString(new URL("http://checkip.amazonaws.com").openStream()); }
 		catch(Exception e) { } return null;
 	}
 	

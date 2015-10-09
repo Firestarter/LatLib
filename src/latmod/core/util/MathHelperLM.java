@@ -14,6 +14,7 @@ public class MathHelperLM
 	public static final float DEG_F = (float)DEG;
 	
 	private static final int SIN_TABLE_SIZE = 65536;
+	private static final int SIN_TABLE_SIZE_1 = SIN_TABLE_SIZE - 1;
 	private static final double[] SIN_TABLE = new double[SIN_TABLE_SIZE];
 	private static final double SIN_SCALE = SIN_TABLE_SIZE / TWO_PI;
 	private static final double COS_SHIFT = SIN_TABLE_SIZE / 4D;
@@ -26,10 +27,10 @@ public class MathHelperLM
 	}
 	
 	public static double sin(double d)
-	{ return SIN_TABLE[(int)(d * SIN_SCALE) & SIN_TABLE_SIZE]; }
+	{ return SIN_TABLE[(int)(d * SIN_SCALE) & SIN_TABLE_SIZE_1]; }
 	
 	public static double cos(double d)
-	{ return SIN_TABLE[(int)(d * SIN_SCALE + COS_SHIFT) & SIN_TABLE_SIZE]; }
+	{ return SIN_TABLE[(int)(d * SIN_SCALE + COS_SHIFT) & SIN_TABLE_SIZE_1]; }
 	
 	public static double tan(double d)
 	{ return sin(d) / cos(d); }

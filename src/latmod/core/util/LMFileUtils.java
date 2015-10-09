@@ -26,17 +26,14 @@ public class LMFileUtils
 	
 	public static File newFile(File f)
 	{
-		if(f == null) return null;
+		if(f == null || f.exists()) return f;
 		
 		try
 		{
-			if(!f.exists())
-			{
-				File pf = f.getParentFile();
-				if(!pf.exists()) pf.mkdirs();
-				f.createNewFile();
-				return f;
-			}
+			File pf = f.getParentFile();
+			if(!pf.exists()) pf.mkdirs();
+			f.createNewFile();
+			return f;
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
@@ -45,16 +42,16 @@ public class LMFileUtils
 	}
 	
 	public static void save(File f, List<String> al) throws Exception
-	{ save(f, LMStringUtils.toString(al)); }
+	{ save(f, LMStringUtils.fromStringList(al)); }
 	
 	public static void save(File f, String s) throws Exception
 	{ BufferedWriter br = new BufferedWriter(new FileWriter(newFile(f))); br.write(s); br.close(); }
 	
 	public static FastList<String> load(File f) throws Exception
-	{ return LMStringUtils.toStringList(new FileInputStream(f)); }
+	{ return LMStringUtils.readStringList(new FileInputStream(f)); }
 	
 	public static String loadAsText(File f) throws Exception
-	{ return LMStringUtils.toString(new FileInputStream(f)); }
+	{ return LMStringUtils.readString(new FileInputStream(f)); }
 	
 	public static boolean downloadFile(String url, File out)
 	{
