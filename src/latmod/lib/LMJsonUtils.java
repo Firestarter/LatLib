@@ -38,6 +38,7 @@ public class LMJsonUtils
 			register(ConfigList.class, new ConfigList.Serializer());
 			register(PrimitiveType.class, new PrimitiveType.Serializer());
 			register(Color.class, new ColorSerializerLM());
+			register(Time.class, new Time.Serializer());
 			registerFactory(new EnumSerializerLM());
 		}
 		

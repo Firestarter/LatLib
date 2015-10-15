@@ -39,6 +39,18 @@ public class LMColorUtils
 	public static int getAlpha(int c)
 	{ return (c >> 24) & 255; }
 	
+	public static float getRedF(int c)
+	{ return getRed(c) / 255F; }
+	
+	public static float getGreenF(int c)
+	{ return getGreen(c) / 255F; }
+	
+	public static float getBlueF(int c)
+	{ return getBlue(c) / 255F; }
+	
+	public static float getAlphaF(int c)
+	{ return getAlpha(c) / 255F; }
+	
 	public static String getHex(int c)
 	{ return '#' + Integer.toHexString(getRGBA(c, 255)).substring(2).toUpperCase(); }
 	
