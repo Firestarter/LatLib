@@ -29,4 +29,12 @@ public abstract class ConfigEntry extends FinalIDObject
 		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id, null);
 		return null;
 	}
+	
+	public void onPreLoaded()
+	{
+	}
+	
+	public void onPostLoaded()
+	{
+	}
 }

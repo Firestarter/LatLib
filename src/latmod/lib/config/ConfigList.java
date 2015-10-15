@@ -58,6 +58,7 @@ public final class ConfigList extends IDObject
 			for(int j = 0; j < g.entries.size(); j++)
 			{
 				ConfigEntry e = g.entries.get(j);
+				e.onPreLoaded();
 				io.writeString(e.toString());
 				io.writeUByte(e.type.ordinal());
 				e.write(io);
@@ -92,6 +93,7 @@ public final class ConfigList extends IDObject
 				{
 					e.read(io);
 					gr.add(e);
+					e.onPostLoaded();
 				}
 			}
 			
@@ -116,7 +118,10 @@ public final class ConfigList extends IDObject
 				JsonObject o1 = new JsonObject();
 				
 				for(ConfigEntry e : g.entries)
+				{
+					e.onPreLoaded();
 					o1.add(e.toString(), context.serialize(e.getJson()));
+				}
 				
 				o.add(g.toString(), o1);
 			}
@@ -140,7 +145,11 @@ public final class ConfigList extends IDObject
 				for(Map.Entry<String, JsonElement> e1 : o1.entrySet())
 				{
 					ConfigEntry entry = new ConfigEntryObject(e1.getKey());
-					if(!e1.getValue().isJsonNull()) entry.setJson((Object)context.deserialize(e1.getValue(), Object.class));
+					if(!e1.getValue().isJsonNull())
+					{
+						entry.setJson((Object)context.deserialize(e1.getValue(), Object.class));
+						entry.onPostLoaded();
+					}
 					g.add(entry);
 				}
 				
