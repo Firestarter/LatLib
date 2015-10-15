@@ -74,6 +74,16 @@ public class LMUtils
 		return h;
 	}
 	
+	public static long longHashCode(Object... o)
+	{
+		if(o == null || o.length == 0) return 0;
+		if(o.length == 1) return hashCodeOf(o[0]);
+		long h = 0L;
+		for(int i = 0; i < o.length; i++)
+			h = h * 31L + hashCodeOf(o[i]);
+		return h;
+	}
+	
 	public static void throwException(Exception e) throws Exception
 	{ if(e != null) throw e; }
 	

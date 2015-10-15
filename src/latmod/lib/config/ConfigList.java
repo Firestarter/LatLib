@@ -37,7 +37,11 @@ public final class ConfigList extends IDObject
 					{
 						ConfigEntry e1 = g1.entries.get(j);
 						ConfigEntry e0 = g0.entries.getObj(e1);
-						if(e0 != null) e0.setJson(e1.getJson());
+						if(e0 != null)
+						{
+							e0.setJson(e1.getJson());
+							e0.onPostLoaded();
+						}
 					}
 				}
 			}
@@ -93,7 +97,6 @@ public final class ConfigList extends IDObject
 				{
 					e.read(io);
 					gr.add(e);
-					e.onPostLoaded();
 				}
 			}
 			
