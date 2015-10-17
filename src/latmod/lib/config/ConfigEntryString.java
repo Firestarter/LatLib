@@ -15,10 +15,10 @@ public class ConfigEntryString extends ConfigEntry
 	public String get()
 	{ return value; }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{ set(o.toString()); }
 	
-	Object getJson()
+	public Object getJson()
 	{ return get(); }
 	
 	void write(ByteIOStream io)

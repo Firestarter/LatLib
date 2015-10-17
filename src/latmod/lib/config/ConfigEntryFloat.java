@@ -21,10 +21,10 @@ public class ConfigEntryFloat extends ConfigEntry
 	public float get()
 	{ return value; }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{ set(((Number)o).floatValue()); }
 	
-	Object getJson()
+	public Object getJson()
 	{ return Float.valueOf(get()); }
 	
 	void write(ByteIOStream io)

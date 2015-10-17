@@ -73,8 +73,6 @@ public class LMFileUtils
 	
 	private static void addAllFiles(FastList<File> l, File f)
 	{
-		//FileUtils.listFiles(directory, extensions, recursive);
-		
 		if(f.isDirectory())
 		{
 			File[] fl = f.listFiles();
@@ -142,7 +140,7 @@ public class LMFileUtils
 				
 				for(File f : files)
 				{
-					File dst1 = new File(dst.getAbsolutePath() + File.separator + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
+					File dst1 = new File(dst.getAbsolutePath() + File.separatorChar + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
 					Exception e = copyFile(f, dst1); if(e != null) return e;
 				}
 				
@@ -180,6 +178,5 @@ public class LMFileUtils
 	}
 	
 	public static File getSourceDirectory(Class<?> c)
-	//{ return new File(c.getProtectionDomain().getCodeSource().getLocation().getPath().replace("%20", " ")); }
 	{ return new File(c.getProtectionDomain().getCodeSource().getLocation().getFile()); }
 }

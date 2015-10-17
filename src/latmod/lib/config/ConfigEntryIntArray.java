@@ -17,14 +17,14 @@ public class ConfigEntryIntArray extends ConfigEntry
 	public int[] get()
 	{ return value; }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{
 		if(o instanceof List<?>)
 			setJson(((List<?>)o).toArray(new Integer[0]));
 		else set(Converter.toInts((Integer[])o));
 	}
 	
-	Object getJson()
+	public Object getJson()
 	{ return Converter.fromInts(get()); }
 	
 	void write(ByteIOStream io)

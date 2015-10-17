@@ -12,8 +12,8 @@ public abstract class ConfigEntry extends FinalIDObject
 	ConfigEntry(String id, PrimitiveType t)
 	{ super(id); type = t; }
 	
-	abstract void setJson(Object o);
-	abstract Object getJson();
+	public abstract void setJson(Object o);
+	public abstract Object getJson();
 	abstract void write(ByteIOStream io);
 	abstract void read(ByteIOStream io);
 	

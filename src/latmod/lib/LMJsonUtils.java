@@ -67,7 +67,7 @@ public class LMJsonUtils
 	
 	public static <T> T fromJson(String s, Type t)
 	{
-		if(s == null || s.length() < 2) return null;
+		if(s == null) return null;
 		return getGson().fromJson(s, t);
 	}
 	

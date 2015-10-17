@@ -24,10 +24,10 @@ public class ConfigEntryInt extends ConfigEntry
 	public void add(int i)
 	{ set(get() + i); }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{ set(o == null ? bounds.defValue : ((Number)o).intValue()); }
 	
-	Object getJson()
+	public Object getJson()
 	{ return Integer.valueOf(get()); }
 	
 	void write(ByteIOStream io)

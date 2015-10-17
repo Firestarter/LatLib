@@ -20,7 +20,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 	public float[] get()
 	{ return value; }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{
 		if(o instanceof Double[])
 		{
@@ -37,7 +37,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 		else set(Converter.toFloats((Float[])o));
 	}
 	
-	Object getJson()
+	public Object getJson()
 	{ return Converter.fromFloats(get()); }
 	
 	void write(ByteIOStream io)

@@ -9,10 +9,10 @@ class ConfigEntryObject extends ConfigEntry
 	ConfigEntryObject(String id)
 	{ super(id, PrimitiveType.STRING); }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{ value = o; }
 	
-	Object getJson()
+	public Object getJson()
 	{ return value; }
 	
 	void write(ByteIOStream io)

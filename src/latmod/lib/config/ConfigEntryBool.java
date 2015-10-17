@@ -15,10 +15,10 @@ public class ConfigEntryBool extends ConfigEntry
 	public boolean get()
 	{ return value; }
 	
-	void setJson(Object o)
+	public void setJson(Object o)
 	{ set(((Boolean)o).booleanValue()); }
 	
-	Object getJson()
+	public Object getJson()
 	{ return Boolean.valueOf(get()); }
 	
 	void write(ByteIOStream io)
