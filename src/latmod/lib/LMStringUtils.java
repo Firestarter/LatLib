@@ -99,7 +99,7 @@ public class LMStringUtils
 		
 		for(int i = 0; i < o.length; i++)
 		{
-			sb.append(MathHelperLM.formatDouble(MathHelperLM.toSmallDouble(o[i])));
+			sb.append(MathHelperLM.toSmallDouble(o[i]));
 			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		

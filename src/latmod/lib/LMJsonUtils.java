@@ -15,7 +15,6 @@ public class LMJsonUtils
 {
 	private static Gson gson = null;
 	private static Gson gson_pretty = null;
-	private static boolean jsonPrettyPrinting = false;
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
 	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<TypeAdapterFactory>();
 	private static boolean inited = false;
@@ -26,7 +25,7 @@ public class LMJsonUtils
 	public static final void registerFactory(TypeAdapterFactory f)
 	{ typeAdapterFactories.add(f); gson = null; gson_pretty = null; }
 	
-	public static Gson getGson()
+	public static Gson getGson(boolean pretty)
 	{
 		if(!inited)
 		{
@@ -59,36 +58,25 @@ public class LMJsonUtils
 			gson_pretty = gb.create();
 		}
 		
-		return jsonPrettyPrinting ? gson_pretty : gson;
+		return pretty ? gson_pretty : gson;
 	}
 	
-	public static void setPretty(boolean b)
-	{ jsonPrettyPrinting = b; }
+	public static <T> T fromJson(Gson gson, String s, Type t)
+	{ if(s == null) return null; return gson.fromJson(s, t); }
 	
-	public static <T> T fromJson(String s, Type t)
-	{
-		if(s == null) return null;
-		return getGson().fromJson(s, t);
-	}
-	
-	public static <T> T fromJsonFile(File f, Type t)
+	public static <T> T fromJsonFile(Gson gson, File f, Type t)
 	{
 		if(!f.exists()) return null;
-		try { return fromJson(LMStringUtils.readString(new FileInputStream(f)), t); }
+		try { return fromJson(gson, LMStringUtils.readString(new FileInputStream(f)), t); }
 		catch(Exception e) { e.printStackTrace(); return null; }
 	}
 	
-	public static String toJson(Object o)
-	{
-		if(o == null) return null;
-		return getGson().toJson(o);
-	}
+	public static String toJson(Gson gson, Object o)
+	{ if(o == null) return null; return gson.toJson(o); }
 	
-	public static boolean toJsonFile(File f, Object o)
+	public static boolean toJsonFile(Gson gson, File f, Object o)
 	{
-		setPretty(true);
-		String s = toJson(o);
-		setPretty(false);
+		String s = toJson(gson, o);
 		if(s == null) return false;
 		
 		try
@@ -101,6 +89,18 @@ public class LMJsonUtils
 		
 		return false;
 	}
+	
+	public static <T> T fromJson(String s, Type t)
+	{ return fromJson(getGson(false), s, t); }
+	
+	public static <T> T fromJsonFile(File f, Type t)
+	{ return fromJsonFile(getGson(true), f, t); }
+	
+	public static String toJson(Object o)
+	{ return toJson(getGson(false), o); }
+	
+	public static boolean toJsonFile(File f, Object o)
+	{ return toJsonFile(getGson(true), f, o); }
 	
 	public static <K, V> Type getMapType(Type K, Type V)
 	{ return new TypeToken<Map<K, V>>() {}.getType(); }

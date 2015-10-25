@@ -9,6 +9,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	private int initSize;
 	private int incr;
 	private int size = 0;
+	private boolean isLocked = false;
 	
 	public FastList(int init, int inc)
 	{
@@ -28,6 +29,9 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public FastList<E> blankCopy()
 	{ return new FastList<E>(initSize, incr); }
+	
+	public FastList<E> setLocked()
+	{ isLocked = true; return this; }
 	
 	public int hashCode()
 	{
@@ -67,20 +71,21 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public boolean add(E e)
 	{
+		if(isLocked) return false;
 		if(size == objects.length) expand(incr);
 		objects[size++] = e;
 		return true;
 	}
 	
 	public E set(int i, E e)
-	{ objects[i] = e; return e; }
+	{ if(!isLocked) objects[i] = e; return e; }
 	
 	public E get(int i)
 	{ return objects[i]; }
 	
 	public E remove(int i)
 	{
-		if(size == 0 || i == -1) return null;
+		if(size == 0 || i == -1 || isLocked) return null;
 		E e0 = get(i);
 		size--;
 		for(int j = i; j < size; j++)
@@ -94,7 +99,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public boolean removeObj(Object o)
 	{
-		if(size == 0 || o == null) return false;
+		if(size == 0 || o == null || isLocked) return false;
 		int i = indexOf(o);
 		if(i != -1) remove(i);
 		return i != -1;
@@ -102,7 +107,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void removeAll(int... i)
 	{
-		if(size == 0 || i == null || i.length == 0) return;
+		if(size == 0 || i == null || i.length == 0 || isLocked) return;
 		for(int j = 0; j < i.length; j++)
 			remove(i[j]);
 	}
@@ -125,7 +130,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void clear()
 	{
-		if(size == 0) return;
+		if(size == 0 || isLocked) return;
 		for(int i = 0; i < size; i++)
 			objects[i] = null;
 		size = 0;
@@ -155,7 +160,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	}
 	
 	public boolean removeAll(Collection<?> list)
-	{ for(Object e : list) remove(e); return true; }
+	{ if(list != null && size > 0 && !isLocked) for(Object e : list) remove(e); return true; }
 	
 	public boolean contains(Object e)
 	{ return indexOf(e) != -1; }
@@ -171,7 +176,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void sort(Comparator<? super E> c)
 	{
-		if(size == 0) return;
+		if(size == 0 || isLocked) return;
 		if(c == null) Arrays.sort(objects, 0, size);
 		else Arrays.sort(objects, 0, size, c);
 	}
@@ -244,11 +249,11 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	return true; return false; }
 	
 	public boolean addAll(Collection<? extends E> l)
-	{ if(l != null && l.size() > 0) addAll(l.toArray()); return true; }
+	{ if(l != null && l.size() > 0 && !isLocked) addAll(l.toArray()); return true; }
 	
 	public boolean addAll(FastList<? extends E> l)
 	{
-		if(l != null && l.size > 0)
+		if(l != null && l.size > 0 && !isLocked)
 		{
 			int s = l.size;
 			expand(Math.max(incr, s));
@@ -261,7 +266,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void addAll(Object[] e)
 	{
-		if(e != null && e.length > 0)
+		if(e != null && e.length > 0 && !isLocked)
 		{
 			int s = e.length;
 			expand(Math.max(incr, s));
@@ -300,7 +305,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public boolean trim(int t)
 	{
-		if(size > t)
+		if(size > t && !isLocked)
 		{
 			size = t;
 			Object[] o = objects.clone();
@@ -337,6 +342,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void removeNullValues()
 	{
+		if(isLocked) return;
 		E[] e0 = (E[])objects.clone();
 		int size0 = size;
 		
@@ -348,6 +354,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public void removeAll(IntList l)
 	{
+		if(isLocked) return;
 		for(int i = 0; i < l.size(); i++)
 			remove(l.get(i));
 	}

@@ -1,4 +1,5 @@
 package latmod.lib;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 import latmod.lib.util.VecLM;
@@ -7,6 +8,8 @@ import latmod.lib.util.VecLM;
 public class MathHelperLM
 {
 	public static final Random rand = new Random();
+	public static final DecimalFormat smallDoubleFormatter = new DecimalFormat("#0.00");
+	
 	public static final double RAD = Math.PI / 180D;
 	public static final double DEG = 180D / Math.PI;
 	public static final double TWO_PI = Math.PI * 2D;
@@ -178,11 +181,8 @@ public class MathHelperLM
 	public static int[] clampInt(int[] i, int min, int max)
 	{ for(int j = 0; j < i.length; j++) i[j] = clampInt(i[j], min, max); return i; }
 	
-	public static double toSmallDouble(double d)
-	{ long i = (long)(d * 100D); return i / 100D; }
-	
-	public static float toSmallFloat(float d)
-	{ long i = (int)(d * 100F); return i / 100F; }
+	public static String toSmallDouble(double d)
+	{ return smallDoubleFormatter.format(d); }
 	
 	public static double map(double val, double min1, double max1, double min2, double max2)
 	{ return min2 + (max2 - min2) * ((val - min1) / (max1 - min1)); }

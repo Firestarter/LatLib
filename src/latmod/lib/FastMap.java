@@ -169,6 +169,32 @@ public class FastMap<K, V> implements Iterable<V>
 		map.values.addAll(keys);
 		return map;
 	}
+
+	public void sortFromKeyStrings(final boolean ignoreCase)
+	{
+		class Obj implements Comparable<Obj>
+		{
+			public final K key;
+			public final V val;
+			
+			public Obj(K k, V v)
+			{ key = k; val = v; }
+			
+			public int compareTo(Obj o)
+			{
+				if(!ignoreCase) return key.toString().compareTo(o.key.toString());
+				return key.toString().compareToIgnoreCase(o.key.toString());
+			}
+		}
+		
+		FastList<Obj> list = new FastList<Obj>();
+		for(int i = 0; i < size(); i++)
+			list.add(new Obj(keys.get(i), values.get(i)));
+		list.sort(null);
+		clear();
+		for(int i = 0; i < list.size(); i++)
+		{ Obj o = list.get(i); put(o.key, o.val); }
+	}
 	
 	/*public static class Serializer implements JsonDeserializer<FastMap>, JsonSerializer<FastMap>
 	{

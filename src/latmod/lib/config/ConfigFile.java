@@ -39,9 +39,7 @@ public final class ConfigFile extends IDObject
 	public String toJsonString(boolean pretty)
 	{
 		configList.sort();
-		LMJsonUtils.setPretty(pretty);
-		String s = LMJsonUtils.toJson(configList);
-		LMJsonUtils.setPretty(false);
+		String s = LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configList);
 		return s;
 	}
 	
