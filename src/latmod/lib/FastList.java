@@ -33,6 +33,9 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	public FastList<E> setLocked()
 	{ isLocked = true; return this; }
 	
+	public boolean isLocked()
+	{ return isLocked; }
+	
 	public int hashCode()
 	{
 		if(size == 0) return 0;

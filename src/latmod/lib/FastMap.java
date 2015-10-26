@@ -14,6 +14,9 @@ public class FastMap<K, V> implements Iterable<V>
 		values = new FastList<V>(init, inc);
 	}
 	
+	public FastMap<K, V> setLocked()
+	{ keys.setLocked(); values.setLocked(); return this; }
+	
 	public FastMap<K, V> setNullRemoves(boolean b)
 	{ nullRemoves = b; return this; }
 	
@@ -36,7 +39,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean put(K k, V v)
 	{
-		if(k == null) return false;
+		if(k == null || keys.isLocked()) return false;
 		
 		int i = keys.indexOf(k);
 		if(i != -1)
@@ -67,6 +70,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean remove(K k)
 	{
+		if(keys.isLocked()) return false;
 		int i = keys.indexOf(k);
 		if(i != -1)
 		{
@@ -80,6 +84,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean removeValue(V v)
 	{
+		if(keys.isLocked()) return false;
 		int i = values.indexOf(v);
 		if(i != -1)
 		{
@@ -93,6 +98,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean clear()
 	{
+		if(keys.isLocked()) return false;
 		boolean b = !isEmpty();
 		keys.clear();
 		values.clear();
@@ -109,14 +115,16 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public void removeAllKeys(FastList<? extends K> al)
 	{
+		if(keys.isLocked()) return;
 		for(int i = 0; i < al.size(); i++)
-		remove(al.get(i));
+			remove(al.get(i));
 	}
 	
 	public void removeAllValues(FastList<? extends V> al)
 	{
+		if(keys.isLocked()) return;
 		for(int i = 0; i < al.size(); i++)
-		removeValue(al.get(i));
+			removeValue(al.get(i));
 	}
 	
 	public boolean isEmpty()
@@ -124,6 +132,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public int putAll(FastMap<K, V> map)
 	{
+		if(map.isEmpty() || keys.isLocked()) return 0;
 		Iterator<K> itrK = map.keys.iterator();
 		Iterator<V> itrV = map.values.iterator();
 		while(itrK.hasNext() && itrV.hasNext())
@@ -133,6 +142,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public int putAll(Map<K, V> map)
 	{
+		if(map.isEmpty() || keys.isLocked()) return 0;
 		Iterator<K> itrK = map.keySet().iterator();
 		Iterator<V> itrV = map.values().iterator();
 		while(itrK.hasNext() && itrV.hasNext())
@@ -172,6 +182,8 @@ public class FastMap<K, V> implements Iterable<V>
 
 	public void sortFromKeyStrings(final boolean ignoreCase)
 	{
+		if(keys.isLocked()) return;
+		
 		class Obj implements Comparable<Obj>
 		{
 			public final K key;
