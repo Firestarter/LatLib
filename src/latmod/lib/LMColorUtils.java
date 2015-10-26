@@ -104,4 +104,12 @@ public class LMColorUtils
 	
 	public static int lerp(int col1, int col2, double m)
 	{ return lerp(col1, col2, m, getAlpha(col1)); }
+	
+	public static int multiply(int col1, int col2, int a)
+	{
+		float r = getRedF(col1) * getRedF(col2);
+		float g = getGreenF(col1) * getGreenF(col2);
+		float b = getBlueF(col1) * getBlueF(col2);
+		return getRGBA((int)(r * 255F), (int)(g * 255F), (int)(b * 255F), a);
+	}
 }
