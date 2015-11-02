@@ -11,6 +11,9 @@ public class LMStringUtils
 	public static final String STRIP_SEP = ", ";
 	public static final String ALLOWED_TEXT_CHARS = "!@#$%^&*()_+ -=\\/,.<>?\'\"[]{}|;:`~";
 	
+	public static boolean isValid(String s)
+	{ return s != null && s.length() > 0; }
+	
 	public static String readString(InputStream is) throws Exception
 	{
 		StringBuilder sb = new StringBuilder();
@@ -358,18 +361,24 @@ public class LMStringUtils
 	
 	public static UUID fromString(String s)
 	{
-		if(s.indexOf('-') != -1) return UUID.fromString(s);
-		
-		int l = s.length();
-		StringBuilder sb = new StringBuilder(32);
-		for(int i = 0; i < l; i++)
+		try
 		{
-			sb.append(s.charAt(i));
-			if(i == 7 || i == 11 || i == 15 || i == 19)
-				sb.append('-');
+			if(s.indexOf('-') != -1) return UUID.fromString(s);
+			
+			int l = s.length();
+			StringBuilder sb = new StringBuilder(32);
+			for(int i = 0; i < l; i++)
+			{
+				sb.append(s.charAt(i));
+				if(i == 7 || i == 11 || i == 15 || i == 19)
+					sb.append('-');
+			}
+			
+			return UUID.fromString(sb.toString());
 		}
-		
-		return UUID.fromString(sb.toString());
+		catch(Exception e)
+		{ e.printStackTrace(); }
+		return null;
 	}
 	
 	public static byte[] toBytes(String s)

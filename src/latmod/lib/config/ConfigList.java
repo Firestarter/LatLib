@@ -39,8 +39,16 @@ public final class ConfigList extends IDObject
 						ConfigEntry e0 = g0.entries.getObj(e1);
 						if(e0 != null)
 						{
-							e0.setJson(e1.getJson());
-							e0.onPostLoaded();
+							try
+							{
+								e0.setJson(e1.getJson());
+								e0.onPostLoaded();
+							}
+							catch(Exception ex)
+							{
+								System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.toString() + "." + e0.toString() + "' (type:" + e0.type + ")");
+								System.err.println(ex.toString());
+							}
 						}
 					}
 				}
