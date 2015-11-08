@@ -1,5 +1,7 @@
 package latmod.lib.config;
 
+import com.google.gson.*;
+
 import latmod.lib.*;
 import latmod.lib.util.IntBounds;
 
@@ -24,11 +26,11 @@ public class ConfigEntryInt extends ConfigEntry
 	public void add(int i)
 	{ set(get() + i); }
 	
-	public void setJson(Object o)
-	{ set(o == null ? bounds.defValue : ((Number)o).intValue()); }
+	public final void setJson(JsonElement o)
+	{ set((o == null || o.isJsonNull()) ? bounds.defValue : o.getAsInt()); }
 	
-	public Object getJson()
-	{ return Integer.valueOf(get()); }
+	public final JsonElement getJson()
+	{ return new JsonPrimitive(get()); }
 	
 	void write(ByteIOStream io)
 	{ io.writeInt(get()); }

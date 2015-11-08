@@ -1,5 +1,7 @@
 package latmod.lib.config;
 
+import com.google.gson.*;
+
 import latmod.lib.*;
 import latmod.lib.util.FloatBounds;
 
@@ -21,11 +23,11 @@ public class ConfigEntryFloat extends ConfigEntry
 	public float get()
 	{ return value; }
 	
-	public void setJson(Object o)
-	{ set(((Number)o).floatValue()); }
+	public final void setJson(JsonElement o)
+	{ set(o.getAsFloat()); }
 	
-	public Object getJson()
-	{ return Float.valueOf(get()); }
+	public final JsonElement getJson()
+	{ return new JsonPrimitive(get()); }
 	
 	void write(ByteIOStream io)
 	{ io.writeFloat(get()); }

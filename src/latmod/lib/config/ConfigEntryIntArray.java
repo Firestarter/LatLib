@@ -1,45 +1,61 @@
 package latmod.lib.config;
 
-import java.util.List;
+import com.google.gson.*;
 
 import latmod.lib.*;
 
 public class ConfigEntryIntArray extends ConfigEntry
 {
-	private int[] value;
+	private IntList value;
 	
-	public ConfigEntryIntArray(String id, int[] def)
-	{ super(id, PrimitiveType.INT_ARRAY); set(def); }
-	
-	public void set(int[] o)
-	{ value = o == null ? new int[0] : o; }
-	
-	public int[] get()
-	{ return value; }
-	
-	public void setJson(Object o)
+	public ConfigEntryIntArray(String id, IntList def)
 	{
-		if(o instanceof List<?>)
-			setJson(((List<?>)o).toArray(new Integer[0]));
-		else set(Converter.toInts((Integer[])o));
+		super(id, PrimitiveType.INT_ARRAY);
+		value = new IntList();
+		set(def);
 	}
 	
-	public Object getJson()
-	{ return Converter.fromInts(get()); }
+	public void set(IntList l)
+	{
+		value.clear();
+		value.addAll(l);
+	}
+	
+	public IntList get()
+	{ return value; }
+	
+	public final void setJson(JsonElement o)
+	{
+		JsonArray a = o.getAsJsonArray();
+		value.clear();
+		for(int i = 0; i < a.size(); i++)
+			value.add(a.get(i).getAsInt());
+		set(value);
+	}
+	
+	public final JsonElement getJson()
+	{
+		JsonArray a = new JsonArray();
+		value = get();
+		for(int i = 0; i < value.size(); i++)
+			a.add(new JsonPrimitive(value.get(i)));
+		return a;
+	}
 	
 	void write(ByteIOStream io)
 	{
 		value = get();
-		io.writeUShort(value.length);
-		for(int i = 0; i < value.length; i++)
-			io.writeInt(value[i]);
+		io.writeUShort(value.size());
+		for(int i = 0; i < value.size(); i++)
+			io.writeInt(value.get(i));
 	}
 	
 	void read(ByteIOStream io)
 	{
-		value = new int[io.readUShort()];
-		for(int i = 0; i < value.length; i++)
-			value[i] = io.readInt();
+		value.clear();
+		int s = io.readUShort();
+		for(int i = 0; i < s; i++)
+			value.add(io.readInt());
 		set(value);
 	}
 }

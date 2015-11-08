@@ -3,14 +3,14 @@ package latmod.lib;
 import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.UUID;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 import latmod.lib.config.ConfigList;
 import latmod.lib.json.*;
 
+/** Type for Lists: new TypeToken<List<E>>() {}.getType() */
 public class LMJsonUtils
 {
 	private static Gson gson = null;
@@ -102,9 +102,6 @@ public class LMJsonUtils
 	public static boolean toJsonFile(File f, Object o)
 	{ return toJsonFile(getGson(true), f, o); }
 	
-	public static <K, V> Type getMapType(Type K, Type V)
-	{ return new TypeToken<Map<K, V>>() {}.getType(); }
-	
-	public static <E> Type getListType(Type E)
-	{ return new TypeToken<List<E>>() {}.getType(); }
+	public static JsonElement getJsonElement(String json)
+	{ return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
 }

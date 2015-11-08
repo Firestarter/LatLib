@@ -1,5 +1,7 @@
 package latmod.lib.config;
 
+import com.google.gson.*;
+
 import latmod.lib.*;
 
 public class ConfigEntryString extends ConfigEntry
@@ -15,11 +17,11 @@ public class ConfigEntryString extends ConfigEntry
 	public String get()
 	{ return value; }
 	
-	public void setJson(Object o)
-	{ set(o.toString()); }
+	public final void setJson(JsonElement o)
+	{ set(o.getAsString()); }
 	
-	public Object getJson()
-	{ return get(); }
+	public final JsonElement getJson()
+	{ return new JsonPrimitive(get()); }
 	
 	void write(ByteIOStream io)
 	{ io.writeString(get()); }

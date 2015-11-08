@@ -1,5 +1,7 @@
 package latmod.lib.config;
 
+import com.google.gson.JsonElement;
+
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
@@ -12,8 +14,8 @@ public abstract class ConfigEntry extends FinalIDObject
 	ConfigEntry(String id, PrimitiveType t)
 	{ super(id); type = t; }
 	
-	public abstract void setJson(Object o);
-	public abstract Object getJson();
+	public abstract void setJson(JsonElement o);
+	public abstract JsonElement getJson();
 	abstract void write(ByteIOStream io);
 	abstract void read(ByteIOStream io);
 	

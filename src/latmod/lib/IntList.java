@@ -57,7 +57,7 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	}
 	
 	public void addAll(IntList l)
-	{ if(l.size > 0) addAll(l.toArray()); }
+	{ if(l != null && l.size > 0) addAll(l.toArray()); }
 	
 	public void setAll(int... values)
 	{ clear(); addAll(values); }

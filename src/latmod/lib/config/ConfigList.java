@@ -155,10 +155,10 @@ public final class ConfigList extends IDObject
 				
 				for(Map.Entry<String, JsonElement> e1 : o1.entrySet())
 				{
-					ConfigEntry entry = new ConfigEntryObject(e1.getKey());
+					ConfigEntry entry = new ConfigEntryJsonElement(e1.getKey());
 					if(!e1.getValue().isJsonNull())
 					{
-						entry.setJson((Object)context.deserialize(e1.getValue(), Object.class));
+						entry.setJson(e1.getValue());
 						entry.onPostLoaded();
 					}
 					g.add(entry);

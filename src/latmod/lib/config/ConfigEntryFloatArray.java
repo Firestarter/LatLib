@@ -1,6 +1,6 @@
 package latmod.lib.config;
 
-import java.util.List;
+import com.google.gson.*;
 
 import latmod.lib.*;
 
@@ -20,25 +20,23 @@ public class ConfigEntryFloatArray extends ConfigEntry
 	public float[] get()
 	{ return value; }
 	
-	public void setJson(Object o)
+	public final void setJson(JsonElement o)
 	{
-		if(o instanceof Double[])
-		{
-			Double[] d = (Double[])o;
-			float[] f = new float[d.length];
-			for(int i = 0; i < d.length; i++)
-				f[i] = d[i].floatValue();
-			set(f);
-		}
-		else if(o instanceof List<?>)
-		{
-			setJson(((List<?>)o).toArray(new Float[0]));
-		}
-		else set(Converter.toFloats((Float[])o));
+		JsonArray a = o.getAsJsonArray();
+		value = new float[a.size()];
+		for(int i = 0; i < value.length; i++)
+			value[i] = a.get(i).getAsFloat();
+		set(value);
 	}
 	
-	public Object getJson()
-	{ return Converter.fromFloats(get()); }
+	public final JsonElement getJson()
+	{
+		JsonArray a = new JsonArray();
+		value = get();
+		for(int i = 0; i < value.length; i++)
+			a.add(new JsonPrimitive(value[i]));
+		return a;
+	}
 	
 	void write(ByteIOStream io)
 	{
