@@ -30,7 +30,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		value.clear();
 		for(int i = 0; i < a.size(); i++)
 			value.add(a.get(i).getAsString());
-		set(value);
+		set(value.clone());
 	}
 	
 	public final JsonElement getJson()

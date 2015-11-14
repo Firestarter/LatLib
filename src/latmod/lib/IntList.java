@@ -150,6 +150,7 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	{
 		IntList l = new IntList(init);
 		l.array = array.clone();
+		l.size = size;
 		return l;
 	}
 	

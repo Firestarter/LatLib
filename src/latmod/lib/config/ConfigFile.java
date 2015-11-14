@@ -24,9 +24,6 @@ public final class ConfigFile extends IDObject
 		loader = new ConfigFileLoader();
 	}
 	
-	public String toString()
-	{ return configList.toString(); }
-	
 	public void add(ConfigGroup g)
 	{ configList.add(g); }
 	

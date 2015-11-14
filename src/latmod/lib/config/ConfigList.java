@@ -22,8 +22,10 @@ public final class ConfigList extends IDObject
 		{ groups.add(g); g.parentList = this; }
 	}
 	
-	public void loadFromList(ConfigList l)
+	public boolean loadFromList(ConfigList l)
 	{
+		boolean result = false;
+		
 		if(l != null && l.groups != null && !l.groups.isEmpty())
 		{
 			for(int i = 0; i < l.groups.size(); i++)
@@ -43,6 +45,7 @@ public final class ConfigList extends IDObject
 							{
 								e0.setJson(e1.getJson());
 								e0.onPostLoaded();
+								result = true;
 							}
 							catch(Exception ex)
 							{
@@ -54,6 +57,8 @@ public final class ConfigList extends IDObject
 				}
 			}
 		}
+		
+		return result;
 	}
 	
 	public int writeToIO(ByteIOStream io)

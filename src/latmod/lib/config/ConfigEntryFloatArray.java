@@ -26,7 +26,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 		value = new float[a.size()];
 		for(int i = 0; i < value.length; i++)
 			value[i] = a.get(i).getAsFloat();
-		set(value);
+		set(value.clone());
 	}
 	
 	public final JsonElement getJson()

@@ -1,18 +1,21 @@
 package latmod.lib.util;
 
-public class FinalIDObject extends IDObject
+public class FinalIDObject implements Comparable<FinalIDObject>
 {
-	private final String ID;
+	public final String ID;
 	
 	public FinalIDObject(String id)
-	{
-		super(id);
-		ID = id;
-	}
-	
-	public void setID(String s)
-	{  }
+	{ ID = id; }
 	
 	public final String toString()
 	{ return ID; }
+	
+	public final int hashCode()
+	{ return ID.hashCode(); }
+	
+	public final boolean equals(Object o)
+	{ return o != null && (o == this || o == ID || ID.equals(o.toString())); }
+	
+	public int compareTo(FinalIDObject o)
+	{ return ID.compareToIgnoreCase(o.ID); }
 }
