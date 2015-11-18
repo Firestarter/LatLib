@@ -4,8 +4,8 @@ import java.util.*;
 /** Made by LatvianModder */
 public class FastMap<K, V> implements Iterable<V>
 {
-	public FastList<K> keys;
-	public FastList<V> values;
+	public final FastList<K> keys;
+	public final FastList<V> values;
 	private boolean nullRemoves = true;
 	
 	public FastMap(int init, int inc)
@@ -107,8 +107,8 @@ public class FastMap<K, V> implements Iterable<V>
 	public FastMap<K, V> clone()
 	{
 		FastMap<K, V> map1 = new FastMap<K, V>();
-		map1.keys = keys.clone();
-		map1.values = values.clone();
+		map1.keys.cloneFrom(keys);
+		map1.values.cloneFrom(values);
 		if(keys.isLocked()) map1.setLocked();
 		return map1;
 	}
@@ -156,19 +156,25 @@ public class FastMap<K, V> implements Iterable<V>
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("{ ");
+		sb.append('{');
+		sb.append(' ');
 		
 		for(int i = 0; i < size(); i++)
 		{
 			sb.append(keys.get(i));
-			sb.append(": ");
+			sb.append(':');
+			sb.append(' ');
 			sb.append(values.get(i));
 			
 			if(i != size() - 1)
-			sb.append(", ");
+			{
+				sb.append(',');
+				sb.append(' ');
+			}
 		}
 		
-		sb.append(" }");
+		sb.append(' ');
+		sb.append('}');
 		return sb.toString();
 	}
 	
@@ -182,7 +188,7 @@ public class FastMap<K, V> implements Iterable<V>
 
 	public void sortFromKeyStrings(final boolean ignoreCase)
 	{
-		if(keys.isLocked() || keys.isEmpty()) return;
+		if(keys.isLocked() || size() < 2) return;
 		
 		class Obj implements Comparable<Obj>
 		{
@@ -210,7 +216,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public void sortFromKeyNums()
 	{
-		if(keys.isLocked() || keys.isEmpty()) return;
+		if(keys.isLocked() || size() < 2) return;
 		
 		class Obj implements Comparable<Obj>
 		{

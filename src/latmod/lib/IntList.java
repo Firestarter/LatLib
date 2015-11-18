@@ -95,11 +95,13 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	{ return size <= 0; }
 	
 	public int[] toArray()
+	{ return toArray(null); }
+	
+	public int[] toArray(int[] a)
 	{
-		if(size <= 0) return new int[0];
-		int ai[] = new int[size];
-		System.arraycopy(array, 0, ai, 0, size);
-		return ai;
+		if(a == null || a.length != size) a = new int[size];
+		if(size > 0) System.arraycopy(array, 0, a, 0, size);
+		return a;
 	}
 	
 	public void sort()
@@ -130,16 +132,22 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
+		sb.append('[');
+		sb.append(' ');
 		
 		for(int i = 0; i < size; i++)
 		{
 			sb.append(array[i]);
+			
 			if(i != size - 1)
-				sb.append(", ");
+			{
+				sb.append(',');
+				sb.append(' ');
+			}
 		}
 		
-		sb.append(" ]");
+		sb.append(' ');
+		sb.append(']');
 		return sb.toString();
 	}
 	
