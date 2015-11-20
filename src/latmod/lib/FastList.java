@@ -366,6 +366,9 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	public static <T> FastList<T> asList(T... a)
 	{ return new FastList<T>(a); }
 	
+	public static <T> FastList<T> asList(Collection<T> c)
+	{ FastList<T> l = new FastList<T>(); l.addAll(c); return l; }
+	
 	public void removeNullValues()
 	{
 		if(isLocked) return;
