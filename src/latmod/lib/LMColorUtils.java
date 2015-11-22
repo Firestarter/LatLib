@@ -27,6 +27,9 @@ public class LMColorUtils
 	public static int getRGBA(int r, int g, int b, int a)
 	{ return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | ((b & 255) << 0); }
 	
+	public static int getRGBAF(float r, float g, float b, float a)
+	{ return getRGBA((int)(r * 255F), (int)(g * 255F), (int)(b * 255F), (int)(a * 255F)); }
+	
 	public static int getRed(int c)
 	{ return (c >> 16) & 255; }
 	

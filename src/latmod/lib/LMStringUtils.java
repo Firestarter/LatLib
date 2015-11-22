@@ -14,6 +14,14 @@ public class LMStringUtils
 	public static boolean isValid(String s)
 	{ return s != null && s.length() > 0; }
 	
+	public static String[] shiftArray(String[] s)
+	{
+		if(s == null || s.length == 0) return new String[0];
+		String[] s1 = new String[s.length - 1];
+		for(int i = 0; i < s1.length; i++) s1[i] = s[i + 1];
+		return s1;
+	}
+	
 	public static String readString(InputStream is) throws Exception
 	{
 		StringBuilder sb = new StringBuilder();

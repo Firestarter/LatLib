@@ -14,6 +14,9 @@ public class MathHelperLM
 	public static final double DEG = 180D / Math.PI;
 	public static final double TWO_PI = Math.PI * 2D;
 	public static final double HALF_PI = Math.PI / 2D;
+	public static final float PI_F = (float)Math.PI;
+	public static final float TWO_PI_F = (float)TWO_PI;
+	public static final float HALF_PI_F = (float)HALF_PI;
 	
 	public static final float RAD_F = (float)RAD;
 	public static final float DEG_F = (float)DEG;
