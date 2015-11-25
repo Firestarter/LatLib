@@ -48,8 +48,11 @@ public final class ByteIOStream
 		}
 	}
 	
+	public void flip()
+	{ pos = 0; }
+	
 	public void setData(byte[] b)
-	{ bytes = b; pos = 0; }
+	{ bytes = b; flip(); }
 	
 	public void setCompressedData(byte[] b)
 	{

@@ -132,17 +132,15 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public int putAll(FastMap<K, V> map)
 	{
-		if(map.isEmpty() || keys.isLocked()) return 0;
-		Iterator<K> itrK = map.keys.iterator();
-		Iterator<V> itrV = map.values.iterator();
-		while(itrK.hasNext() && itrV.hasNext())
-			put(itrK.next(), itrV.next());
+		if(map == null || map.isEmpty() || keys.isLocked()) return 0;
+		for(int i = 0; i < map.size(); i++)
+			put(map.keys.get(i), map.values.get(i));
 		return map.size();
 	}
 	
 	public int putAll(Map<K, V> map)
 	{
-		if(map.isEmpty() || keys.isLocked()) return 0;
+		if(map == null || map.isEmpty() || keys.isLocked()) return 0;
 		Iterator<K> itrK = map.keySet().iterator();
 		Iterator<V> itrV = map.values().iterator();
 		while(itrK.hasNext() && itrV.hasNext())
@@ -183,6 +181,14 @@ public class FastMap<K, V> implements Iterable<V>
 		FastMap<V, K> map = new FastMap<V, K>();
 		map.keys.addAll(values);
 		map.values.addAll(keys);
+		return map;
+	}
+	
+	public HashMap<K, V> toHashMap()
+	{
+		HashMap<K, V> map = new HashMap<K, V>();
+		for(int i = 0; i < size(); i++)
+			map.put(keys.get(i), values.get(i));
 		return map;
 	}
 

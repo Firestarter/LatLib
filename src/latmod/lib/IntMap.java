@@ -57,19 +57,25 @@ public class IntMap
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
+		sb.append('[');
+		sb.append(' ');
 		
 		for(int i = 0; i < size(); i++)
 		{
 			sb.append(keys.get(i));
-			sb.append(": ");
+			sb.append(':');
+			sb.append(' ');
 			sb.append(values.get(i));
 			
 			if(i != size() - 1)
-			sb.append(", ");
+			{
+				sb.append(',');
+				sb.append(' ');
+			}
 		}
 		
-		sb.append(" ]");
+		sb.append(' ');
+		sb.append(']');
 		return sb.toString();
 	}
 	

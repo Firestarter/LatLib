@@ -179,4 +179,16 @@ public class LMFileUtils
 	
 	public static File getSourceDirectory(Class<?> c)
 	{ return new File(c.getProtectionDomain().getCodeSource().getLocation().getFile()); }
+
+	public static String getRawFileName(File f)
+	{
+		if(f == null || !f.exists()) return null;
+		else if(f.isDirectory()) return f.getName();
+		else if(f.isFile())
+		{
+			String s = f.getName();
+			return s.substring(0, s.lastIndexOf('.'));
+		}
+		return null;
+	}
 }

@@ -93,30 +93,6 @@ public class Converter
 		ai[j] = i[j].byteValue(); return ai;
 	}
 	
-	public static double[] toDoubles(float... f)
-	{
-		if(f == null) return null;
-		double d[] = new double[f.length];
-		for(int i = 0; i < f.length; i++)
-		d[i] = f[i]; return d;
-	}
-	
-	public static Boolean[] fromBooleans(boolean[] i)
-	{
-		if(i == null) return null;
-		Boolean ai[] = new Boolean[i.length];
-		for(int j = 0; j < ai.length; j++)
-		ai[j] = Boolean.valueOf(i[j]); return ai;
-	}
-	
-	public static boolean[] toBooleans(Boolean[] i)
-	{
-		if(i == null) return null;
-		boolean ai[] = new boolean[i.length];
-		for(int j = 0; j < ai.length; j++)
-		ai[j] = i[j].booleanValue(); return ai;
-	}
-	
 	public static void toBools(boolean[] bools, IntList idx, boolean isTrue)
 	{
 		Arrays.fill(bools, !isTrue);
@@ -124,16 +100,18 @@ public class Converter
 			bools[idx.get(i)] = isTrue;
 	}
 	
-	public static IntList fromBools(boolean[] bools, boolean isTrue)
+	public static void fromBools(boolean[] bools, IntList il, boolean isTrue)
 	{
-		IntList il = new IntList();
+		il.clear();
 		for(int i = 0; i < bools.length; i++)
 			if(bools[i] == isTrue) il.add(i);
-		return il;
 	}
 	
 	public static int decodeInt(String s)
-	{ return Integer.decode(s); }
+	{
+		Integer i = decode(s);
+		return (i == null) ? 0 : i.intValue();
+	}
 	
 	public static Integer decode(String s)
 	{
