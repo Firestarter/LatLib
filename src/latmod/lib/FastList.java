@@ -5,7 +5,7 @@ import java.util.*;
 @SuppressWarnings("all")
 public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 {
-	public E[] objects;
+	private E[] objects;
 	private int initSize;
 	private int incr;
 	private int size = 0;
@@ -93,7 +93,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 		E e0 = get(i);
 		size--;
 		for(int j = i; j < size; j++)
-		objects[j] = objects[j + 1];
+			objects[j] = objects[j + 1];
 		objects[size] = null;
 		return e0;
 	}
@@ -272,19 +272,26 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	return true; return false; }
 	
 	public boolean addAll(Collection<? extends E> l)
-	{ if(l != null && l.size() > 0 && !isLocked) addAll(l.toArray()); return true; }
-	
-	public boolean addAll(FastList<? extends E> l)
 	{
-		if(l != null && l.size > 0 && !isLocked)
+		if(l != null && l.size() > 0 && !isLocked)
 		{
-			int s = l.size;
-			expand(Math.max(incr, s));
-			System.arraycopy(l.objects, 0, objects, size, s);
-			size += s;
+			if(l instanceof FastList)
+			{
+				FastList list = (FastList)l;
+				expand(Math.max(incr, list.size));
+				System.arraycopy(list.objects, 0, objects, size, list.size);
+				size += list.size;
+			}
+			else
+			{
+				Iterator<? extends E> itr = l.iterator();
+				while(itr.hasNext()) add(itr.next());
+			}
+			
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public void addAll(Object[] e)
@@ -333,9 +340,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	{
 		if(size > t && !isLocked)
 		{
-			size = t;
-			Object[] o = objects.clone();
-			System.arraycopy(o, 0, objects, 0, t);
+			while(size > t) { remove(t); t--; }
 			return true;
 		}
 
