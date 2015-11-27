@@ -8,6 +8,8 @@ import latmod.lib.util.FinalIDObject;
 public abstract class ConfigEntry extends FinalIDObject
 {
 	public final PrimitiveType type;
+	public boolean hideEntry = false;
+	public boolean serialize = true;
 	
 	public ConfigGroup parentGroup = null;
 	
@@ -39,4 +41,27 @@ public abstract class ConfigEntry extends FinalIDObject
 	public void onPostLoaded()
 	{
 	}
+	
+	public String getFullID()
+	{
+		if(!isValid()) return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append(parentGroup.parentList.ID);
+		sb.append('.');
+		sb.append(parentGroup.ID);
+		sb.append('.');
+		sb.append(ID);
+		return sb.toString();
+	}
+	
+	public boolean isValid()
+	{ return ID != null && parentGroup != null && parentGroup.ID != null && parentGroup.parentList != null && parentGroup.parentList.ID != null; }
+	
+	@SuppressWarnings("unchecked")
+	public <E extends ConfigEntry> E setHidden(boolean b)
+	{ hideEntry = b; return (E)this; }
+	
+	@SuppressWarnings("unchecked")
+	public <E extends ConfigEntry> E setSave(boolean b)
+	{ serialize = b; return (E)this; }
 }

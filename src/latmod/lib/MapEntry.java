@@ -18,4 +18,8 @@ public class MapEntry<K, V> implements Map.Entry<K, V>
 	
 	public V setValue(V value)
 	{ val = value; return val; }
+	
+	@SuppressWarnings("rawtypes")
+	public boolean equals(Object o)
+	{ return o != null && (o == this || key == o || ((o instanceof Map.Entry) ? ((Map.Entry)o).getKey().equals(getKey()) : getKey().equals(o))); }
 }

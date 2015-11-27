@@ -24,7 +24,11 @@ public final class ConfigList extends IDObject
 	
 	public boolean loadFromList(ConfigList l)
 	{
+		if(l == null || l.groups.isEmpty()) return false;
+		
 		boolean result = false;
+		
+		System.out.println("Reading " + ID + " from " + l.ID);
 		
 		if(l != null && l.groups != null && !l.groups.isEmpty())
 		{
@@ -39,10 +43,11 @@ public final class ConfigList extends IDObject
 					{
 						ConfigEntry e1 = g1.entries.get(j);
 						ConfigEntry e0 = g0.entries.getObj(e1);
-						if(e0 != null)
+						if(e0 != null && e0.serialize)
 						{
 							try
 							{
+								//System.out.println("Value " + e1.getFullID() + " set from " + e0.getJson() + " to " + e1.getJson());
 								e0.setJson(e1.getJson());
 								e0.onPostLoaded();
 								result = true;
@@ -135,11 +140,14 @@ public final class ConfigList extends IDObject
 				
 				for(ConfigEntry e : g.entries)
 				{
-					e.onPreLoaded();
-					o1.add(e.toString(), context.serialize(e.getJson()));
+					if(e.serialize)
+					{
+						e.onPreLoaded();
+						o1.add(e.toString(), context.serialize(e.getJson()));
+					}
 				}
 				
-				o.add(g.toString(), o1);
+				if(!o1.entrySet().isEmpty()) o.add(g.toString(), o1);
 			}
 			
 			return o;
@@ -161,6 +169,7 @@ public final class ConfigList extends IDObject
 				for(Map.Entry<String, JsonElement> e1 : o1.entrySet())
 				{
 					ConfigEntry entry = new ConfigEntryJsonElement(e1.getKey());
+					
 					if(!e1.getValue().isJsonNull())
 					{
 						entry.setJson(e1.getValue());
@@ -169,7 +178,7 @@ public final class ConfigList extends IDObject
 					g.add(entry);
 				}
 				
-				c.groups.add(g);
+				c.add(g);
 			}
 			
 			return c;
@@ -193,6 +202,10 @@ public final class ConfigList extends IDObject
 	
 	public ConfigList clone()
 	{
-		return null;
+		ConfigList list1 = new ConfigList();
+		list1.setID(ID);
+		list1.parentFile = parentFile;
+		for(ConfigGroup g : groups) list1.add(g);
+		return list1;
 	}
 }

@@ -4,22 +4,19 @@ import com.google.gson.JsonElement;
 
 import latmod.lib.*;
 
-class ConfigEntryJsonElement extends ConfigEntry
+public class ConfigEntryBlank extends ConfigEntry
 {
-	private JsonElement value;
-	
-	ConfigEntryJsonElement(String id)
+	public ConfigEntryBlank(String id)
 	{
 		super(id, PrimitiveType.NULL);
-		hideEntry = true;
 		serialize = false;
 	}
 	
 	public final void setJson(JsonElement o)
-	{ value = o; }
+	{ }
 	
 	public final JsonElement getJson()
-	{ return value; }
+	{ return null; }
 	
 	void write(ByteIOStream io)
 	{ }

@@ -22,6 +22,8 @@ public enum PrimitiveType
 	FLOAT_ARRAY("num_f_a", float[].class),
 	DOUBLE_ARRAY("num_d_a", double[].class),
 	
+	ENUM("enum", Enum.class),
+	
 	; public static final PrimitiveType[] VALUES = values();
 	
 	public final String ID;
@@ -31,6 +33,7 @@ public enum PrimitiveType
 	public final boolean isString;
 	public final boolean isNumber;
 	public final boolean isArray;
+	public final boolean isEnum;
 	
 	PrimitiveType(String s, Class<?> c)
 	{
@@ -41,6 +44,7 @@ public enum PrimitiveType
 		isString = c == String.class;
 		isNumber = s.startsWith("num_");
 		isArray = s.endsWith("_a");
+		isEnum = c == Enum.class;
 	}
 	
 	public static PrimitiveType get(String s)

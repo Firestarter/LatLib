@@ -167,14 +167,14 @@ public class LMFileUtils
 		return null;
 	}
 	
-	public static boolean delete(File dir)
+	public static boolean delete(File f)
 	{
-		if(!dir.exists()) return false;
-		if(dir.isFile()) return dir.delete();
-		String[] files = dir.list();
+		if(f == null || !f.exists()) return false;
+		if(f.isFile()) return f.delete();
+		String[] files = f.list();
 		for(int i = 0; i < files.length; i++)
-			delete(new File(dir, files[i]));
-		return dir.delete();
+			delete(new File(f, files[i]));
+		return f.delete();
 	}
 	
 	public static File getSourceDirectory(Class<?> c)

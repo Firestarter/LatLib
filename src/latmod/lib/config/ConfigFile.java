@@ -5,7 +5,7 @@ import java.io.File;
 import latmod.lib.*;
 import latmod.lib.util.IDObject;
 
-public final class ConfigFile extends IDObject
+public final class ConfigFile extends IDObject implements Cloneable
 {
 	public final File file;
 	public final ConfigList configList;

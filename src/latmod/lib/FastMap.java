@@ -246,6 +246,9 @@ public class FastMap<K, V> implements Iterable<V>
 		{ Obj o = list.get(i); put(o.key, o.val); }
 	}
 	
+	public FastMap<K, V> setWeakIndexing()
+	{ keys.setWeakIndexing(); return this; }
+	
 	/*public static class Serializer implements JsonDeserializer<FastMap>, JsonSerializer<FastMap>
 	{
 		public JsonElement serialize(FastMap src, Type typeOfSrc, JsonSerializationContext context)

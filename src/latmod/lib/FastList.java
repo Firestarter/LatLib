@@ -10,6 +10,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	private int incr;
 	private int size = 0;
 	private boolean isLocked = false;
+	private boolean weakIndexing = false;
 	
 	public FastList(int init, int inc)
 	{
@@ -32,6 +33,9 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public FastList<E> setLocked()
 	{ isLocked = true; return this; }
+	
+	public FastList<E> setWeakIndexing()
+	{ weakIndexing = true; return this; }
 	
 	public boolean isLocked()
 	{ return isLocked; }
@@ -121,6 +125,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 		if(size == 0 || o == null) return -1;
 		for(int i = 0; i < size; i++)
 			if(objects[i] == o) return i;
+		if(weakIndexing) return -1;
 		for(int i = 0; i < size; i++)
 			if(objects[i] != null && objects[i].equals(o)) return i;
 		return -1;
