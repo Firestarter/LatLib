@@ -131,6 +131,7 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	
 	public String toString()
 	{
+		if(size == 0) return "[ ]";
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
 		sb.append(' ');

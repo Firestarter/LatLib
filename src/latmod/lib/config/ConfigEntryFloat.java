@@ -8,7 +8,7 @@ import latmod.lib.util.FloatBounds;
 public class ConfigEntryFloat extends ConfigEntry
 {
 	private float value;
-	private final FloatBounds bounds;
+	public final FloatBounds bounds;
 	
 	public ConfigEntryFloat(String id, FloatBounds b)
 	{
@@ -28,6 +28,9 @@ public class ConfigEntryFloat extends ConfigEntry
 	
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
+	
+	public String getValue()
+	{ return Float.toString(get()); }
 	
 	void write(ByteIOStream io)
 	{ io.writeFloat(get()); }

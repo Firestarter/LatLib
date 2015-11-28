@@ -1,5 +1,6 @@
 package latmod.lib;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import com.google.gson.TypeAdapter;
@@ -23,6 +24,7 @@ public enum PrimitiveType
 	DOUBLE_ARRAY("num_d_a", double[].class),
 	
 	ENUM("enum", Enum.class),
+	COLOR("col", Color.class),
 	
 	; public static final PrimitiveType[] VALUES = values();
 	
@@ -42,15 +44,24 @@ public enum PrimitiveType
 		
 		isBoolean = c == Boolean.class;
 		isString = c == String.class;
-		isNumber = s.startsWith("num_");
+		isNumber = c == Color.class || s.startsWith("num_");
 		isArray = s.endsWith("_a");
 		isEnum = c == Enum.class;
 	}
 	
 	public static PrimitiveType get(String s)
 	{
-		for(PrimitiveType t : values())
+		if(s == null) return null;
+		for(PrimitiveType t : VALUES)
 			if(t.ID.equals(s)) return t;
+		return null;
+	}
+	
+	public static PrimitiveType get(Class<?> c)
+	{
+		if(c == null) return null;
+		for(PrimitiveType t : VALUES)
+			if(t.typeClass.equals(c)) return t;
 		return null;
 	}
 

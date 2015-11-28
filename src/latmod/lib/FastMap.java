@@ -249,6 +249,14 @@ public class FastMap<K, V> implements Iterable<V>
 	public FastMap<K, V> setWeakIndexing()
 	{ keys.setWeakIndexing(); return this; }
 	
+	public FastList<MapEntry<K, V>> entrySet()
+	{
+		FastList<MapEntry<K, V>> l = new FastList<MapEntry<K, V>>();
+		for(int i = 0; i < size(); i++)
+			l.add(new MapEntry<K, V>(keys.get(i), values.get(i)));
+		return l;
+	}
+	
 	/*public static class Serializer implements JsonDeserializer<FastMap>, JsonSerializer<FastMap>
 	{
 		public JsonElement serialize(FastMap src, Type typeOfSrc, JsonSerializationContext context)

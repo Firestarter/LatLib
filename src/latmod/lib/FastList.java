@@ -81,7 +81,8 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	{
 		if(isLocked) return false;
 		if(size == objects.length) expand(incr);
-		objects[size++] = e;
+		objects[size] = e;
+		size++;
 		return true;
 	}
 	
@@ -122,7 +123,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	
 	public int indexOf(Object o)
 	{
-		if(size == 0 || o == null) return -1;
+		if(size == 0 || (!weakIndexing && o == null)) return -1;
 		for(int i = 0; i < size; i++)
 			if(objects[i] == o) return i;
 		if(weakIndexing) return -1;

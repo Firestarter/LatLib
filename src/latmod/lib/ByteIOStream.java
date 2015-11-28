@@ -115,7 +115,10 @@ public final class ByteIOStream
 	
 	public String readString()
 	{
-		int l = readUShort();
+		int l = readShort();
+		
+		if(l == -1) return null;
+		l = l & 0xFFFF;
 		
 		if(utf_bytes == null || utf_bytes.length < l)
 			utf_bytes = new byte[l * 2];
@@ -247,6 +250,7 @@ public final class ByteIOStream
 	
 	public void writeString(String s)
 	{
+		if(s == null) { writeShort((short)-1); return; }
 		int sl = s.length();
 		int l = 0;
 		int c, count = 0;

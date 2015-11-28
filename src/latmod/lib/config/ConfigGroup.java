@@ -1,15 +1,14 @@
 package latmod.lib.config;
 
-
 import java.lang.reflect.Field;
 
-import latmod.lib.FastList;
+import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
-public final class ConfigGroup extends FinalIDObject
+public final class ConfigGroup extends FinalIDObject implements Cloneable
 {
 	public final FastList<ConfigEntry> entries;
-	
+	private String displayName = null;
 	public ConfigList parentList = null;
 	
 	public ConfigGroup(String s)
@@ -24,7 +23,7 @@ public final class ConfigGroup extends FinalIDObject
 		{ entries.add(e); e.parentGroup = this; }
 	}
 
-	public void addAll(Class<?> c)
+	public ConfigGroup addAll(Class<?> c)
 	{
 		try
 		{
@@ -47,5 +46,34 @@ public final class ConfigGroup extends FinalIDObject
 		}
 		catch(Exception e)
 		{ e.printStackTrace(); }
+		
+		return this;
+	}
+	
+	public ConfigGroup setName(String s)
+	{ displayName = s; return this; }
+	
+	public String getDisplayName()
+	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
+	
+	public String getFullID()
+	{
+		if(!isValid()) return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append(parentList.ID);
+		sb.append('.');
+		sb.append(ID);
+		return sb.toString();
+	}
+	
+	public boolean isValid()
+	{ return ID != null && parentList != null && parentList.ID != null; }
+	
+	public ConfigGroup clone()
+	{
+		ConfigGroup g = new ConfigGroup(ID);
+		g.displayName = displayName;
+		g.entries.addAll(entries);
+		return g;
 	}
 }

@@ -8,7 +8,7 @@ import latmod.lib.util.IntBounds;
 public class ConfigEntryInt extends ConfigEntry
 {
 	private int value;
-	private final IntBounds bounds;
+	public final IntBounds bounds;
 	
 	public ConfigEntryInt(String id, IntBounds b)
 	{
@@ -31,6 +31,9 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
+	
+	public String getValue()
+	{ return Integer.toString(get()); }
 	
 	void write(ByteIOStream io)
 	{ io.writeInt(get()); }

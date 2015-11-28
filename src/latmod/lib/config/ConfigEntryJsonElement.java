@@ -11,8 +11,8 @@ class ConfigEntryJsonElement extends ConfigEntry
 	ConfigEntryJsonElement(String id)
 	{
 		super(id, PrimitiveType.NULL);
-		hideEntry = true;
-		serialize = false;
+		setHidden();
+		setExcluded();
 	}
 	
 	public final void setJson(JsonElement o)
@@ -20,6 +20,9 @@ class ConfigEntryJsonElement extends ConfigEntry
 	
 	public final JsonElement getJson()
 	{ return value; }
+	
+	public String getValue()
+	{ return String.valueOf(value); }
 	
 	void write(ByteIOStream io)
 	{ }

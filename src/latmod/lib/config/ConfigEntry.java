@@ -8,8 +8,10 @@ import latmod.lib.util.FinalIDObject;
 public abstract class ConfigEntry extends FinalIDObject
 {
 	public final PrimitiveType type;
-	public boolean hideEntry = false;
-	public boolean serialize = true;
+	private boolean isHidden = false;
+	private boolean isExcluded = false;
+	private boolean sync = false;
+	public ConfigEntryInfo info;
 	
 	public ConfigGroup parentGroup = null;
 	
@@ -18,12 +20,21 @@ public abstract class ConfigEntry extends FinalIDObject
 	
 	public abstract void setJson(JsonElement o);
 	public abstract JsonElement getJson();
+	public abstract String getValue();
 	abstract void write(ByteIOStream io);
 	abstract void read(ByteIOStream io);
 	
+	void writeExtended(ByteIOStream io)
+	{ write(io); }
+	
+	void readExtended(ByteIOStream io)
+	{ read(io); }
+	
+	@SuppressWarnings("all")
 	public static ConfigEntry getEntry(PrimitiveType t, String id)
 	{
-		if(PrimitiveType.isNull(t)) return null;
+		if(t == null) return null;
+		else if(t == PrimitiveType.NULL) return new ConfigEntryBlank(id);
 		else if(t == PrimitiveType.BOOLEAN) return new ConfigEntryBool(id, false);
 		else if(t == PrimitiveType.FLOAT) return new ConfigEntryFloat(id, null);
 		else if(t == PrimitiveType.FLOAT_ARRAY) return new ConfigEntryFloatArray(id, null);
@@ -31,6 +42,8 @@ public abstract class ConfigEntry extends FinalIDObject
 		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, null);
 		else if(t == PrimitiveType.STRING) return new ConfigEntryString(id, null);
 		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id, null);
+		else if(t == PrimitiveType.ENUM) return new ConfigEntryEnumExtended(id);
+		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, 0, false);
 		return null;
 	}
 	
@@ -55,13 +68,30 @@ public abstract class ConfigEntry extends FinalIDObject
 	}
 	
 	public boolean isValid()
-	{ return ID != null && parentGroup != null && parentGroup.ID != null && parentGroup.parentList != null && parentGroup.parentList.ID != null; }
+	{ return ID != null && parentGroup != null && parentGroup.isValid(); }
 	
 	@SuppressWarnings("unchecked")
-	public <E extends ConfigEntry> E setHidden(boolean b)
-	{ hideEntry = b; return (E)this; }
+	public final <E extends ConfigEntry> E setHidden()
+	{ isHidden = true; return (E)this; }
+	
+	public boolean isHidden()
+	{ return isHidden; }
 	
 	@SuppressWarnings("unchecked")
-	public <E extends ConfigEntry> E setSave(boolean b)
-	{ serialize = b; return (E)this; }
+	public final <E extends ConfigEntry> E setExcluded()
+	{ isExcluded = true; return (E)this; }
+	
+	public boolean isExcluded()
+	{ return isExcluded; }
+	
+	@SuppressWarnings("unchecked")
+	public final <E extends ConfigEntry> E sync()
+	{ sync = true; return (E)this; }
+	
+	public boolean shouldSync()
+	{ return sync; }
+	
+	@SuppressWarnings("unchecked")
+	public final <E extends ConfigEntry> E setInfo(String s)
+	{ info = new ConfigEntryInfo(this, s); return (E)this; }
 }

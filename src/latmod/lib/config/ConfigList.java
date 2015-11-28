@@ -8,10 +8,11 @@ import com.google.gson.*;
 import latmod.lib.*;
 import latmod.lib.util.IDObject;
 
-public final class ConfigList extends IDObject
+public final class ConfigList extends IDObject implements Cloneable
 {
 	public FastList<ConfigGroup> groups;
-	public ConfigFile parentFile = null;
+	public IConfigFile parentFile = null;
+	private String displayName = null;
 	
 	public ConfigList()
 	{ super(null); }
@@ -43,7 +44,7 @@ public final class ConfigList extends IDObject
 					{
 						ConfigEntry e1 = g1.entries.get(j);
 						ConfigEntry e0 = g0.entries.getObj(e1);
-						if(e0 != null && e0.serialize)
+						if(e0 != null && !e0.isExcluded())
 						{
 							try
 							{
@@ -66,9 +67,10 @@ public final class ConfigList extends IDObject
 		return result;
 	}
 	
-	public int writeToIO(ByteIOStream io)
+	public int writeToIO(ByteIOStream io, boolean extended)
 	{
 		int count = 0;
+		if(extended) io.writeString(displayName);
 		io.writeUShort(groups.size());
 		
 		for(int i = 0; i < groups.size(); i++)
@@ -83,7 +85,12 @@ public final class ConfigList extends IDObject
 				e.onPreLoaded();
 				io.writeString(e.toString());
 				io.writeUByte(e.type.ordinal());
-				e.write(io);
+				if(extended)
+				{
+					e.writeExtended(io);
+					io.writeString((e.info != null && e.info.info != null) ? e.info.info : null);
+				}
+				else e.write(io);
 				count++;
 			}
 		}
@@ -91,11 +98,12 @@ public final class ConfigList extends IDObject
 		return count;
 	}
 	
-	public static ConfigList readFromIO(ByteIOStream io)
+	public static ConfigList readFromIO(ByteIOStream io, boolean extended)
 	{
 		ConfigList list = new ConfigList();
 		list.groups = new FastList<ConfigGroup>();
 		
+		if(extended) list.displayName = io.readString();
 		int gs = io.readUShort();
 		
 		for(int i = 0; i < gs; i++)
@@ -113,7 +121,12 @@ public final class ConfigList extends IDObject
 				
 				if(e != null)
 				{
-					e.read(io);
+					if(extended)
+					{
+						e.readExtended(io);
+						e.setInfo(io.readString());
+					}
+					else e.read(io);
 					gr.add(e);
 				}
 			}
@@ -140,7 +153,7 @@ public final class ConfigList extends IDObject
 				
 				for(ConfigEntry e : g.entries)
 				{
-					if(e.serialize)
+					if(!e.isExcluded())
 					{
 						e.onPreLoaded();
 						o1.add(e.toString(), context.serialize(e.getJson()));
@@ -205,7 +218,14 @@ public final class ConfigList extends IDObject
 		ConfigList list1 = new ConfigList();
 		list1.setID(ID);
 		list1.parentFile = parentFile;
-		for(ConfigGroup g : groups) list1.add(g);
+		list1.displayName = displayName;
+		for(ConfigGroup g : groups) list1.add(g.clone());
 		return list1;
 	}
+	
+	public ConfigList setName(String s)
+	{ displayName = s; return this; }
+	
+	public String getDisplayName()
+	{ return displayName == null ? ID : displayName; }
 }

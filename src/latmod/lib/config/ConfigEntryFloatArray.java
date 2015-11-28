@@ -38,6 +38,28 @@ public class ConfigEntryFloatArray extends ConfigEntry
 		return a;
 	}
 	
+	public String getValue()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		sb.append(' ');
+		
+		for(int i = 0; i < value.length; i++)
+		{
+			sb.append(value[i]);
+			
+			if(i != value.length - 1)
+			{
+				sb.append(',');
+				sb.append(' ');
+			}
+		}
+		
+		sb.append(' ');
+		sb.append(']');
+		return sb.toString();
+	}
+	
 	void write(ByteIOStream io)
 	{
 		value = get();

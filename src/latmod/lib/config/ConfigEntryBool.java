@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import latmod.lib.*;
 
-public class ConfigEntryBool extends ConfigEntry
+public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntry
 {
 	private boolean value;
 	
@@ -23,9 +23,15 @@ public class ConfigEntryBool extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
+	public String getValue()
+	{ return get() ? "true" : "false"; }
+	
 	void write(ByteIOStream io)
 	{ io.writeBoolean(get()); }
 	
 	void read(ByteIOStream io)
 	{ set(io.readBoolean()); }
+	
+	public void onClicked()
+	{ set(!get()); }
 }

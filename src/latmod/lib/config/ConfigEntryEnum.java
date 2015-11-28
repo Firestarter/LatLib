@@ -4,25 +4,36 @@ import com.google.gson.*;
 
 import latmod.lib.*;
 
-public class ConfigEntryEnum<E extends Enum<?>> extends ConfigEntry // EnumTypeAdapterFactory
+@SuppressWarnings("all")
+public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements IClickableConfigEntry // EnumTypeAdapterFactory
 {
 	public final Class<E> enumClass;
+	public final FastList<E> values;
 	private E value;
 	
-	public ConfigEntryEnum(String id, Class<E> c, E def)
-	{ super(id, PrimitiveType.ENUM); enumClass = c; value = def; }
+	public ConfigEntryEnum(String id, Class<E> c, E[] val, E def, boolean addNull)
+	{
+		super(id, PrimitiveType.ENUM);
+		enumClass = c;
+		values = new FastList<E>();
+		values.setWeakIndexing();
+		if(addNull) values.add(null);
+		values.addAll(val);
+		value = def;
+	}
 	
-	@SuppressWarnings("unchecked")
 	public void set(Object o)
 	{ value = (E)o; }
 	
 	public E get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o)
-	{ set(fromString(o.getAsString())); }
+	public static <T extends Enum<?>> String getName(T e)
+	{ return e == null ? "-" : e.name().toLowerCase(); }
 	
-	@SuppressWarnings("unchecked")
+	public int getIndex()
+	{ return values.indexOf(get()); }
+	
 	private E fromString(String s)
 	{
 		try
@@ -43,12 +54,29 @@ public class ConfigEntryEnum<E extends Enum<?>> extends ConfigEntry // EnumTypeA
 		return null;
 	}
 	
+	public final void setJson(JsonElement o)
+	{ set(fromString(o.getAsString())); }
+	
 	public final JsonElement getJson()
-	{ return new JsonPrimitive(get().name().toLowerCase()); }
+	{ return new JsonPrimitive(getName(get())); }
+	
+	public String getValue()
+	{ return getName(get()); }
 	
 	void write(ByteIOStream io)
-	{ io.writeString(get().name()); }
+	{ io.writeString(getName(get())); }
 	
 	void read(ByteIOStream io)
 	{ fromString(io.readString()); }
+	
+	void writeExtended(ByteIOStream io)
+	{
+		io.writeString(getName(get()));
+		io.writeUByte(values.size());
+		for(int i = 0; i < values.size(); i++)
+			io.writeString(getName(values.get(i)));
+	}
+	
+	public void onClicked()
+	{ set(values.get((getIndex() + 1) % values.size())); }
 }

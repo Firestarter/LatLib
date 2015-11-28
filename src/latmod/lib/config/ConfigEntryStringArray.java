@@ -42,6 +42,9 @@ public class ConfigEntryStringArray extends ConfigEntry
 		return a;
 	}
 	
+	public String getValue()
+	{ return get().toString(); }
+	
 	void write(ByteIOStream io)
 	{
 		value = get();
@@ -56,6 +59,6 @@ public class ConfigEntryStringArray extends ConfigEntry
 		int s = io.readUShort();
 		for(int i = 0; i < s; i++)
 			value.add(io.readString());
-		set(value);
+		set(value.clone());
 	}
 }

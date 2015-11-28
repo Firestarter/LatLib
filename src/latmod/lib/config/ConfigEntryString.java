@@ -23,6 +23,9 @@ public class ConfigEntryString extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
+	public String getValue()
+	{ return get(); }
+	
 	void write(ByteIOStream io)
 	{ io.writeString(get()); }
 	

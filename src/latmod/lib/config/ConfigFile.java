@@ -5,14 +5,12 @@ import java.io.File;
 import latmod.lib.*;
 import latmod.lib.util.IDObject;
 
-public final class ConfigFile extends IDObject implements Cloneable
+public final class ConfigFile extends IDObject implements IConfigFile
 {
 	public final File file;
 	public final ConfigList configList;
-	public final boolean canEdit;
-	public ConfigFileLoader loader;
 	
-	public ConfigFile(String id, File f, boolean edit)
+	public ConfigFile(String id, File f)
 	{
 		super(id);
 		configList = new ConfigList();
@@ -20,30 +18,34 @@ public final class ConfigFile extends IDObject implements Cloneable
 		configList.groups = new FastList<ConfigGroup>();
 		configList.parentFile = this;
 		file = LMFileUtils.newFile(f);
-		canEdit = edit;
-		loader = new ConfigFileLoader();
 	}
+	
+	public ConfigList getList()
+	{ return configList; }
 	
 	public void add(ConfigGroup g)
 	{ configList.add(g); }
 	
 	public void load()
-	{ loader.load(this); }
+	{
+		ConfigList list = (ConfigList)LMJsonUtils.fromJsonFile(file, ConfigList.class);
+		if(list != null)
+		{
+			list.setID(ID);
+			if(configList.loadFromList(list)) save();
+		}
+	}
 	
 	public void save()
-	{ loader.save(this); }
+	{
+		try { LMFileUtils.save(file, toJsonString(true)); }
+		catch(Exception e) { e.printStackTrace(); }
+	}
 	
-	public String toJsonString(boolean pretty)
+	public final String toJsonString(boolean pretty)
 	{
 		configList.sort();
 		String s = LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configList);
 		return s;
-	}
-	
-	public ConfigFile clone()
-	{
-		ConfigFile f = new ConfigFile(toString(), file, canEdit);
-		f.configList.groups = configList.groups.clone();
-		return f;
 	}
 }
