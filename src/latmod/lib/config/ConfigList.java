@@ -29,8 +29,6 @@ public final class ConfigList extends IDObject implements Cloneable
 		
 		boolean result = false;
 		
-		System.out.println("Reading " + ID + " from " + l.ID);
-		
 		if(l != null && l.groups != null && !l.groups.isEmpty())
 		{
 			for(int i = 0; i < l.groups.size(); i++)

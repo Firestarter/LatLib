@@ -30,7 +30,6 @@ public abstract class ConfigEntry extends FinalIDObject
 	void readExtended(ByteIOStream io)
 	{ read(io); }
 	
-	@SuppressWarnings("all")
 	public static ConfigEntry getEntry(PrimitiveType t, String id)
 	{
 		if(t == null) return null;
