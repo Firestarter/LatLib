@@ -86,7 +86,8 @@ public final class ConfigList extends IDObject implements Cloneable
 				if(extended)
 				{
 					e.writeExtended(io);
-					io.writeString((e.info != null && e.info.info != null) ? e.info.info : null);
+					io.writeString(e.info);
+					io.writeString(e.defaultValue);
 				}
 				else e.write(io);
 				count++;
@@ -122,7 +123,8 @@ public final class ConfigList extends IDObject implements Cloneable
 					if(extended)
 					{
 						e.readExtended(io);
-						e.setInfo(io.readString());
+						e.info = io.readString();
+						e.defaultValue = io.readString();
 					}
 					else e.read(io);
 					gr.add(e);

@@ -11,7 +11,8 @@ public abstract class ConfigEntry extends FinalIDObject
 	private boolean isHidden = false;
 	private boolean isExcluded = false;
 	private boolean sync = false;
-	public ConfigEntryInfo info;
+	public String info = null;
+	public String defaultValue = null;
 	
 	public ConfigGroup parentGroup = null;
 	
@@ -92,5 +93,11 @@ public abstract class ConfigEntry extends FinalIDObject
 	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setInfo(String s)
-	{ info = new ConfigEntryInfo(this, s); return (E)this; }
+	{ info = s; return (E)this; }
+	
+	void updateDefault()
+	{ try { defaultValue = getValue(); } catch(Exception e) { } }
+	
+	public String getMinValue() { return null; }
+	public String getMaxValue() { return null; }
 }

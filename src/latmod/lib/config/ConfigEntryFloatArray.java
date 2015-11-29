@@ -12,6 +12,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 	{
 		super(id, PrimitiveType.FLOAT_ARRAY);
 		set(def);
+		updateDefault();
 	}
 	
 	public void set(float[] o)

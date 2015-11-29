@@ -9,7 +9,11 @@ public class ConfigEntryString extends ConfigEntry
 	private String value;
 	
 	public ConfigEntryString(String id, String def)
-	{ super(id, PrimitiveType.STRING); value = def; }
+	{
+		super(id, PrimitiveType.STRING);
+		set(def);
+		updateDefault();
+	}
 	
 	public void set(String o)
 	{ value = o == null ? "" : o; }

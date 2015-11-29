@@ -13,6 +13,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		super(id, PrimitiveType.STRING_ARRAY);
 		value = new FastList<String>();
 		set(def);
+		updateDefault();
 	}
 	
 	public void set(FastList<String> o)

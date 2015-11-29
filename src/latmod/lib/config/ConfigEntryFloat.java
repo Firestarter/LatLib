@@ -8,13 +8,14 @@ import latmod.lib.util.FloatBounds;
 public class ConfigEntryFloat extends ConfigEntry
 {
 	private float value;
-	public final FloatBounds bounds;
+	private FloatBounds bounds;
 	
 	public ConfigEntryFloat(String id, FloatBounds b)
 	{
 		super(id, PrimitiveType.FLOAT);
 		bounds = (b == null) ? new FloatBounds(0F) : b;
 		set(bounds.defValue);
+		updateDefault();
 	}
 	
 	public void set(float v)
@@ -37,4 +38,25 @@ public class ConfigEntryFloat extends ConfigEntry
 	
 	void read(ByteIOStream io)
 	{ set(io.readFloat()); }
+	
+	void writeExtended(ByteIOStream io)
+	{
+		write(io);
+		io.writeFloat(bounds.minValue);
+		io.writeFloat(bounds.maxValue);
+	}
+	
+	void readExtended(ByteIOStream io)
+	{
+		read(io);
+		float min = io.readFloat();
+		float max = io.readFloat();
+		bounds = new FloatBounds(bounds.defValue, min, max);
+	}
+	
+	public String getMinValue()
+	{ return MathHelperLM.formatDouble(bounds.minValue); }
+	
+	public String getMaxValue()
+	{ return MathHelperLM.formatDouble(bounds.maxValue); }
 }

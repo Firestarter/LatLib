@@ -14,6 +14,7 @@ public class ConfigEntryColor extends ConfigEntry
 		super(id, PrimitiveType.INT);
 		alpha = a;
 		set(def);
+		updateDefault();
 	}
 	
 	private int format(int col)

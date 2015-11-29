@@ -8,13 +8,14 @@ import latmod.lib.util.IntBounds;
 public class ConfigEntryInt extends ConfigEntry
 {
 	private int value;
-	public final IntBounds bounds;
+	private IntBounds bounds;
 	
 	public ConfigEntryInt(String id, IntBounds b)
 	{
 		super(id, PrimitiveType.INT);
 		bounds = (b == null) ? new IntBounds(0) : b;
 		set(bounds.defValue);
+		updateDefault();
 	}
 	
 	public void set(int v)
@@ -40,4 +41,25 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	void read(ByteIOStream io)
 	{ set(io.readInt()); }
+	
+	void writeExtended(ByteIOStream io)
+	{
+		write(io);
+		io.writeInt(bounds.minValue);
+		io.writeInt(bounds.maxValue);
+	}
+	
+	void readExtended(ByteIOStream io)
+	{
+		read(io);
+		int min = io.readInt();
+		int max = io.readInt();
+		bounds = new IntBounds(bounds.defValue, min, max);
+	}
+	
+	public String getMinValue()
+	{ return Integer.toString(bounds.minValue); }
+	
+	public String getMaxValue()
+	{ return Integer.toString(bounds.maxValue); }
 }

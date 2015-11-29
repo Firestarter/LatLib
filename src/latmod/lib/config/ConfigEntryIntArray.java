@@ -13,6 +13,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		super(id, PrimitiveType.INT_ARRAY);
 		value = new IntList();
 		set(def);
+		updateDefault();
 	}
 	
 	public void set(IntList l)

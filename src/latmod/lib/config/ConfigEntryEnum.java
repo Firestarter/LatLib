@@ -19,7 +19,8 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 		values.setWeakIndexing();
 		if(addNull) values.add(null);
 		values.addAll(val);
-		value = def;
+		set(def);
+		updateDefault();
 	}
 	
 	public void set(Object o)

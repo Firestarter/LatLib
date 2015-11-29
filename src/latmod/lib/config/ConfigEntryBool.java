@@ -9,7 +9,11 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	private boolean value;
 	
 	public ConfigEntryBool(String id, boolean def)
-	{ super(id, PrimitiveType.BOOLEAN); set(def); }
+	{
+		super(id, PrimitiveType.BOOLEAN);
+		set(def);
+		updateDefault();
+	}
 	
 	public void set(boolean v)
 	{ value = v; }
