@@ -77,6 +77,18 @@ public class LMStringUtils
 		}
 	}
 	
+	public static String replace(String s, char c, char with)
+	{
+		if(s == null || s.isEmpty()) return s;
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < s.length(); i++)
+		{
+			char c1 = s.charAt(i);
+			sb.append((c1 == c) ? with : c1);
+		}
+		return sb.toString();
+	}
+	
 	public static <E> String[] toStrings(E[] o)
 	{
 		if(o == null) return null;

@@ -35,15 +35,15 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	{ isLocked = true; return this; }
 	
 	public FastList<E> setWeakIndexing()
-	{ weakIndexing = true; return this; }
+	{ if(!isLocked) weakIndexing = true; return this; }
 	
 	public boolean isLocked()
 	{ return isLocked; }
 	
 	public int hashCode()
 	{
-		if(size == 0) return 0;
-		if(size == 1) return LMUtils.hashCodeOf(objects[0]);
+		if(size == 0 || objects[0] == null) return 0;
+		if(size == 1) return objects[0].hashCode();
 		int h = 0;
 		for(int i = 0; i < size; i++)
 			h = h * 31 + LMUtils.hashCodeOf(objects[i]);

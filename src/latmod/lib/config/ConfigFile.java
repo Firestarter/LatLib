@@ -32,8 +32,10 @@ public final class ConfigFile extends IDObject implements IConfigFile
 		if(list != null)
 		{
 			list.setID(ID);
-			if(configList.loadFromList(list)) save();
+			configList.loadFromList(list);
 		}
+		
+		save();
 	}
 	
 	public void save()

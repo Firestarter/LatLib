@@ -58,8 +58,16 @@ public class ConfigEntryInt extends ConfigEntry
 	}
 	
 	public String getMinValue()
-	{ return Integer.toString(bounds.minValue); }
+	{
+		if(bounds.minValue == Integer.MAX_VALUE) return "2.14B";
+		else if(bounds.minValue == Integer.MIN_VALUE) return "-2.14B";
+		else return Integer.toString(bounds.minValue);
+	}
 	
 	public String getMaxValue()
-	{ return Integer.toString(bounds.maxValue); }
+	{
+		if(bounds.maxValue == Integer.MAX_VALUE) return "2.14B";
+		else if(bounds.maxValue == Integer.MIN_VALUE) return "-2.14B";
+		else return Integer.toString(bounds.maxValue);
+	}
 }
