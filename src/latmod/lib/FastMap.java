@@ -17,8 +17,8 @@ public class FastMap<K, V> implements Iterable<V>
 	public FastMap<K, V> setLocked()
 	{ keys.setLocked(); values.setLocked(); return this; }
 	
-	public FastMap<K, V> setNullRemoves(boolean b)
-	{ nullRemoves = b; return this; }
+	public FastMap<K, V> allowNullKeys()
+	{ if(!keys.isLocked()) nullRemoves = false; return this; }
 	
 	public FastMap(int init)
 	{ this(init, 5); }
@@ -30,12 +30,10 @@ public class FastMap<K, V> implements Iterable<V>
 	{ return values.size(); }
 	
 	public V get(Object o)
-	{ int i = keys.indexOf(o);
-	return (i == -1) ? null : values.get(i); }
+	{ return values.get(keys.indexOf(o)); }
 	
 	public K getKey(Object o)
-	{ int i = values.indexOf(o);
-	return (i == -1) ? null : keys.get(i); }
+	{ return keys.get(values.indexOf(o)); }
 	
 	public boolean put(K k, V v)
 	{

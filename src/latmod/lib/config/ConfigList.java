@@ -1,5 +1,6 @@
 package latmod.lib.config;
 
+import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public final class ConfigList extends IDObject implements Cloneable
 							}
 							catch(Exception ex)
 							{
-								System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.toString() + "." + e0.toString() + "' (type:" + e0.type + ")");
+								System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.type + ")");
 								System.err.println(ex.toString());
 							}
 						}
@@ -74,14 +75,14 @@ public final class ConfigList extends IDObject implements Cloneable
 		for(int i = 0; i < groups.size(); i++)
 		{
 			ConfigGroup g = groups.get(i);
-			io.writeString(g.toString());
+			io.writeString(g.ID);
 			io.writeUShort(g.entries.size());
 			
 			for(int j = 0; j < g.entries.size(); j++)
 			{
 				ConfigEntry e = g.entries.get(j);
 				e.onPreLoaded();
-				io.writeString(e.toString());
+				io.writeString(e.ID);
 				io.writeUByte(e.type.ordinal());
 				if(extended)
 				{
@@ -156,11 +157,11 @@ public final class ConfigList extends IDObject implements Cloneable
 					if(!e.isExcluded())
 					{
 						e.onPreLoaded();
-						o1.add(e.toString(), context.serialize(e.getJson()));
+						o1.add(e.ID, context.serialize(e.getJson()));
 					}
 				}
 				
-				if(!o1.entrySet().isEmpty()) o.add(g.toString(), o1);
+				if(!o1.entrySet().isEmpty()) o.add(g.ID, o1);
 			}
 			
 			return o;
@@ -228,4 +229,27 @@ public final class ConfigList extends IDObject implements Cloneable
 	
 	public String getDisplayName()
 	{ return displayName == null ? ID : displayName; }
+	
+	public void printTree(PrintStream stream, int spaceSize)
+	{
+		stream.println(ID);
+		sort();
+		
+		for(ConfigGroup g : groups)
+		{
+			for(int i = 0; i < spaceSize; i++)
+				stream.print(' ');
+			stream.println(g.ID);
+			
+			for(ConfigEntry e : g.entries)
+			{
+				for(int i = 0; i < spaceSize * 2; i++)
+					stream.print(' ');
+				stream.print(e.ID);
+				stream.print(':');
+				stream.print(' ');
+				stream.println(e.getValue());
+			}
+		}
+	}
 }

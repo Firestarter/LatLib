@@ -25,7 +25,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	public FastList()
 	{ this(10); }
 	
-	public FastList(Object[] o)
+	public FastList(E... o)
 	{ this((o == null) ? 10 : o.length); addAll(o); }
 	
 	public FastList<E> blankCopy()
@@ -90,7 +90,7 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 	{ if(!isLocked) objects[i] = e; return e; }
 	
 	public E get(int i)
-	{ return objects[i]; }
+	{ return (i >= 0 && i < size) ? objects[i] : null; }
 	
 	public E remove(int i)
 	{
@@ -373,9 +373,6 @@ public class FastList<E> implements Iterable<E>, List<E> //ArrayList
 		
 		return true;
 	}
-	
-	public static <T> FastList<T> asList(T... a)
-	{ return new FastList<T>(a); }
 	
 	public static <T> FastList<T> asList(Collection<T> c)
 	{ FastList<T> l = new FastList<T>(); l.addAll(c); return l; }

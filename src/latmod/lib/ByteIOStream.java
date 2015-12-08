@@ -1,5 +1,5 @@
 package latmod.lib;
-import java.io.UTFDataFormatException;
+import java.io.*;
 import java.util.UUID;
 
 /** Made by LatvianModder */
@@ -22,6 +22,9 @@ public final class ByteIOStream
 	
 	public ByteIOStream()
 	{ this(16); }
+	
+	public boolean hasData()
+	{ return pos > 0; }
 	
 	public byte[] toByteArray()
 	{
@@ -299,6 +302,13 @@ public final class ByteIOStream
 		writeRawBytes(utf_bytes, 0, l);
 	}
 	
+	public void writeRawString(String s)
+	{
+		if(s == null || s.isEmpty()) return;
+		for(int i = 0; i < s.length(); i++)
+			writeByte((byte)s.charAt(i));
+	}
+	
 	public void writeUShort(int s)
 	{
 		expand(2);
@@ -334,5 +344,36 @@ public final class ByteIOStream
 		expand(16);
 		Bits.fromUUID(bytes, pos, uuid);
 		pos += 16;
+	}
+	
+	public OutputStream createOutputStream()
+	{
+		OutputStream os = new OutputStream()
+		{
+			public void write(int b) throws IOException
+			{ writeUByte(b); }
+			
+			public void write(byte b[], int off, int len) throws IOException
+			{ writeRawBytes(b, off, len); }
+		};
+		
+		return os;
+	}
+	
+	public InputStream createInputStream()
+	{
+		InputStream is = new InputStream()
+		{
+			public int read() throws IOException
+			{ return readUByte(); }
+			
+			public int read(byte b[], int off, int len) throws IOException
+			{ return readRawBytes(b, off, len); }
+			
+			public int available()
+			{ return bytes.length - pos; }
+		};
+		
+		return is;
 	}
 }

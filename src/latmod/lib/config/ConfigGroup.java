@@ -1,6 +1,9 @@
 package latmod.lib.config;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
+import java.util.Map;
+
+import com.google.gson.*;
 
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
@@ -22,7 +25,7 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 		if(e != null && !entries.contains(e))
 		{ entries.add(e); e.parentGroup = this; }
 	}
-
+	
 	public ConfigGroup addAll(Class<?> c)
 	{
 		try
@@ -75,5 +78,49 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 		g.displayName = displayName;
 		g.entries.addAll(entries);
 		return g;
+	}
+	
+	public static class Serializer implements JsonSerializer<ConfigGroup>, JsonDeserializer<ConfigGroup>
+	{
+		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)
+		{
+			if(src == null) return null;
+			
+			JsonObject o = new JsonObject();
+			
+			for(ConfigEntry e : src.entries)
+			{
+				if(!e.isExcluded())
+				{
+					e.onPreLoaded();
+					o.add(e.ID, context.serialize(e.getJson()));
+				}
+			}
+			
+			return o;
+		}
+		
+		public ConfigGroup deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+		{
+			if(json.isJsonNull()) return null;
+			ConfigGroup g = new ConfigGroup("");
+			
+			JsonObject o = json.getAsJsonObject();
+			
+			for(Map.Entry<String, JsonElement> e : o.entrySet())
+			{
+				ConfigEntry entry = new ConfigEntryJsonElement(e.getKey());
+				
+				if(!e.getValue().isJsonNull())
+				{
+					entry.setJson(e.getValue());
+					entry.onPostLoaded();
+				}
+				
+				g.add(entry);
+			}
+			
+			return g;
+		}
 	}
 }

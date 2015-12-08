@@ -47,13 +47,8 @@ public abstract class ConfigEntry extends FinalIDObject
 		return null;
 	}
 	
-	public void onPreLoaded()
-	{
-	}
-	
-	public void onPostLoaded()
-	{
-	}
+	public void onPreLoaded() { }
+	public void onPostLoaded() { }
 	
 	public String getFullID()
 	{

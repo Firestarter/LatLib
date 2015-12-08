@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.google.gson.*;
 
-import latmod.lib.config.ConfigList;
+import latmod.lib.config.*;
 import latmod.lib.json.*;
 
 /** Type for Lists: new TypeToken<List<E>>() {}.getType() */
@@ -35,6 +35,7 @@ public class LMJsonUtils
 			register(IntMap.class, new IntMap.Serializer());
 			register(UUID.class, new UUIDTypeAdapterLM());
 			register(ConfigList.class, new ConfigList.Serializer());
+			register(ConfigGroup.class, new ConfigGroup.Serializer());
 			register(PrimitiveType.class, new PrimitiveType.Serializer());
 			register(Color.class, new ColorSerializerLM());
 			register(Time.class, new Time.Serializer());
