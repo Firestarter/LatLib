@@ -426,4 +426,12 @@ public class LMStringUtils
 			return new String(c);
 		}
 	}
+	
+	public static String[] toStringArray(List<?> l)
+	{
+		String[] s = new String[l.size()];
+		for(int i = 0; i < s.length; i++)
+			s[i] = String.valueOf(l.get(i));
+		return s;
+	}
 }

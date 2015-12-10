@@ -4,24 +4,18 @@ import java.util.*;
 /** Made by LatvianModder */
 public class FastMap<K, V> implements Iterable<V>
 {
-	public final FastList<K> keys;
-	public final FastList<V> values;
+	public final ArrayList<K> keys;
+	public final ArrayList<V> values;
 	private boolean nullRemoves = true;
 	
-	public FastMap(int init, int inc)
+	public FastMap(int init)
 	{
-		keys = new FastList<K>(init, inc);
-		values = new FastList<V>(init, inc);
+		keys = new ArrayList<K>(init);
+		values = new ArrayList<V>(init);
 	}
 	
-	public FastMap<K, V> setLocked()
-	{ keys.setLocked(); values.setLocked(); return this; }
-	
 	public FastMap<K, V> allowNullKeys()
-	{ if(!keys.isLocked()) nullRemoves = false; return this; }
-	
-	public FastMap(int init)
-	{ this(init, 5); }
+	{ nullRemoves = false; return this; }
 	
 	public FastMap()
 	{ this(10); }
@@ -30,14 +24,20 @@ public class FastMap<K, V> implements Iterable<V>
 	{ return values.size(); }
 	
 	public V get(Object o)
-	{ return values.get(keys.indexOf(o)); }
+	{
+		int i = keys.indexOf(o);
+		return i == -1 ? null : values.get(i);
+	}
 	
 	public K getKey(Object o)
-	{ return keys.get(values.indexOf(o)); }
+	{
+		int i = values.indexOf(o);
+		return i == -1 ? null : keys.get(i);
+	}
 	
 	public boolean put(K k, V v)
 	{
-		if(k == null || keys.isLocked()) return false;
+		if(k == null) return false;
 		
 		int i = keys.indexOf(k);
 		if(i != -1)
@@ -68,7 +68,6 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean remove(K k)
 	{
-		if(keys.isLocked()) return false;
 		int i = keys.indexOf(k);
 		if(i != -1)
 		{
@@ -82,7 +81,6 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean removeValue(V v)
 	{
-		if(keys.isLocked()) return false;
 		int i = values.indexOf(v);
 		if(i != -1)
 		{
@@ -96,31 +94,20 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public boolean clear()
 	{
-		if(keys.isLocked() || isEmpty()) return false;
+		if(isEmpty()) return false;
 		keys.clear();
 		values.clear();
 		return true;
 	}
 	
-	public FastMap<K, V> clone()
-	{
-		FastMap<K, V> map1 = new FastMap<K, V>();
-		map1.keys.cloneFrom(keys);
-		map1.values.cloneFrom(values);
-		if(keys.isLocked()) map1.setLocked();
-		return map1;
-	}
-	
 	public void removeAllKeys(FastList<? extends K> al)
 	{
-		if(keys.isLocked()) return;
 		for(int i = 0; i < al.size(); i++)
 			remove(al.get(i));
 	}
 	
 	public void removeAllValues(FastList<? extends V> al)
 	{
-		if(keys.isLocked()) return;
 		for(int i = 0; i < al.size(); i++)
 			removeValue(al.get(i));
 	}
@@ -130,7 +117,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public int putAll(FastMap<K, V> map)
 	{
-		if(map == null || map.isEmpty() || keys.isLocked()) return 0;
+		if(map == null || map.isEmpty()) return 0;
 		for(int i = 0; i < map.size(); i++)
 			put(map.keys.get(i), map.values.get(i));
 		return map.size();
@@ -138,7 +125,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public int putAll(Map<K, V> map)
 	{
-		if(map == null || map.isEmpty() || keys.isLocked()) return 0;
+		if(map == null || map.isEmpty()) return 0;
 		Iterator<K> itrK = map.keySet().iterator();
 		Iterator<V> itrV = map.values().iterator();
 		while(itrK.hasNext() && itrV.hasNext())
@@ -192,7 +179,7 @@ public class FastMap<K, V> implements Iterable<V>
 
 	public void sortFromKeyStrings(final boolean ignoreCase)
 	{
-		if(keys.isLocked() || size() < 2) return;
+		if(size() < 2) return;
 		
 		class Obj implements Comparable<Obj>
 		{
@@ -220,7 +207,7 @@ public class FastMap<K, V> implements Iterable<V>
 	
 	public void sortFromKeyNums()
 	{
-		if(keys.isLocked() || size() < 2) return;
+		if(size() < 2) return;
 		
 		class Obj implements Comparable<Obj>
 		{
@@ -243,9 +230,6 @@ public class FastMap<K, V> implements Iterable<V>
 		for(int i = 0; i < list.size(); i++)
 		{ Obj o = list.get(i); put(o.key, o.val); }
 	}
-	
-	public FastMap<K, V> setWeakIndexing()
-	{ keys.setWeakIndexing(); return this; }
 	
 	public FastList<MapEntry<K, V>> entrySet()
 	{
