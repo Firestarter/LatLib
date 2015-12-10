@@ -58,7 +58,7 @@ public class LMUtils
 	{
 		if(o1 == null && o2 == null) return allowNulls;
 		if(o1 == null || o2 == null) return false;
-		return o1.equals(o2);
+		return o1 == o2 || o1.equals(o2);
 	}
 	
 	public static int hashCodeOf(Object o)

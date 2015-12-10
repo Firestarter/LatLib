@@ -4,14 +4,14 @@ import java.util.*;
 /** Made by LatvianModder */
 public class FastMap<K, V> implements Iterable<V>
 {
-	public final ArrayList<K> keys;
-	public final ArrayList<V> values;
+	public final FastList<K> keys;
+	public final FastList<V> values;
 	private boolean nullRemoves = true;
 	
 	public FastMap(int init)
 	{
-		keys = new ArrayList<K>(init);
-		values = new ArrayList<V>(init);
+		keys = new FastList<K>(init);
+		values = new FastList<V>(init);
 	}
 	
 	public FastMap<K, V> allowNullKeys()
