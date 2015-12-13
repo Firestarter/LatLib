@@ -2,29 +2,23 @@ package latmod.lib;
 import java.util.*;
 
 /** Made by LatvianModder */
-@SuppressWarnings("all")
 public class FastList<E> extends ArrayList<E>
 {
-	private boolean isLocked = false;
+	private static final long serialVersionUID = 1L;
+	
 	private boolean weakIndexing = false;
 	
 	public FastList(int init)
 	{ super(init); }
 	
 	public FastList()
-	{ this(10); }
+	{ super(); }
 	
 	public FastList(E... o)
 	{ this((o == null) ? 10 : o.length); addAll(o); }
 	
-	public FastList<E> setLocked()
-	{ isLocked = true; return this; }
-	
 	public FastList<E> setWeakIndexing()
-	{ if(!isLocked) weakIndexing = true; return this; }
-	
-	public boolean isLocked()
-	{ return isLocked; }
+	{ weakIndexing = true; return this; }
 	
 	public int hashCode()
 	{
@@ -56,27 +50,9 @@ public class FastList<E> extends ArrayList<E>
 		return false;
 	}
 	
-	public boolean add(E e)
-	{
-		if(isLocked) return false;
-		return super.add(e);
-	}
-	
-	public E set(int i, E e)
-	{ return isLocked ? e : super.set(i, e); }
-	
-	public E remove(int i)
-	{
-		if(size() == 0 || i < 0 || isLocked) return null;
-		return super.remove(i);
-	}
-	
-	public boolean remove(Object o)
-	{ return (size() == 0 || o == null || isLocked) ? false : super.remove(o); }
-	
 	public void removeAll(int... i)
 	{
-		if(size() == 0 || i == null || i.length == 0 || isLocked) return;
+		if(size() == 0 || i == null || i.length == 0) return;
 		for(int j = 0; j < i.length; j++)
 			remove(i[j]);
 	}
@@ -95,12 +71,6 @@ public class FastList<E> extends ArrayList<E>
 	public E getObj(Object o)
 	{ int i = indexOf(o); return (i == -1) ? null : get(i); }
 	
-	public void clear()
-	{
-		if(size() == 0 || isLocked) return;
-		super.clear();
-	}
-	
 	public String[] toStringArray()
 	{
 		String[] s = new String[size()];
@@ -109,26 +79,15 @@ public class FastList<E> extends ArrayList<E>
 		return s;
 	}
 	
-	public boolean removeAll(Collection<?> list)
-	{ return (list != null && size() > 0 && !isLocked) ? super.removeAll(list) : false; }
-	
-	
 	public FastList<E> clone()
 	{
 		FastList<E> l = new FastList<E>();
 		l.cloneFrom(this);
-		if(isLocked) l.setLocked();
 		return l;
 	}
 	
 	public void cloneFrom(FastList<E> l)
 	{ clear(); addAll(l); }
-	
-	public void sort(Comparator<? super E> c)
-	{
-		if(isLocked || size() < 2) return;
-		super.sort(c);
-	}
 	
 	public FastList<E> sortToNew(Comparator<? super E> c)
 	{
@@ -147,7 +106,7 @@ public class FastList<E> extends ArrayList<E>
 		
 		for(int i = 0; i < size; i++)
 		{
-			sb.append(String.valueOf(get(i)));
+			sb.append(get(i));
 			
 			if(i != size - 1)
 			{
@@ -162,41 +121,36 @@ public class FastList<E> extends ArrayList<E>
 	}
 	
 	public boolean containsAny(Collection<?> c)
-	{ for(Object o : c) if(contains(o))
-	return true; return false; }
+	{
+		for(Object o : c) if(contains(o))
+			return true;
+		return false;
+	}
 	
+	@SuppressWarnings("all")
 	public void addAll(Object[] e)
 	{
-		if(e != null && e.length > 0 && !isLocked)
+		if(e != null && e.length > 0)
 			addAll(Arrays.asList((E[])e));
 	}
 	
-	public boolean addAll(int index, Collection<? extends E> c)
-	{ throw new UnsupportedOperationException("addAllWithIndex"); }
-	
-	public boolean retainAll(Collection<?> c)
-	{ throw new UnsupportedOperationException("retainAll"); }
-	
-	public void add(int i, E e)
-	{ if(!isLocked) super.add(i, e); }
-	
 	public boolean trim(int t)
 	{
-		if(size() > t && !isLocked)
+		if(size() > t)
 		{
 			while(size() > t) { remove(t); t--; }
 			return true;
 		}
-
+		
 		return false;
 	}
 	
 	public FastList<E> flip()
 	{
+		if(size() == 0) return this;
 		FastList<E> al1 = new FastList<E>();
-		if(size() == 0) return al1;
 		for(int i = size() - 1; i >= 0; i--)
-		al1.add(get(i)); return al1;
+			al1.add(get(i)); return al1;
 	}
 	
 	public boolean allObjectsEquals(E e)
@@ -213,18 +167,22 @@ public class FastList<E> extends ArrayList<E>
 	}
 	
 	public static <T> FastList<T> asList(Collection<T> c)
-	{ FastList<T> l = new FastList<T>(); l.addAll(c); return l; }
+	{
+		if(c == null) return null;
+		if(c instanceof FastList<?>) return (FastList<T>)c;
+		FastList<T> l = new FastList<T>();
+		l.addAll(c);
+		return l;
+	}
 	
 	public void removeNullValues()
 	{
-		if(isLocked) return;
 		for(int i = size() - 1; i >= 0; i--)
 			if(get(i) == null) remove(i);
 	}
 	
 	public void removeAll(IntList l)
 	{
-		if(isLocked) return;
 		for(int i = 0; i < l.size(); i++)
 			remove(l.get(i));
 	}

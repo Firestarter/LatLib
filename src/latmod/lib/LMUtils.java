@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.net.*;
 import java.util.*;
 
+import latmod.lib.util.*;
+
 /** Made by LatvianModder */
 public class LMUtils
 {
@@ -136,5 +138,13 @@ public class LMUtils
 		T[] t = newArray(array.length, typeClass);
 		System.arraycopy(array, 0, t, 0, t.length);
 		return t;
+	}
+	
+	public static final String getID(Object o)
+	{
+		if(o == null) return null;
+		else if(o instanceof FinalIDObject) return ((FinalIDObject)o).ID;
+		else if(o instanceof IDObject) return ((IDObject)o).ID;
+		else return o.toString();
 	}
 }

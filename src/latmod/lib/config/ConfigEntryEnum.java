@@ -55,22 +55,22 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 		return null;
 	}
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{ set(fromString(o.getAsString())); }
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{ return new JsonPrimitive(getName(get())); }
 	
 	public String getValue()
 	{ return getName(get()); }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{ io.writeString(getName(get())); }
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{ fromString(io.readString()); }
 	
-	void writeExtended(ByteIOStream io)
+	public void writeExtended(ByteIOStream io)
 	{
 		io.writeString(getName(get()));
 		io.writeUByte(values.size());

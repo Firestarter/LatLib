@@ -25,7 +25,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 	public IntList get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{
 		JsonArray a = o.getAsJsonArray();
 		value.clear();
@@ -34,7 +34,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		set(value.clone());
 	}
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{
 		JsonArray a = new JsonArray();
 		value = get();
@@ -46,7 +46,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 	public String getValue()
 	{ return get().toString(); }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{
 		value = get();
 		io.writeUShort(value.size());
@@ -54,7 +54,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 			io.writeInt(value.get(i));
 	}
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{
 		value.clear();
 		int s = io.readUShort();

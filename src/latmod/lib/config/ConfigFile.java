@@ -8,33 +8,26 @@ import latmod.lib.util.IDObject;
 public final class ConfigFile extends IDObject implements IConfigFile
 {
 	public final File file;
-	public final ConfigList configList;
+	public final ConfigGroup configGroup;
 	
 	public ConfigFile(String id, File f)
 	{
 		super(id);
-		configList = new ConfigList();
-		configList.setID(id);
-		configList.groups = new FastList<ConfigGroup>();
-		configList.parentFile = this;
+		configGroup = new ConfigGroup(id);
+		configGroup.parentFile = this;
 		file = LMFileUtils.newFile(f);
 	}
 	
-	public ConfigList getList()
-	{ return configList; }
+	public ConfigGroup getGroup()
+	{ return configGroup; }
 	
 	public void add(ConfigGroup g)
-	{ configList.add(g); }
+	{ configGroup.add(g); }
 	
 	public void load()
 	{
-		ConfigList list = (ConfigList)LMJsonUtils.fromJsonFile(file, ConfigList.class);
-		if(list != null)
-		{
-			list.setID(ID);
-			configList.loadFromList(list);
-		}
-		
+		ConfigGroup g = (ConfigGroup)LMJsonUtils.fromJsonFile(file, ConfigGroup.class);
+		if(g != null) configGroup.loadFromGroup(g);
 		save();
 	}
 	
@@ -46,8 +39,8 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	
 	public final String toJsonString(boolean pretty)
 	{
-		configList.sort();
-		String s = LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configList);
+		configGroup.sort(null);
+		String s = LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup);
 		return s;
 	}
 }

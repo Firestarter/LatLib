@@ -26,18 +26,18 @@ public class ConfigEntryColor extends ConfigEntry
 	public int get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{ set(format(o.getAsInt())); }
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{ return new JsonPrimitive(get()); }
 	
 	public String getValue()
 	{ return "color"; }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{ io.writeInt(get()); }
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{ set(format(io.readInt())); }
 }

@@ -1,11 +1,11 @@
 package latmod.lib.config;
 
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
-public abstract class ConfigEntry extends FinalIDObject
+public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 {
 	public final PrimitiveType type;
 	private boolean isHidden = false;
@@ -19,29 +19,30 @@ public abstract class ConfigEntry extends FinalIDObject
 	ConfigEntry(String id, PrimitiveType t)
 	{ super(id); type = t; }
 	
-	public abstract void setJson(JsonElement o);
-	public abstract JsonElement getJson();
+	public abstract void setJson(JsonElement o, JsonDeserializationContext c);
+	public abstract JsonElement getJson(JsonSerializationContext c);
 	public abstract String getValue();
-	abstract void write(ByteIOStream io);
-	abstract void read(ByteIOStream io);
+	public abstract void write(ByteIOStream io);
+	public abstract void read(ByteIOStream io);
 	
-	void writeExtended(ByteIOStream io)
+	public void writeExtended(ByteIOStream io)
 	{ write(io); }
 	
-	void readExtended(ByteIOStream io)
+	public void readExtended(ByteIOStream io)
 	{ read(io); }
 	
 	public static ConfigEntry getEntry(PrimitiveType t, String id)
 	{
 		if(t == null) return null;
 		else if(t == PrimitiveType.NULL) return new ConfigEntryBlank(id);
+		else if(t == PrimitiveType.MAP) return new ConfigGroup(id);
 		else if(t == PrimitiveType.BOOLEAN) return new ConfigEntryBool(id, false);
-		else if(t == PrimitiveType.FLOAT) return new ConfigEntryFloat(id, null);
-		else if(t == PrimitiveType.FLOAT_ARRAY) return new ConfigEntryFloatArray(id, null);
+		else if(t == PrimitiveType.DOUBLE) return new ConfigEntryDouble(id, null);
+		else if(t == PrimitiveType.DOUBLE_ARRAY) return new ConfigEntryDoubleArray(id, null);
 		else if(t == PrimitiveType.INT) return new ConfigEntryInt(id, null);
 		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, null);
 		else if(t == PrimitiveType.STRING) return new ConfigEntryString(id, null);
-		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id, null);
+		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id);
 		else if(t == PrimitiveType.ENUM) return new ConfigEntryEnumExtended(id);
 		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, 0, false);
 		return null;
@@ -53,17 +54,16 @@ public abstract class ConfigEntry extends FinalIDObject
 	public String getFullID()
 	{
 		if(!isValid()) return null;
+		if(parentGroup == null) return ID;
 		StringBuilder sb = new StringBuilder();
-		sb.append(parentGroup.parentList.ID);
-		sb.append('.');
-		sb.append(parentGroup.ID);
+		sb.append(parentGroup.getFullID());
 		sb.append('.');
 		sb.append(ID);
 		return sb.toString();
 	}
 	
 	public boolean isValid()
-	{ return ID != null && parentGroup != null && parentGroup.isValid(); }
+	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
 	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setHidden()
@@ -95,4 +95,14 @@ public abstract class ConfigEntry extends FinalIDObject
 	
 	public String getMinValue() { return null; }
 	public String getMaxValue() { return null; }
+	
+	public ConfigGroup getAsGroup()
+	{ return null; }
+	
+	public ConfigEntry clone()
+	{
+		ConfigEntry e = ConfigEntry.getEntry(type, ID);
+		e.setJson(getJson(LMJsonUtils.serializationContext), LMJsonUtils.deserializationContext);
+		return e;
+	}
 }

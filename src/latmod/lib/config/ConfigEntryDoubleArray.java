@@ -4,13 +4,13 @@ import com.google.gson.*;
 
 import latmod.lib.*;
 
-public class ConfigEntryFloatArray extends ConfigEntry
+public class ConfigEntryDoubleArray extends ConfigEntry
 {
 	private float[] value;
 	
-	public ConfigEntryFloatArray(String id, float[] def)
+	public ConfigEntryDoubleArray(String id, float[] def)
 	{
-		super(id, PrimitiveType.FLOAT_ARRAY);
+		super(id, PrimitiveType.DOUBLE_ARRAY);
 		set(def);
 		updateDefault();
 	}
@@ -21,7 +21,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 	public float[] get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{
 		JsonArray a = o.getAsJsonArray();
 		value = new float[a.size()];
@@ -30,7 +30,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 		set(value.clone());
 	}
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{
 		JsonArray a = new JsonArray();
 		value = get();
@@ -61,7 +61,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 		return sb.toString();
 	}
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{
 		value = get();
 		io.writeUShort(value.length);
@@ -69,7 +69,7 @@ public class ConfigEntryFloatArray extends ConfigEntry
 			io.writeFloat(value[i]);
 	}
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{
 		value = new float[io.readUShort()];
 		for(int i = 0; i < value.length; i++)

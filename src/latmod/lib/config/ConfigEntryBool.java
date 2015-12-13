@@ -21,19 +21,19 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	public boolean get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{ set(o.getAsBoolean()); }
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{ return new JsonPrimitive(get()); }
 	
 	public String getValue()
 	{ return get() ? "true" : "false"; }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{ io.writeBoolean(get()); }
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{ set(io.readBoolean()); }
 	
 	public void onClicked()

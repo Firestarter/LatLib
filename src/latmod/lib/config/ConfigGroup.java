@@ -1,23 +1,29 @@
 package latmod.lib.config;
 
 import java.lang.reflect.*;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.*;
 
 import latmod.lib.*;
-import latmod.lib.util.FinalIDObject;
 
-public final class ConfigGroup extends FinalIDObject implements Cloneable
+public final class ConfigGroup extends ConfigEntry
 {
 	public final FastList<ConfigEntry> entries;
 	private String displayName = null;
-	public ConfigList parentList = null;
+	public IConfigFile parentFile = null;
 	
 	public ConfigGroup(String s)
 	{
-		super(s);
+		super(s, PrimitiveType.MAP);
 		entries = new FastList<ConfigEntry>();
+	}
+	
+	public IConfigFile getParentFile()
+	{
+		if(parentFile != null) return parentFile;
+		else if(parentGroup != null) return parentGroup.getParentFile();
+		else return null;
 	}
 	
 	public void add(ConfigEntry e)
@@ -27,6 +33,9 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 	}
 	
 	public ConfigGroup addAll(Class<?> c)
+	{ return addAll(c, null); }
+	
+	public ConfigGroup addAll(Class<?> c, Object obj)
 	{
 		try
 		{
@@ -40,8 +49,8 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 					f[i].setAccessible(true);
 					if(ConfigEntry.class.isAssignableFrom(f[i].getType()))
 					{
-						ConfigEntry entry = (ConfigEntry)f[i].get(null);
-						if(entry != null) add(entry);
+						ConfigEntry entry = (ConfigEntry)f[i].get(obj);
+						if(entry != null && entry != this) add(entry);
 					}
 				}
 				catch(Exception e1) { }
@@ -59,25 +68,113 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 	public String getDisplayName()
 	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
 	
-	public String getFullID()
+	public ConfigGroup clone()
+	{ return clone(ID, true); }
+	
+	public ConfigGroup clone(String id, boolean newEntries)
 	{
-		if(!isValid()) return null;
-		StringBuilder sb = new StringBuilder();
-		sb.append(parentList.ID);
-		sb.append('.');
-		sb.append(ID);
-		return sb.toString();
+		ConfigGroup g = new ConfigGroup((id == null || id.isEmpty()) ? ID : id);
+		g.displayName = displayName;
+		for(int i = 0; i < entries.size(); i++)
+			g.add(newEntries ? entries.get(i).clone() : entries.get(i));
+		return g;
 	}
 	
-	public boolean isValid()
-	{ return ID != null && parentList != null && parentList.ID != null; }
-	
-	public ConfigGroup clone()
+	public final void setJson(JsonElement o0, JsonDeserializationContext c)
 	{
-		ConfigGroup g = new ConfigGroup(ID);
-		g.displayName = displayName;
-		g.entries.addAll(entries);
-		return g;
+		JsonObject o = o0.getAsJsonObject();
+		
+		for(Map.Entry<String, JsonElement> e : o.entrySet())
+		{
+			ConfigEntry entry = new ConfigEntryJsonElement(e.getKey());
+			
+			if(!e.getValue().isJsonNull())
+			{
+				entry.setJson(e.getValue(), c);
+				entry.onPostLoaded();
+			}
+			
+			add(entry);
+		}
+	}
+	
+	public final JsonElement getJson(JsonSerializationContext c)
+	{
+		JsonObject o = new JsonObject();
+		
+		for(ConfigEntry e : entries)
+		{
+			if(!e.isExcluded())
+			{
+				e.onPreLoaded();
+				o.add(e.ID, e.getJson(c));
+			}
+		}
+		
+		return o;
+	}
+	
+	public String getValue()
+	{ return ">"; }
+	
+	public void write(ByteIOStream io)
+	{
+		io.writeUShort(entries.size());
+		for(int i = 0; i < entries.size(); i++)
+		{
+			ConfigEntry e = entries.get(i);
+			e.onPreLoaded();
+			io.writeUByte(e.type.ordinal());
+			io.writeString(e.ID);
+			e.write(io);
+		}
+	}
+	
+	public void read(ByteIOStream io)
+	{
+		int s = io.readUShort();
+		entries.clear();
+		for(int i = 0; i < s; i++)
+		{
+			int type = io.readUByte();
+			String id = io.readString();
+			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
+			e.read(io);
+			add(e);
+		}
+	}
+	
+	public void writeExtended(ByteIOStream io)
+	{
+		io.writeString(displayName);
+		io.writeUShort(entries.size());
+		for(int i = 0; i < entries.size(); i++)
+		{
+			ConfigEntry e = entries.get(i);
+			e.onPreLoaded();
+			io.writeUByte(e.type.ordinal());
+			io.writeString(e.ID);
+			e.writeExtended(io);
+			io.writeString(e.info);
+			io.writeString(e.defaultValue);
+		}
+	}
+	
+	public void readExtended(ByteIOStream io)
+	{
+		displayName = io.readString();
+		int s = io.readUShort();
+		entries.clear();
+		for(int i = 0; i < s; i++)
+		{
+			int type = io.readUByte();
+			String id = io.readString();
+			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
+			e.readExtended(io);
+			e.info = io.readString();
+			e.defaultValue = io.readString();
+			add(e);
+		}
 	}
 	
 	public static class Serializer implements JsonSerializer<ConfigGroup>, JsonDeserializer<ConfigGroup>
@@ -85,42 +182,106 @@ public final class ConfigGroup extends FinalIDObject implements Cloneable
 		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)
 		{
 			if(src == null) return null;
-			
-			JsonObject o = new JsonObject();
-			
-			for(ConfigEntry e : src.entries)
-			{
-				if(!e.isExcluded())
-				{
-					e.onPreLoaded();
-					o.add(e.ID, context.serialize(e.getJson()));
-				}
-			}
-			
-			return o;
+			return src.getJson(context);
 		}
 		
 		public ConfigGroup deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
 		{
-			if(json.isJsonNull()) return null;
+			if(json.isJsonNull() || !json.isJsonObject()) return null;
 			ConfigGroup g = new ConfigGroup("");
-			
-			JsonObject o = json.getAsJsonObject();
-			
-			for(Map.Entry<String, JsonElement> e : o.entrySet())
-			{
-				ConfigEntry entry = new ConfigEntryJsonElement(e.getKey());
-				
-				if(!e.getValue().isJsonNull())
-				{
-					entry.setJson(e.getValue());
-					entry.onPostLoaded();
-				}
-				
-				g.add(entry);
-			}
-			
+			g.setJson(json.getAsJsonObject(), context);
 			return g;
 		}
 	}
+	
+	public void sort(Comparator<ConfigEntry> c)
+	{
+		entries.sort(c);
+		
+		for(int i = 0; i < entries.size(); i++)
+		{
+			ConfigGroup g = entries.get(i).getAsGroup();
+			if(g != null) g.sort(c);
+		}
+	}
+	
+	public int loadFromGroup(ConfigGroup l)
+	{ return loadFromGroup(l, LMJsonUtils.serializationContext, LMJsonUtils.deserializationContext); }
+	
+	public int loadFromGroup(ConfigGroup l, JsonSerializationContext sc, JsonDeserializationContext dc)
+	{
+		if(l == null || l.entries.isEmpty()) return 0;
+		
+		int result = 0;
+		
+		for(int i = 0; i < l.entries.size(); i++)
+		{
+			ConfigEntry e1 = l.entries.get(i);
+			ConfigEntry e0 = entries.getObj(e1);
+			
+			if(e0 != null)
+			{
+				if(e0.getAsGroup() != null)
+				{
+					ConfigGroup g1 = new ConfigGroup(e1.ID);
+					g1.setJson(e1.getJson(sc), dc);
+					result += e0.getAsGroup().loadFromGroup(g1, sc, dc);
+				}
+				else
+				{
+					try
+					{
+						//System.out.println("Value " + e1.getFullID() + " set from " + e0.getJson() + " to " + e1.getJson());
+						e0.setJson(e1.getJson(sc), dc);
+						e0.onPostLoaded();
+						result++;
+					}
+					catch(Exception ex)
+					{
+						System.err.println("Can't set value " + e1.getJson(sc) + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.type + ")");
+						System.err.println(ex.toString());
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public ConfigGroup getGroup(Object key)
+	{
+		ConfigEntry e = entries.getObj(key);
+		return (e instanceof ConfigGroup) ? (ConfigGroup)e : null;
+	}
+	
+	public FastList<ConfigGroup> getGroups()
+	{
+		FastList<ConfigGroup> list = new FastList<ConfigGroup>();
+		for(ConfigEntry e : entries)
+		{
+			ConfigGroup g = e.getAsGroup();
+			if(g != null) list.add(g);
+		}
+		return list;
+	}
+	
+	public ConfigGroup getAsGroup()
+	{ return this; }
+	
+	public int getTotalEntryCount()
+	{
+		int count = 0;
+		
+		for(int i = 0; i < entries.size(); i++)
+		{
+			ConfigGroup g = entries.get(i).getAsGroup();
+			if(g == null) count++;
+			else count += g.getTotalEntryCount();
+		}
+		
+		return count;
+	}
+	
+	public int getDepth()
+	{ return (parentGroup == null) ? 0 : (parentGroup.getDepth() + 1); }
 }

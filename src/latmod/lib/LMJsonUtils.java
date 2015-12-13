@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.google.gson.*;
 
-import latmod.lib.config.*;
+import latmod.lib.config.ConfigGroup;
 import latmod.lib.json.*;
 
 /** Type for Lists: new TypeToken<List<E>>() {}.getType() */
@@ -18,6 +18,8 @@ public class LMJsonUtils
 	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<Class<?>, Object>();
 	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<TypeAdapterFactory>();
 	private static boolean inited = false;
+	public static JsonDeserializationContext deserializationContext;
+	public static JsonSerializationContext serializationContext, prettySerializationContext;
 	
 	public static final void register(Class<?> c, Object o)
 	{ typeAdapters.put(c, o); gson = null; gson_pretty = null; }
@@ -34,7 +36,6 @@ public class LMJsonUtils
 			register(IntList.class, new IntList.Serializer());
 			register(IntMap.class, new IntMap.Serializer());
 			register(UUID.class, new UUIDTypeAdapterLM());
-			register(ConfigList.class, new ConfigList.Serializer());
 			register(ConfigGroup.class, new ConfigGroup.Serializer());
 			register(PrimitiveType.class, new PrimitiveType.Serializer());
 			register(Color.class, new ColorSerializerLM());
@@ -57,6 +58,31 @@ public class LMJsonUtils
 			gson = gb.create();
 			gb.setPrettyPrinting();
 			gson_pretty = gb.create();
+			
+			deserializationContext = new JsonDeserializationContext()
+			{
+				@SuppressWarnings("unchecked")
+				public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException
+				{ return (T) gson.fromJson(json, typeOfT); }
+			};
+			
+			serializationContext = new JsonSerializationContext()
+			{
+				public JsonElement serialize(Object src)
+				{ return gson.toJsonTree(src); }
+				
+				public JsonElement serialize(Object src, Type typeOfSrc)
+				{ return gson.toJsonTree(src, typeOfSrc); }
+			};
+			
+			prettySerializationContext = new JsonSerializationContext()
+			{
+				public JsonElement serialize(Object src)
+				{ return gson_pretty.toJsonTree(src); }
+				
+				public JsonElement serialize(Object src, Type typeOfSrc)
+				{ return gson_pretty.toJsonTree(src, typeOfSrc); }
+			};
 		}
 		
 		return pretty ? gson_pretty : gson;

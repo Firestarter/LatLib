@@ -164,7 +164,7 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	}
 	
 	public static IntList asList(int... values)
-	{ IntList l = new IntList(); l.addAll(values); return l; }
+	{ IntList l = new IntList(values.length); l.addAll(values); return l; }
 	
 	public static class IntIterator implements Iterator<Integer>
 	{

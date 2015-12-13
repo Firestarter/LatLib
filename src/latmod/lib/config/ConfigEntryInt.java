@@ -27,29 +27,29 @@ public class ConfigEntryInt extends ConfigEntry
 	public void add(int i)
 	{ set(get() + i); }
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{ set((o == null || o.isJsonNull()) ? bounds.defValue : o.getAsInt()); }
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{ return new JsonPrimitive(get()); }
 	
 	public String getValue()
 	{ return Integer.toString(get()); }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{ io.writeInt(get()); }
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{ set(io.readInt()); }
 	
-	void writeExtended(ByteIOStream io)
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeInt(bounds.minValue);
 		io.writeInt(bounds.maxValue);
 	}
 	
-	void readExtended(ByteIOStream io)
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		int min = io.readInt();

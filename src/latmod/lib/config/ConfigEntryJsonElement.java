@@ -1,6 +1,6 @@
 package latmod.lib.config;
 
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 
 import latmod.lib.*;
 
@@ -15,18 +15,18 @@ class ConfigEntryJsonElement extends ConfigEntry
 		setExcluded();
 	}
 	
-	public final void setJson(JsonElement o)
+	public final void setJson(JsonElement o, JsonDeserializationContext c)
 	{ value = o; }
 	
-	public final JsonElement getJson()
+	public final JsonElement getJson(JsonSerializationContext c)
 	{ return value; }
 	
 	public String getValue()
 	{ return String.valueOf(value); }
 	
-	void write(ByteIOStream io)
+	public void write(ByteIOStream io)
 	{ }
 	
-	void read(ByteIOStream io)
+	public void read(ByteIOStream io)
 	{ }
 }

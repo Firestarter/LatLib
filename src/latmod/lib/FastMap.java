@@ -8,17 +8,17 @@ public class FastMap<K, V> implements Iterable<V>
 	public final FastList<V> values;
 	private boolean nullRemoves = true;
 	
+	private FastMap(List<K> k, List<V> v)
+	{ keys = FastList.asList(k); values = FastList.asList(v); }
+	
 	public FastMap(int init)
-	{
-		keys = new FastList<K>(init);
-		values = new FastList<V>(init);
-	}
+	{ this(new FastList<K>(init), new FastList<V>(init)); }
+	
+	public FastMap()
+	{ this(new FastList<K>(), new FastList<V>()); }
 	
 	public FastMap<K, V> allowNullKeys()
 	{ nullRemoves = false; return this; }
-	
-	public FastMap()
-	{ this(10); }
 	
 	public int size()
 	{ return values.size(); }
@@ -66,30 +66,32 @@ public class FastMap<K, V> implements Iterable<V>
 		}
 	}
 	
-	public boolean remove(K k)
+	public V remove(K k)
 	{
 		int i = keys.indexOf(k);
 		if(i != -1)
 		{
+			V v = values.get(i);
 			keys.remove(i);
 			values.remove(i);
-			return true;
+			return v;
 		}
 		
-		return false;
+		return null;
 	}
 	
-	public boolean removeValue(V v)
+	public K removeValue(V v)
 	{
 		int i = values.indexOf(v);
 		if(i != -1)
 		{
+			K k = keys.get(i);
 			keys.remove(i);
 			values.remove(i);
-			return true;
+			return k;
 		}
 		
-		return false;
+		return null;
 	}
 	
 	public boolean clear()
@@ -239,37 +241,12 @@ public class FastMap<K, V> implements Iterable<V>
 		return l;
 	}
 	
-	/*public static class Serializer implements JsonDeserializer<FastMap>, JsonSerializer<FastMap>
+	public static <K1, V1> FastMap<K1, V1> fromMap(Map<K1, V1> map)
 	{
-		public JsonElement serialize(FastMap src, Type typeOfSrc, JsonSerializationContext context)
-		{
-			com.google.gson.GsonBuilder
-			JsonObject o = new JsonObject();
-			for(int i = 0; i < src.size(); i++)
-				o.add(context.serialize(src.keys.get(i)), context.serialize(src.values.get(i)));
-			return o;
-		}
-		
-		public FastMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-		{
-			FastMap map = new IntMap();
-			JsonObject o = json.getAsJsonObject();
-			
-			for(Map.Entry<String, JsonElement> e : o.entrySet())
-			{
-				Integer i = MathHelperLM.decode(e.getKey());
-				if(i != null) map.put(i.intValue(), e.getValue().getAsInt());
-			}
-			
-			return map;
-		}
+		FastMap<K1, V1> map1 = new FastMap<K1, V1>();
+		map1.putAll(map); return map1;
 	}
 	
-	public static class TypeSerializer implements TypeAdapterFactory
-	{
-		public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type)
-		{
-			return null;
-		}
-	}*/
+	public FastMap<K, V> getLocked()
+	{ return new FastMap<K, V>(); } 
 }
