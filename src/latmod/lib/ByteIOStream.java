@@ -78,6 +78,37 @@ public final class ByteIOStream
 		return sb.toString();
 	}
 	
+	public OutputStream createOutputStream()
+	{
+		OutputStream os = new OutputStream()
+		{
+			public void write(int b) throws IOException
+			{ writeUByte(b); }
+			
+			public void write(byte b[], int off, int len) throws IOException
+			{ writeRawBytes(b, off, len); }
+		};
+		
+		return os;
+	}
+	
+	public InputStream createInputStream()
+	{
+		InputStream is = new InputStream()
+		{
+			public int read() throws IOException
+			{ return readUByte(); }
+			
+			public int read(byte b[], int off, int len) throws IOException
+			{ return readRawBytes(b, off, len); }
+			
+			public int available()
+			{ return bytes.length - pos; }
+		};
+		
+		return is;
+	}
+	
 	// Read functions //
 	
 	public byte readByte()
@@ -101,9 +132,9 @@ public final class ByteIOStream
 	public int readRawBytes(byte[] b)
 	{ return readRawBytes(b, 0, b.length); }
 	
-	public byte[] readByteArray()
+	public byte[] readByteArray(ByteCount c)
 	{
-		short s = readShort();
+		int s = c.read(this);
 		if(s == -1) return null;
 		byte[] b = new byte[s];
 		readRawBytes(b);
@@ -112,9 +143,6 @@ public final class ByteIOStream
 	
 	public boolean readBoolean()
 	{ return readUByte() == 1; }
-	
-	public void read8BooleanArray(boolean[] b)
-	{ Bits.fromBits(b, readUByte()); }
 	
 	public String readString()
 	{
@@ -215,6 +243,16 @@ public final class ByteIOStream
 		return v;
 	}
 	
+	public int[] readIntArray(ByteCount c)
+	{
+		int len = c.read(this);
+		if(len == -1) return null;
+		int[] ai = new int[len];
+		for(int i = 0; i < len; i++)
+			ai[i] = readInt();
+		return ai;
+	}
+	
 	// Write functions //
 	
 	public void writeByte(byte i)
@@ -238,18 +276,15 @@ public final class ByteIOStream
 	public void writeRawBytes(byte[] b)
 	{ writeRawBytes(b, 0, b.length); }
 	
-	public void writeByteArray(byte[] b)
+	public void writeByteArray(byte[] b, ByteCount c)
 	{
-		if(b == null) { writeShort((short)-1); return; }
-		writeShort((short)b.length);
+		if(b == null) { c.write(this, -1); return; }
+		c.write(this, b.length);
 		writeRawBytes(b);
 	}
 	
 	public void writeBoolean(boolean b)
 	{ writeUByte(b ? 1 : 0); }
-	
-	public void write8BooleanArray(boolean[] b)
-	{ writeUByte(Bits.toBits(b)); }
 	
 	public void writeString(String s)
 	{
@@ -346,34 +381,11 @@ public final class ByteIOStream
 		pos += 16;
 	}
 	
-	public OutputStream createOutputStream()
+	public void writeIntArray(int[] ai, ByteCount c)
 	{
-		OutputStream os = new OutputStream()
-		{
-			public void write(int b) throws IOException
-			{ writeUByte(b); }
-			
-			public void write(byte b[], int off, int len) throws IOException
-			{ writeRawBytes(b, off, len); }
-		};
-		
-		return os;
-	}
-	
-	public InputStream createInputStream()
-	{
-		InputStream is = new InputStream()
-		{
-			public int read() throws IOException
-			{ return readUByte(); }
-			
-			public int read(byte b[], int off, int len) throws IOException
-			{ return readRawBytes(b, off, len); }
-			
-			public int available()
-			{ return bytes.length - pos; }
-		};
-		
-		return is;
+		int asize = (ai == null) ? -1 : ai.length;
+		c.write(this, asize);
+		for(int i = 0; i < asize; i++)
+			writeInt(ai[i]);
 	}
 }

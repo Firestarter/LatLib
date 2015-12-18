@@ -2,7 +2,7 @@ package latmod.lib;
 import java.util.*;
 
 /** Made by LatvianModder */
-public class FastMap<K, V> implements Iterable<V>
+public class FastMap<K, V> implements Iterable<V>, Map<K, V>
 {
 	public final FastList<K> keys;
 	public final FastList<V> values;
@@ -17,7 +17,7 @@ public class FastMap<K, V> implements Iterable<V>
 	public FastMap()
 	{ this(new FastList<K>(), new FastList<V>()); }
 	
-	public FastMap<K, V> allowNullKeys()
+	public FastMap<K, V> allowNullValues()
 	{ nullRemoves = false; return this; }
 	
 	public int size()
@@ -35,13 +35,15 @@ public class FastMap<K, V> implements Iterable<V>
 		return i == -1 ? null : keys.get(i);
 	}
 	
-	public boolean put(K k, V v)
+	public V put(K k, V v)
 	{
-		if(k == null) return false;
+		if(k == null) return null;
 		
 		int i = keys.indexOf(k);
 		if(i != -1)
 		{
+			V v0 = values.get(i);
+			
 			if(nullRemoves && v == null)
 			{
 				keys.remove(i);
@@ -53,20 +55,17 @@ public class FastMap<K, V> implements Iterable<V>
 				values.set(i, v);
 			}
 			
-			return false;
+			return v0;
 		}
 		else
 		{
-			if(nullRemoves && v == null)
-				return false;
-			
 			keys.add(k);
 			values.add(v);
-			return true;
+			return null;
 		}
 	}
 	
-	public V remove(K k)
+	public V remove(Object k)
 	{
 		int i = keys.indexOf(k);
 		if(i != -1)
@@ -94,13 +93,8 @@ public class FastMap<K, V> implements Iterable<V>
 		return null;
 	}
 	
-	public boolean clear()
-	{
-		if(isEmpty()) return false;
-		keys.clear();
-		values.clear();
-		return true;
-	}
+	public void clear()
+	{ if(!isEmpty()) { keys.clear(); values.clear(); } }
 	
 	public void removeAllKeys(FastList<? extends K> al)
 	{
@@ -125,16 +119,6 @@ public class FastMap<K, V> implements Iterable<V>
 		return map.size();
 	}
 	
-	public int putAll(Map<K, V> map)
-	{
-		if(map == null || map.isEmpty()) return 0;
-		Iterator<K> itrK = map.keySet().iterator();
-		Iterator<V> itrV = map.values().iterator();
-		while(itrK.hasNext() && itrV.hasNext())
-			put(itrK.next(), itrV.next());
-		return map.size();
-	}
-
 	public Iterator<V> iterator()
 	{ return values.iterator(); }
 	
@@ -233,9 +217,9 @@ public class FastMap<K, V> implements Iterable<V>
 		{ Obj o = list.get(i); put(o.key, o.val); }
 	}
 	
-	public FastList<MapEntry<K, V>> entrySet()
+	public Set<java.util.Map.Entry<K, V>> entrySet()
 	{
-		FastList<MapEntry<K, V>> l = new FastList<MapEntry<K, V>>();
+		FastList<java.util.Map.Entry<K, V>> l = new FastList<java.util.Map.Entry<K, V>>();
 		for(int i = 0; i < size(); i++)
 			l.add(new MapEntry<K, V>(keys.get(i), values.get(i)));
 		return l;
@@ -248,5 +232,26 @@ public class FastMap<K, V> implements Iterable<V>
 	}
 	
 	public FastMap<K, V> getLocked()
-	{ return new FastMap<K, V>(); } 
+	{ return new FastMap<K, V>(); }
+	
+	public boolean containsKey(Object key)
+	{ return keys.contains(key); }
+	
+	public boolean containsValue(Object value)
+	{ return values.contains(value); }
+	
+	public void putAll(Map<? extends K, ? extends V> map)
+	{
+		if(map == null || map.isEmpty()) return;
+		Iterator<? extends K> itrK = map.keySet().iterator();
+		Iterator<? extends V> itrV = map.values().iterator();
+		while(itrK.hasNext() && itrV.hasNext())
+			put(itrK.next(), itrV.next());
+	}
+	
+	public Set<K> keySet()
+	{ return keys; }
+	
+	public Collection<V> values()
+	{ return values; }
 }

@@ -2,10 +2,9 @@ package latmod.lib;
 import java.util.*;
 
 /** Made by LatvianModder */
-public class FastList<E> extends ArrayList<E>
+public class FastList<E> extends ArrayList<E> implements Set<E>
 {
 	private static final long serialVersionUID = 1L;
-	
 	private boolean weakIndexing = false;
 	
 	public FastList(int init)
@@ -71,6 +70,9 @@ public class FastList<E> extends ArrayList<E>
 	public E getObj(Object o)
 	{ int i = indexOf(o); return (i == -1) ? null : get(i); }
 	
+	public boolean remove(Object o)
+	{ int index = indexOf(o); return (index >= 0) && remove(index) != null; }
+	
 	public String[] toStringArray()
 	{
 		String[] s = new String[size()];
@@ -118,6 +120,29 @@ public class FastList<E> extends ArrayList<E>
 		sb.append(' ');
 		sb.append(']');
 		return sb.toString();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void clearTree()
+	{
+		for(int i = 0; i < size(); i++)
+		{
+			E e = get(i);
+			
+			if(e instanceof FastList)
+				((FastList)e).clearTree();
+			else if(e instanceof Collection)
+				((Collection)e).clear();
+			else if(e instanceof FastMap)
+			{
+				((FastMap)e).values.clearTree();
+				((FastMap)e).clear();
+			}
+			else if(e instanceof Map)
+				((Map)e).clear();
+		}
+		
+		super.clear();
 	}
 	
 	public boolean containsAny(Collection<?> c)
