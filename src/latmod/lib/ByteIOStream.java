@@ -8,9 +8,6 @@ public final class ByteIOStream
 	private byte[] bytes;
 	private int pos;
 	
-	private byte[] utf_bytes = null;
-	private char[] utf_chars = null;
-	
 	private static void throwUTFException(String s)
 	{
 		try { throw new UTFDataFormatException(s); }
@@ -146,24 +143,19 @@ public final class ByteIOStream
 	
 	public String readString()
 	{
-		int l = readShort();
+		int l = readUShort();
+		if(l == 65535) return null;
+		else if(l == 0) return "";
 		
-		if(l == -1) return null;
-		l = l & 0xFFFF;
+		char[] utf_chars = new char[l];
 		
-		if(utf_bytes == null || utf_bytes.length < l)
-			utf_bytes = new byte[l * 2];
+		int c, c2, c3, c1 = 0, cac = 0, pos0 = pos;
 		
-		if(utf_chars == null || utf_chars.length < l)
-			utf_chars = new char[l * 2];
-		
-		int c, c2, c3, c1 = 0, cac = 0;
-		
-		readRawBytes(utf_bytes, 0, l);
+		pos += l;
 		
 		while(c1 < l)
 		{
-			c = (int) utf_bytes[c1] & 0xFF;
+			c = (int) bytes[c1 + pos0] & 0xFF;
 			if(c > 127) break;
 			c1++;
 			utf_chars[cac++] = (char)c;
@@ -171,19 +163,19 @@ public final class ByteIOStream
 		
 		while(c1 < l)
 		{
-			c = (int) utf_bytes[c1] & 0xFF;
+			c = (int) bytes[c1 + pos0] & 0xFF;
 			
 			switch(c >> 4)
 			{
 				case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
 					c1++;
-					utf_chars[cac++]=(char)c;
+					utf_chars[cac++] = (char)c;
 					break;
 				case 12: case 13:
 					c1 += 2;
 					if (c1 > l)
 						throwUTFException("malformed input: partial character at end");
-					c2 = (int) utf_bytes[c1 - 1];
+					c2 = (int) bytes[c1 + pos0 - 1];
 					if ((c2 & 0xC0) != 0x80)
 						throwUTFException("malformed input around byte " + c1);
 					utf_chars[cac++]=(char)(((c & 0x1F) << 6) | (c2 & 0x3F));
@@ -192,8 +184,8 @@ public final class ByteIOStream
 					c1 += 3;
 					if (c1 > l)
 						throwUTFException("malformed input: partial character at end");
-					c2 = (int) utf_bytes[c1 - 2];
-					c3 = (int) utf_bytes[c1 - 1];
+					c2 = (int) bytes[c1 + pos0 - 2];
+					c3 = (int) bytes[c1 + pos0 - 1];
 					if (((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
 						throwUTFException("malformed input around byte " + (c1 - 1));
 					utf_chars[cac++] = (char)(((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F) << 0));
@@ -203,7 +195,9 @@ public final class ByteIOStream
 			}
 		}
 		
-		return new String(utf_chars, 0, cac);
+		String s = new String(utf_chars, 0, cac);
+		utf_chars = null;
+		return s;
 	}
 	
 	public int readUShort()
@@ -286,12 +280,13 @@ public final class ByteIOStream
 	public void writeBoolean(boolean b)
 	{ writeUByte(b ? 1 : 0); }
 	
-	public void writeString(String s)
+	public int writeString(String s)
 	{
-		if(s == null) { writeShort((short)-1); return; }
+		if(s == null) { writeUShort(-1); return -1; }
 		int sl = s.length();
+		if(sl == 0) { writeUShort(0); return 0; }
 		int l = 0;
-		int c, count = 0;
+		int c;
 		
 		for(int i = 0; i < sl; i++)
 		{
@@ -301,40 +296,38 @@ public final class ByteIOStream
 			else l += 2;
 		}
 		
-		if(l > 65535) throwUTFException("encoded string too long: " + l + " bytes");
-		
-		if(utf_bytes == null || (utf_bytes.length < l))
-			utf_bytes = new byte[l * 2];
+		if(l >= 65535) throwUTFException("encoded string too long: " + l + " bytes");
 		
 		writeUShort(l);
+		expand(l);
 		
 		int i = 0;
 		for(i = 0; i < sl; i++)
 		{
 		   c = s.charAt(i);
 		   if (!(c >= 0x0001 && c <= 0x007F)) break;
-		   utf_bytes[count++] = (byte) c;
+		   writeUByte(c);
 		}
 		
 		for(;i < sl; i++)
 		{
 			c = s.charAt(i);
 			if (c >= 0x0001 && c <= 0x007F)
-				utf_bytes[count++] = (byte) c;
+				writeUByte(c);
 			else if(c > 0x07FF)
 			{
-				utf_bytes[count++] = (byte) (0xE0 | ((c >> 12) & 0x0F));
-				utf_bytes[count++] = (byte) (0x80 | ((c >>  6) & 0x3F));
-				utf_bytes[count++] = (byte) (0x80 | ((c >>  0) & 0x3F));
+				writeUByte(0xE0 | ((c >> 12) & 0x0F));
+				writeUByte(0x80 | ((c >>  6) & 0x3F));
+				writeUByte(0x80 | ((c >>  0) & 0x3F));
 			}
 			else
 			{
-				utf_bytes[count++] = (byte) (0xC0 | ((c >>  6) & 0x1F));
-				utf_bytes[count++] = (byte) (0x80 | ((c >>  0) & 0x3F));
+				writeUByte(0xC0 | ((c >>  6) & 0x1F));
+				writeUByte(0x80 | ((c >>  0) & 0x3F));
 			}
 		}
 		
-		writeRawBytes(utf_bytes, 0, l);
+		return l;
 	}
 	
 	public void writeRawString(String s)
@@ -391,12 +384,22 @@ public final class ByteIOStream
 
 	public static int stringLength(String data)
 	{
-		int len = 2;
-		
-		if(data != null && !data.isEmpty())
+		if(data == null) return -1;
+		else if(data.isEmpty()) return 0;
+		else
 		{
+			int len = 0;
+			char c;
+			
+			for(int i = 0; i < data.length(); i++)
+			{
+				c = data.charAt(i);
+				if ((c >= 0x0001) && (c <= 0x007F)) len++;
+				else if (c > 0x07FF) len += 3;
+				else len += 2;
+			}
+			
+			return len;
 		}
-		
-		return len;
 	}
 }

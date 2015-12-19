@@ -13,7 +13,7 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	public FastList()
 	{ super(); }
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("all")
 	public FastList(E... o)
 	{ this((o == null) ? 10 : o.length); addAll(o); }
 	
