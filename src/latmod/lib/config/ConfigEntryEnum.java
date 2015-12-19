@@ -3,6 +3,7 @@ package latmod.lib.config;
 import com.google.gson.*;
 
 import latmod.lib.*;
+import latmod.lib.util.EnumEnabled;
 
 @SuppressWarnings("all")
 public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements IClickableConfigEntry // EnumTypeAdapterFactory
