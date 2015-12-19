@@ -388,4 +388,15 @@ public final class ByteIOStream
 		for(int i = 0; i < asize; i++)
 			writeInt(ai[i]);
 	}
+
+	public static int stringLength(String data)
+	{
+		int len = 2;
+		
+		if(data != null && !data.isEmpty())
+		{
+		}
+		
+		return len;
+	}
 }

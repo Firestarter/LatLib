@@ -23,6 +23,9 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 		updateDefault();
 	}
 	
+	public static ConfigEntryEnum<EnumEnabled> enabledWithNull(String id, EnumEnabled def)
+	{ return new ConfigEntryEnum<EnumEnabled>(id, EnumEnabled.class, EnumEnabled.VALUES, def, true); }
+	
 	public void set(Object o)
 	{ value = (E)o; }
 	
