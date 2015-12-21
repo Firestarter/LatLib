@@ -427,11 +427,12 @@ public class LMStringUtils
 		}
 	}
 	
-	public static String[] toStringArray(List<?> l)
+	public static String[] toStringArray(Set<?> l)
 	{
 		String[] s = new String[l.size()];
-		for(int i = 0; i < s.length; i++)
-			s[i] = String.valueOf(l.get(i));
+		int i = -1;
+		for(Object o : l)
+			s[++i] = String.valueOf(o);
 		return s;
 	}
 }

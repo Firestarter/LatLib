@@ -64,14 +64,14 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 	public void write(ByteIOStream io)
 	{
 		value = get();
-		io.writeUShort(value.length);
+		io.writeShort(value.length);
 		for(int i = 0; i < value.length; i++)
 			io.writeFloat(value[i]);
 	}
 	
 	public void read(ByteIOStream io)
 	{
-		value = new float[io.readUShort()];
+		value = new float[io.readUnsignedShort()];
 		for(int i = 0; i < value.length; i++)
 			value[i] = io.readFloat();
 		set(value);

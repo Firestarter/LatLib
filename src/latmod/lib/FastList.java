@@ -82,6 +82,14 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 		return s;
 	}
 	
+	public int[] toHashCodeArray()
+	{
+		int[] s = new int[size()];
+		for(int i = 0; i < s.length; i++)
+			s[i] = LMUtils.hashCodeOf(get(i));
+		return s;
+	}
+	
 	public FastList<E> clone()
 	{
 		FastList<E> l = new FastList<E>();
@@ -134,13 +142,21 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 				((FastList)e).clearTree();
 			else if(e instanceof Collection)
 				((Collection)e).clear();
-			else if(e instanceof FastMap)
-			{
-				((FastMap)e).values.clearTree();
-				((FastMap)e).clear();
-			}
 			else if(e instanceof Map)
+			{
+				Collection c = ((Map)e).values();
+				for(Object o : c)
+				{
+					if(o instanceof FastList)
+						((FastList)o).clearTree();
+					else if(o instanceof Collection)
+						((List)o).clear();
+					else if(o instanceof Map)
+						((Map)o).clear();
+				}
+				
 				((Map)e).clear();
+			}
 		}
 		
 		super.clear();
@@ -173,10 +189,13 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	
 	public FastList<E> flip()
 	{
-		if(size() == 0) return this;
+		int s = size();
+		if(s == 0) return this;
 		FastList<E> al1 = new FastList<E>();
-		for(int i = size() - 1; i >= 0; i--)
-			al1.add(get(i)); return al1;
+		al1.ensureCapacity(s);
+		for(int i = 0; i < s; i++)
+			al1.add(get(s - i - 1));
+		return al1;
 	}
 	
 	public boolean allObjectsEquals(E e)

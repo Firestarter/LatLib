@@ -22,4 +22,10 @@ public class MapEntry<K, V> implements Map.Entry<K, V>
 	@SuppressWarnings("rawtypes")
 	public boolean equals(Object o)
 	{ return o != null && (o == this || key == o || ((o instanceof Map.Entry) ? ((Map.Entry)o).getKey().equals(getKey()) : getKey().equals(o))); }
+	
+	public String toString()
+	{ return key.toString(); }
+	
+	public int hashCode()
+	{ return key.hashCode(); }
 }

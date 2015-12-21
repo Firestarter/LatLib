@@ -103,14 +103,14 @@ public class Registry<E>
 		int s = entries.size();
 		
 		io.writeBoolean(shortKeys);
-		if(shortKeys) io.writeUShort(s);
+		if(shortKeys) io.writeShort(s);
 		else io.writeInt(s);
 		
 		for(int i = 0; i < s; i++)
 		{
 			Entry e = entries.get(i);
-			io.writeString(e.key);
-			if(shortKeys) io.writeUShort(e.ID);
+			io.writeUTF(e.key);
+			if(shortKeys) io.writeShort(e.ID);
 			else io.writeInt(e.ID);
 		}
 		
@@ -122,12 +122,12 @@ public class Registry<E>
 		int r = 0;
 		
 		boolean sk = io.readBoolean();
-		int s = sk ? io.readUShort() : io.readInt();
+		int s = sk ? io.readUnsignedShort() : io.readInt();
 		
 		for(int i = 0; i < s; i++)
 		{
-			String key = io.readString();
-			int id = sk ? io.readUShort() : io.readInt();
+			String key = io.readUTF();
+			int id = sk ? io.readUnsignedShort() : io.readInt();
 			
 			Entry e = get(key);
 			if(e != null)

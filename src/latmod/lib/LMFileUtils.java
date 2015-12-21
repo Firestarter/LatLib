@@ -3,7 +3,7 @@ package latmod.lib;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.*;
-import java.util.List;
+import java.util.*;
 
 public class LMFileUtils
 {
@@ -16,6 +16,18 @@ public class LMFileUtils
 	public static final double KB_D = 1024D;
 	public static final double MB_D = KB_D * 1024D;
 	public static final double GB_D = MB_D * 1024D;
+	
+	public static final Comparator<File> fileComparator = new Comparator<File>()
+	{
+		public int compare(File o1, File o2)
+		{ return o1.getName().compareToIgnoreCase(o2.getName()); }
+	};
+	
+	public static final Comparator<File> deepFileComparator = new Comparator<File>()
+	{
+		public int compare(File o1, File o2)
+		{ return o1.getAbsolutePath().compareToIgnoreCase(o2.getAbsolutePath()); }
+	};
 	
 	private static File getFolder()
 	{

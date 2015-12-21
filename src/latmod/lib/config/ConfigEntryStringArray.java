@@ -60,17 +60,17 @@ public class ConfigEntryStringArray extends ConfigEntry
 	public void write(ByteIOStream io)
 	{
 		value = get();
-		io.writeUShort(value.size());
+		io.writeShort(value.size());
 		for(int i = 0; i < value.size(); i++)
-			io.writeString(value.get(i));
+			io.writeUTF(value.get(i));
 	}
 	
 	public void read(ByteIOStream io)
 	{
 		value.clear();
-		int s = io.readUShort();
+		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
-			value.add(io.readString());
+			value.add(io.readUTF());
 		set(value.clone());
 	}
 }

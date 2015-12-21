@@ -28,18 +28,18 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	{ return value; }
 	
 	public void write(ByteIOStream io)
-	{ io.writeString(value); }
+	{ io.writeUTF(value); }
 	
 	public void read(ByteIOStream io)
-	{ value = io.readString(); }
+	{ value = io.readUTF(); }
 	
 	public void readExtended(ByteIOStream io)
 	{
-		value = io.readString();
+		value = io.readUTF();
 		values.clear();
-		int s = io.readUByte();
+		int s = io.readUnsignedByte();
 		for(int i = 0; i < s; i++)
-			values.add(io.readString());
+			values.add(io.readUTF());
 	}
 	
 	public void onClicked()

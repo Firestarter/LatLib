@@ -13,8 +13,8 @@ public enum ByteCount
 	
 	public void write(ByteIOStream io, int num)
 	{
-		if(this == BYTE) io.writeByte((byte)num);
-		else if(this == SHORT) io.writeShort((short)num);
+		if(this == BYTE) io.writeByte(num);
+		else if(this == SHORT) io.writeShort(num);
 		else io.writeInt(num);
 	}
 	

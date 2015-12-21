@@ -133,6 +133,9 @@ public class MathHelperLM
 	public static int chunk(int i)
 	{ return i >> 4; }
 	
+	public static int unchunk(int i)
+	{ return i << 4; }
+	
 	public static int chunk(double d)
 	{ return chunk(floor(d)); }
 	

@@ -31,8 +31,8 @@ public class ConfigEntryString extends ConfigEntry
 	{ return get(); }
 	
 	public void write(ByteIOStream io)
-	{ io.writeString(get()); }
+	{ io.writeUTF(get()); }
 	
 	public void read(ByteIOStream io)
-	{ set(io.readString()); }
+	{ set(io.readUTF()); }
 }

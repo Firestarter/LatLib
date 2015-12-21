@@ -119,25 +119,25 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public void write(ByteIOStream io)
 	{
-		io.writeUShort(entries.size());
+		io.writeShort(entries.size());
 		for(int i = 0; i < entries.size(); i++)
 		{
 			ConfigEntry e = entries.get(i);
 			e.onPreLoaded();
-			io.writeUByte(e.type.ordinal());
-			io.writeString(e.ID);
+			io.writeByte(e.type.ordinal());
+			io.writeUTF(e.ID);
 			e.write(io);
 		}
 	}
 	
 	public void read(ByteIOStream io)
 	{
-		int s = io.readUShort();
+		int s = io.readUnsignedShort();
 		entries.clear();
 		for(int i = 0; i < s; i++)
 		{
-			int type = io.readUByte();
-			String id = io.readString();
+			int type = io.readUnsignedByte();
+			String id = io.readUTF();
 			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
 			e.read(io);
 			add(e);
@@ -146,33 +146,33 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public void writeExtended(ByteIOStream io)
 	{
-		io.writeString(displayName);
-		io.writeUShort(entries.size());
+		io.writeUTF(displayName);
+		io.writeShort(entries.size());
 		for(int i = 0; i < entries.size(); i++)
 		{
 			ConfigEntry e = entries.get(i);
 			e.onPreLoaded();
-			io.writeUByte(e.type.ordinal());
-			io.writeString(e.ID);
+			io.writeByte(e.type.ordinal());
+			io.writeUTF(e.ID);
 			e.writeExtended(io);
-			io.writeString(e.info);
-			io.writeString(e.defaultValue);
+			io.writeUTF(e.info);
+			io.writeUTF(e.defaultValue);
 		}
 	}
 	
 	public void readExtended(ByteIOStream io)
 	{
-		displayName = io.readString();
-		int s = io.readUShort();
+		displayName = io.readUTF();
+		int s = io.readUnsignedShort();
 		entries.clear();
 		for(int i = 0; i < s; i++)
 		{
-			int type = io.readUByte();
-			String id = io.readString();
+			int type = io.readUnsignedByte();
+			String id = io.readUTF();
 			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
 			e.readExtended(io);
-			e.info = io.readString();
-			e.defaultValue = io.readString();
+			e.info = io.readUTF();
+			e.defaultValue = io.readUTF();
 			add(e);
 		}
 	}

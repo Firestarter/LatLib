@@ -69,17 +69,17 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	{ return getName(get()); }
 	
 	public void write(ByteIOStream io)
-	{ io.writeString(getName(get())); }
+	{ io.writeUTF(getName(get())); }
 	
 	public void read(ByteIOStream io)
-	{ fromString(io.readString()); }
+	{ fromString(io.readUTF()); }
 	
 	public void writeExtended(ByteIOStream io)
 	{
-		io.writeString(getName(get()));
-		io.writeUByte(values.size());
+		io.writeUTF(getName(get()));
+		io.writeByte(values.size());
 		for(int i = 0; i < values.size(); i++)
-			io.writeString(getName(values.get(i)));
+			io.writeUTF(getName(values.get(i)));
 	}
 	
 	public void onClicked()

@@ -1,7 +1,7 @@
 package latmod.lib;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Calendar;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.*;
@@ -9,24 +9,22 @@ import com.google.gson.stream.*;
 public final class Time implements Comparable<Time>
 {
 	public final long millis;
-	public final byte seconds;
-	public final byte minutes;
-	public final byte hours;
-	public final byte day;
-	public final byte month;
+	public final int seconds;
+	public final int minutes;
+	public final int hours;
+	public final int day;
+	public final int month;
 	public final int year;
 	
-	@SuppressWarnings("deprecation")
-	private Time(Date date)
+	private Time(Calendar c)
 	{
-		millis = date.getTime();
-		seconds = (byte)date.getSeconds();
-		minutes = (byte)date.getMinutes();
-		hours = (byte)date.getHours();
-		day = (byte)date.getDate();
-		month = (byte)(date.getMonth() + 1);
-		year = date.getYear() + 1900;
-		date = null;
+		millis = c.getTimeInMillis();
+		seconds = c.get(Calendar.SECOND);
+		minutes = c.get(Calendar.MINUTE);
+		hours = c.get(Calendar.HOUR_OF_DAY);
+		day = c.get(Calendar.DAY_OF_MONTH);
+		month = c.get(Calendar.MONTH) + 1;
+		year = c.get(Calendar.YEAR) + 1900;
 	}
 	
 	public boolean equalsTime(long t)
@@ -127,44 +125,39 @@ public final class Time implements Comparable<Time>
 	
 	// Static //
 	
-	@SuppressWarnings("deprecation")
-	public static Time parseTime(String s)
-	{
-		if(s == null || s.length() < 20) return null;
-		String[] s1 = s.split(",");
-		if(s1 == null || s1.length != 7) return null;
-		
-		int year = Integer.parseInt(s1[0]);
-		int month = Integer.parseInt(s1[1]);
-		int day = Integer.parseInt(s1[2]);
-		int hours = Integer.parseInt(s1[3]);
-		int minutes = Integer.parseInt(s1[4]);
-		int seconds = Integer.parseInt(s1[5]);
-		return get(new Date(year - 1900, month - 1, day, hours, minutes, seconds).getTime() + Integer.parseInt(s1[6]));
-		//public Date(int year, int month, int date, int hrs, int min)
-	}
-	
-	public static Time get(Date date)
-	{ return new Time(date); }
+	public static Time get(Calendar c)
+	{ return new Time(c); }
 	
 	public static Time get(long millis)
-	{ return get(new Date(millis)); }
+	{
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(millis);
+		return get(c);
+	}
+	
+	public static Time get(int year, int month, int day, int hours, int minutes, int seconds, long deltaMillis)
+	{
+		Calendar c = Calendar.getInstance();
+		c.set(year, month, day, hours, minutes, seconds);
+		c.setTimeInMillis(c.getTimeInMillis() + deltaMillis);
+		return null;
+	}
 	
 	public static Time now()
-	{ return get(new Date()); }
+	{ return get(Calendar.getInstance()); }
 	
 	public static class Serializer extends TypeAdapter<Time>	
 	{
 		public void write(JsonWriter out, Time value) throws IOException
 		{
 			if(value == null) out.nullValue();
-			else out.value(value.toString());
+			else out.value(value.millis);
 		}
 		
 		public Time read(JsonReader in) throws IOException
 		{
 			if(in.peek() == JsonToken.NULL) { in.nextNull(); return null; }
-			return parseTime(in.nextString());
+			return get(in.nextLong());
 		}
 	}
 }

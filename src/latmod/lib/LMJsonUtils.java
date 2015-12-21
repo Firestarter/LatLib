@@ -3,7 +3,7 @@ package latmod.lib;
 import java.awt.Color;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.UUID;
+import java.util.*;
 
 import com.google.gson.*;
 
@@ -47,8 +47,8 @@ public class LMJsonUtils
 		{
 			GsonBuilder gb = new GsonBuilder();
 			
-			for(int i = 0; i < typeAdapters.size(); i++)
-				gb.registerTypeAdapter(typeAdapters.keys.get(i), typeAdapters.values.get(i));
+			for(Map.Entry<Class<?>, Object> e : typeAdapters.entrySet())
+				gb.registerTypeAdapter(e.getKey(), e.getValue());
 			
 			for(int i = 0; i < typeAdapterFactories.size(); i++)
 				gb.registerTypeAdapterFactory(typeAdapterFactories.get(i));

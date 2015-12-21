@@ -3,10 +3,10 @@ import java.io.*;
 import java.util.UUID;
 
 /** Made by LatvianModder */
-public final class ByteIOStream
+public final class ByteIOStream implements DataInput, DataOutput
 {
-	private byte[] bytes;
-	private int pos;
+	protected byte[] bytes;
+	protected int pos;
 	
 	private static void throwUTFException(String s)
 	{
@@ -80,10 +80,10 @@ public final class ByteIOStream
 		OutputStream os = new OutputStream()
 		{
 			public void write(int b) throws IOException
-			{ writeUByte(b); }
+			{ ByteIOStream.this.write(b); }
 			
 			public void write(byte b[], int off, int len) throws IOException
-			{ writeRawBytes(b, off, len); }
+			{ write(b, off, len); }
 		};
 		
 		return os;
@@ -94,10 +94,10 @@ public final class ByteIOStream
 		InputStream is = new InputStream()
 		{
 			public int read() throws IOException
-			{ return readUByte(); }
+			{ return (available() <= 0) ? -1 : readUnsignedByte(); }
 			
 			public int read(byte b[], int off, int len) throws IOException
-			{ return readRawBytes(b, off, len); }
+			{ readFully(b, off, len); return len; }
 			
 			public int available()
 			{ return bytes.length - pos; }
@@ -115,35 +115,37 @@ public final class ByteIOStream
 		return b;
 	}
 	
-	public int readRawBytes(byte[] b, int off, int len)
+	public void readFully(byte[] b, int off, int len)
 	{
-		if(b == null || len == 0) return 0;
+		if(b == null || len == 0) return;
 		System.arraycopy(bytes, pos, b, off, len);
 		pos += len;
-		return len;
 	}
 	
-	public int readUByte()
+	public int readUnsignedByte()
 	{ return readByte() & 0xFF; }
 	
-	public int readRawBytes(byte[] b)
-	{ return readRawBytes(b, 0, b.length); }
+	public void readFully(byte[] b)
+	{ readFully(b, 0, b.length); }
 	
 	public byte[] readByteArray(ByteCount c)
 	{
 		int s = c.read(this);
 		if(s == -1) return null;
 		byte[] b = new byte[s];
-		readRawBytes(b);
+		readFully(b);
 		return b;
 	}
 	
 	public boolean readBoolean()
-	{ return readUByte() == 1; }
+	{ return readUnsignedByte() == 1; }
 	
-	public String readString()
+	public char readChar()
+	{ return (char)readUnsignedShort(); }
+	
+	public String readUTF()
 	{
-		int l = readUShort();
+		int l = readUnsignedShort();
 		if(l == 65535) return null;
 		else if(l == 0) return "";
 		
@@ -200,7 +202,11 @@ public final class ByteIOStream
 		return s;
 	}
 	
-	public int readUShort()
+	@Deprecated
+	public String readLine()
+	{ return null; }
+	
+	public int readUnsignedShort()
 	{
 		int v = Bits.toUShort(bytes, pos);
 		pos += 2;
@@ -208,7 +214,7 @@ public final class ByteIOStream
 	}
 	
 	public short readShort()
-	{ return (short)readUShort(); }
+	{ return (short)readUnsignedShort(); }
 	
 	public int readInt()
 	{
@@ -249,14 +255,17 @@ public final class ByteIOStream
 	
 	// Write functions //
 	
-	public void writeByte(byte i)
+	public void writeByte(int i)
 	{
 		expand(1);
-		bytes[pos] = i;
+		bytes[pos] = (byte)i;
 		pos++;
 	}
 	
-	public void writeRawBytes(byte[] b, int off, int len)
+	public void write(int b)
+	{ writeByte(b); }
+	
+	public void write(byte[] b, int off, int len)
 	{
 		if(b == null || len == 0) return;
 		expand(len);
@@ -264,27 +273,27 @@ public final class ByteIOStream
 		pos += len;
 	}
 	
-	public void writeUByte(int i)
-	{ writeByte((byte)i); }
-	
-	public void writeRawBytes(byte[] b)
-	{ writeRawBytes(b, 0, b.length); }
+	public void write(byte[] b)
+	{ write(b, 0, b.length); }
 	
 	public void writeByteArray(byte[] b, ByteCount c)
 	{
 		if(b == null) { c.write(this, -1); return; }
 		c.write(this, b.length);
-		writeRawBytes(b);
+		write(b);
 	}
 	
 	public void writeBoolean(boolean b)
-	{ writeUByte(b ? 1 : 0); }
+	{ writeByte(b ? 1 : 0); }
 	
-	public int writeString(String s)
+	public void writeChar(int c)
+	{ writeShort(c); }
+	
+	public void writeUTF(String s)
 	{
-		if(s == null) { writeUShort(-1); return -1; }
+		if(s == null) { writeShort(-1); return; }
 		int sl = s.length();
-		if(sl == 0) { writeUShort(0); return 0; }
+		if(sl == 0) { writeShort(0); return; }
 		int l = 0;
 		int c;
 		
@@ -298,7 +307,7 @@ public final class ByteIOStream
 		
 		if(l >= 65535) throwUTFException("encoded string too long: " + l + " bytes");
 		
-		writeUShort(l);
+		writeShort(l);
 		expand(l);
 		
 		int i = 0;
@@ -306,46 +315,48 @@ public final class ByteIOStream
 		{
 		   c = s.charAt(i);
 		   if (!(c >= 0x0001 && c <= 0x007F)) break;
-		   writeUByte(c);
+		   writeByte(c);
 		}
 		
 		for(;i < sl; i++)
 		{
 			c = s.charAt(i);
 			if (c >= 0x0001 && c <= 0x007F)
-				writeUByte(c);
+				writeByte(c);
 			else if(c > 0x07FF)
 			{
-				writeUByte(0xE0 | ((c >> 12) & 0x0F));
-				writeUByte(0x80 | ((c >>  6) & 0x3F));
-				writeUByte(0x80 | ((c >>  0) & 0x3F));
+				writeByte(0xE0 | ((c >> 12) & 0x0F));
+				writeByte(0x80 | ((c >>  6) & 0x3F));
+				writeByte(0x80 | ((c >>  0) & 0x3F));
 			}
 			else
 			{
-				writeUByte(0xC0 | ((c >>  6) & 0x1F));
-				writeUByte(0x80 | ((c >>  0) & 0x3F));
+				writeByte(0xC0 | ((c >>  6) & 0x1F));
+				writeByte(0x80 | ((c >>  0) & 0x3F));
 			}
 		}
-		
-		return l;
 	}
 	
-	public void writeRawString(String s)
+	public void writeBytes(String s)
 	{
 		if(s == null || s.isEmpty()) return;
 		for(int i = 0; i < s.length(); i++)
 			writeByte((byte)s.charAt(i));
 	}
 	
-	public void writeUShort(int s)
+	public void writeChars(String s)
+	{
+		if(s == null || s.isEmpty()) return;
+		for(int i = 0; i < s.length(); i++)
+			writeChar(s.charAt(i));
+	}
+	
+	public void writeShort(int s)
 	{
 		expand(2);
 		Bits.fromUShort(bytes, pos, s);
 		pos += 2;
 	}
-	
-	public void writeShort(short s)
-	{ writeUShort(s & 0xFFFF); }
 	
 	public void writeInt(int i)
 	{
@@ -381,8 +392,11 @@ public final class ByteIOStream
 		for(int i = 0; i < asize; i++)
 			writeInt(ai[i]);
 	}
-
-	public static int stringLength(String data)
+	
+	public int skipBytes(int n)
+	{ return 0; }
+	
+	public static int getUTFLength(String data)
 	{
 		if(data == null) return -1;
 		else if(data.isEmpty()) return 0;

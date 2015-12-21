@@ -49,7 +49,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 	public void write(ByteIOStream io)
 	{
 		value = get();
-		io.writeUShort(value.size());
+		io.writeShort(value.size());
 		for(int i = 0; i < value.size(); i++)
 			io.writeInt(value.get(i));
 	}
@@ -57,7 +57,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 	public void read(ByteIOStream io)
 	{
 		value.clear();
-		int s = io.readUShort();
+		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
 			value.add(io.readInt());
 		set(value.clone());
