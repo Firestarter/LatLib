@@ -21,8 +21,8 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	public ConfigGroup getGroup()
 	{ return configGroup; }
 	
-	public void add(ConfigGroup g)
-	{ configGroup.add(g); }
+	public void add(ConfigEntry e)
+	{ if(e != null) configGroup.add(e); }
 	
 	public void load()
 	{
