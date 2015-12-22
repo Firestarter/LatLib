@@ -76,6 +76,7 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 	public String[] getKeyStringArray()
 	{
 		String[] s = new String[size()];
+		if(s.length == 0) return s;
 		int i = -1;
 		for(Object o : keySet())
 			s[++i] = String.valueOf(o);

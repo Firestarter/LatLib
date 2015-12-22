@@ -90,7 +90,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	public final <E extends ConfigEntry> E setInfo(String s)
 	{ info = s; return (E)this; }
 	
-	void updateDefault()
+	public void updateDefault()
 	{ try { defaultValue = getValue(); } catch(Exception e) { } }
 	
 	public String getMinValue() { return null; }

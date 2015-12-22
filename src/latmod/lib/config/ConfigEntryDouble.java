@@ -55,8 +55,14 @@ public class ConfigEntryDouble extends ConfigEntry
 	}
 	
 	public String getMinValue()
-	{ return MathHelperLM.formatDouble(bounds.minValue); }
+	{
+		if(bounds.minValue == Double.NEGATIVE_INFINITY) return null;
+		return MathHelperLM.formatDouble(bounds.minValue);
+	}
 	
 	public String getMaxValue()
-	{ return MathHelperLM.formatDouble(bounds.maxValue); }
+	{
+		if(bounds.minValue == Double.POSITIVE_INFINITY) return null;
+		return MathHelperLM.formatDouble(bounds.maxValue);
+	}
 }
