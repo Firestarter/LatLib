@@ -27,14 +27,11 @@ public class ConfigEntryInt extends ConfigEntry
 	public void add(int i)
 	{ set(get() + i); }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ set((o == null || o.isJsonNull()) ? bounds.defValue : o.getAsInt()); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
-	
-	public String getValue()
-	{ return Integer.toString(get()); }
 	
 	public void write(ByteIOStream io)
 	{ io.writeInt(get()); }
@@ -68,4 +65,16 @@ public class ConfigEntryInt extends ConfigEntry
 		if(bounds.maxValue == Integer.MAX_VALUE) return null;
 		else return Integer.toString(bounds.maxValue);
 	}
+	
+	public String getAsString()
+	{ return Integer.toString(get()); }
+	
+	public boolean getAsBoolean()
+	{ return get() == 1; }
+	
+	public int getAsInt()
+	{ return get(); }
+	
+	public double getAsDouble()
+	{ return get(); }
 }

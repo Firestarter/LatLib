@@ -21,14 +21,11 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	public boolean get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ set(o.getAsBoolean()); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
-	
-	public String getValue()
-	{ return get() ? "true" : "false"; }
 	
 	public void write(ByteIOStream io)
 	{ io.writeBoolean(get()); }
@@ -38,4 +35,16 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	
 	public void onClicked()
 	{ set(!get()); }
+	
+	public String getAsString()
+	{ return get() ? "true" : "false"; }
+	
+	public boolean getAsBoolean()
+	{ return get(); }
+	
+	public int getAsInt()
+	{ return get() ? 1 : 0; }
+	
+	public double getAsDouble()
+	{ return get() ? 1D : 0D; }
 }

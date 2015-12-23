@@ -36,7 +36,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	public FastList<String> get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{
 		JsonArray a = o.getAsJsonArray();
 		value.clear();
@@ -45,7 +45,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		set(value.clone());
 	}
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{
 		JsonArray a = new JsonArray();
 		value = get();
@@ -53,9 +53,6 @@ public class ConfigEntryStringArray extends ConfigEntry
 			a.add(new JsonPrimitive(value.get(i)));
 		return a;
 	}
-	
-	public String getValue()
-	{ return get().toString(); }
 	
 	public void write(ByteIOStream io)
 	{
@@ -72,5 +69,32 @@ public class ConfigEntryStringArray extends ConfigEntry
 		for(int i = 0; i < s; i++)
 			value.add(io.readUTF());
 		set(value.clone());
+	}
+	
+	public String getAsString()
+	{ return get().toString(); }
+	
+	public String[] getAsStringArray()
+	{ return get().toStringArray(); }
+	
+	public boolean getAsBoolean()
+	{ return !get().isEmpty(); }
+	
+	public int[] getAsIntArray()
+	{
+		value = get();
+		int[] ai = new int[value.size()];
+		for(int i = 0; i < ai.length; i++)
+			ai[i] = Integer.parseInt(value.get(i));
+		return ai;
+	}
+	
+	public double[] getAsDoubleArray()
+	{
+		value = get();
+		double[] ai = new double[value.size()];
+		for(int i = 0; i < ai.length; i++)
+			ai[i] = Double.parseDouble(value.get(i));
+		return ai;
 	}
 }

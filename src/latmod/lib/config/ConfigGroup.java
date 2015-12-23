@@ -32,6 +32,16 @@ public final class ConfigGroup extends ConfigEntry
 		{ entries.add(e); e.parentGroup = this; }
 	}
 	
+	public void put(ConfigEntry e)
+	{
+		if(e != null)
+		{
+			entries.remove(e);
+			entries.add(e);
+			e.parentGroup = this;
+		}
+	}
+	
 	public ConfigGroup addAll(Class<?> c)
 	{ return addAll(c, null); }
 	
@@ -80,8 +90,12 @@ public final class ConfigGroup extends ConfigEntry
 		return g;
 	}
 	
-	public final void setJson(JsonElement o0, JsonDeserializationContext c)
+	public final void setJson(JsonElement o0)
 	{
+		if(o0 == null || !o0.isJsonObject()) return;
+		
+		entries.clear();
+		
 		JsonObject o = o0.getAsJsonObject();
 		
 		for(Map.Entry<String, JsonElement> e : o.entrySet())
@@ -90,7 +104,7 @@ public final class ConfigGroup extends ConfigEntry
 			
 			if(!e.getValue().isJsonNull())
 			{
-				entry.setJson(e.getValue(), c);
+				entry.setJson(e.getValue());
 				entry.onPostLoaded();
 			}
 			
@@ -98,7 +112,7 @@ public final class ConfigGroup extends ConfigEntry
 		}
 	}
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{
 		JsonObject o = new JsonObject();
 		
@@ -107,14 +121,14 @@ public final class ConfigGroup extends ConfigEntry
 			if(!e.isExcluded())
 			{
 				e.onPreLoaded();
-				o.add(e.ID, e.getJson(c));
+				o.add(e.ID, e.getJson());
 			}
 		}
 		
 		return o;
 	}
 	
-	public String getValue()
+	public String getAsString()
 	{ return ">"; }
 	
 	public void write(ByteIOStream io)
@@ -182,14 +196,14 @@ public final class ConfigGroup extends ConfigEntry
 		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)
 		{
 			if(src == null) return null;
-			return src.getJson(context);
+			return src.getJson();
 		}
 		
 		public ConfigGroup deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
 		{
 			if(json.isJsonNull() || !json.isJsonObject()) return null;
 			ConfigGroup g = new ConfigGroup("");
-			g.setJson(json.getAsJsonObject(), context);
+			g.setJson(json.getAsJsonObject());
 			return g;
 		}
 	}
@@ -206,9 +220,6 @@ public final class ConfigGroup extends ConfigEntry
 	}
 	
 	public int loadFromGroup(ConfigGroup l)
-	{ return loadFromGroup(l, LMJsonUtils.serializationContext, LMJsonUtils.deserializationContext); }
-	
-	public int loadFromGroup(ConfigGroup l, JsonSerializationContext sc, JsonDeserializationContext dc)
 	{
 		if(l == null || l.entries.isEmpty()) return 0;
 		
@@ -224,21 +235,21 @@ public final class ConfigGroup extends ConfigEntry
 				if(e0.getAsGroup() != null)
 				{
 					ConfigGroup g1 = new ConfigGroup(e1.ID);
-					g1.setJson(e1.getJson(sc), dc);
-					result += e0.getAsGroup().loadFromGroup(g1, sc, dc);
+					g1.setJson(e1.getJson());
+					result += e0.getAsGroup().loadFromGroup(g1);
 				}
 				else
 				{
 					try
 					{
 						//System.out.println("Value " + e1.getFullID() + " set from " + e0.getJson() + " to " + e1.getJson());
-						e0.setJson(e1.getJson(sc), dc);
+						e0.setJson(e1.getJson());
 						e0.onPostLoaded();
 						result++;
 					}
 					catch(Exception ex)
 					{
-						System.err.println("Can't set value " + e1.getJson(sc) + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.type + ")");
+						System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.type + ")");
 						System.err.println(ex.toString());
 					}
 				}
@@ -248,10 +259,16 @@ public final class ConfigGroup extends ConfigEntry
 		return result;
 	}
 	
+	public boolean hasKey(Object key)
+	{ return entries.getObj(key) != null; }
+	
+	public ConfigEntry getEntry(Object key)
+	{ return entries.getObj(key); }
+	
 	public ConfigGroup getGroup(Object key)
 	{
-		ConfigEntry e = entries.getObj(key);
-		return (e instanceof ConfigGroup) ? (ConfigGroup)e : null;
+		ConfigEntry e = getEntry(key);
+		return (e == null) ? null : e.getAsGroup();
 	}
 	
 	public FastList<ConfigGroup> getGroups()

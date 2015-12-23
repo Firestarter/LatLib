@@ -131,4 +131,41 @@ public class LMJsonUtils
 	
 	public static JsonElement getJsonElement(String json)
 	{ return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
+	
+	public static JsonElement getJsonElement(File json)
+	{
+		try
+		{
+			if(json == null || !json.exists()) return JsonNull.INSTANCE;
+			Reader reader = new FileReader(json);
+			JsonElement e = new JsonParser().parse(reader);
+			reader.close();
+			return e;
+		}
+		catch(Exception ex) { }
+		return JsonNull.INSTANCE;
+	}
+	
+	// -- //
+	
+	public static JsonArray toArray(int[] ai)
+	{
+		if(ai == null) return null;
+		JsonArray a = new JsonArray();
+		if(ai.length == 0) return a;
+		for(int i = 0; i < ai.length; i++)
+			a.add(new JsonPrimitive(ai[i]));
+		return a;
+	}
+	
+	public static int[] fromArray(JsonElement e)
+	{
+		if(e == null || e.isJsonNull() || !e.isJsonArray()) return null;
+		JsonArray a = e.getAsJsonArray();
+		int[] ai = new int[a.size()];
+		if(ai.length == 0) return ai;
+		for(int i = 0; i < ai.length; i++)
+			ai[i] = a.get(i).getAsInt();
+		return ai;
+	}
 }

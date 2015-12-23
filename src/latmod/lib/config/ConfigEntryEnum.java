@@ -59,14 +59,11 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 		return null;
 	}
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ set(fromString(o.getAsString())); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(getName(get())); }
-	
-	public String getValue()
-	{ return getName(get()); }
 	
 	public void write(ByteIOStream io)
 	{ io.writeUTF(getName(get())); }
@@ -84,4 +81,13 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public void onClicked()
 	{ set(values.get((getIndex() + 1) % values.size())); }
+	
+	public String getAsString()
+	{ return getName(get()); }
+	
+	public boolean getAsBoolean()
+	{ return get() != null; }
+	
+	public int getAsInt()
+	{ return getIndex(); }
 }

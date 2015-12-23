@@ -21,18 +21,27 @@ public class ConfigEntryString extends ConfigEntry
 	public String get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ set(o.getAsString()); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
-	
-	public String getValue()
-	{ return get(); }
 	
 	public void write(ByteIOStream io)
 	{ io.writeUTF(get()); }
 	
 	public void read(ByteIOStream io)
 	{ set(io.readUTF()); }
+	
+	public String getAsString()
+	{ return get(); }
+	
+	public boolean getAsBoolean()
+	{ return get().equals("true"); }
+	
+	public int getAsInt()
+	{ return Integer.parseInt(get()); }
+	
+	public double getAsDouble()
+	{ return Double.parseDouble(get()); }
 }

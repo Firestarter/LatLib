@@ -1,6 +1,6 @@
 package latmod.lib.config;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
 
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
@@ -19,9 +19,8 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	ConfigEntry(String id, PrimitiveType t)
 	{ super(id); type = t; }
 	
-	public abstract void setJson(JsonElement o, JsonDeserializationContext c);
-	public abstract JsonElement getJson(JsonSerializationContext c);
-	public abstract String getValue();
+	public abstract void setJson(JsonElement o);
+	public abstract JsonElement getJson();
 	public abstract void write(ByteIOStream io);
 	public abstract void read(ByteIOStream io);
 	
@@ -40,7 +39,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 		else if(t == PrimitiveType.DOUBLE) return new ConfigEntryDouble(id, null);
 		else if(t == PrimitiveType.DOUBLE_ARRAY) return new ConfigEntryDoubleArray(id, null);
 		else if(t == PrimitiveType.INT) return new ConfigEntryInt(id, null);
-		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, null);
+		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, (IntList)null);
 		else if(t == PrimitiveType.STRING) return new ConfigEntryString(id, null);
 		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id);
 		else if(t == PrimitiveType.ENUM) return new ConfigEntryEnumExtended(id);
@@ -91,18 +90,38 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	{ info = s; return (E)this; }
 	
 	public void updateDefault()
-	{ try { defaultValue = getValue(); } catch(Exception e) { } }
+	{ try { defaultValue = getAsString(); } catch(Exception e) { } }
 	
 	public String getMinValue() { return null; }
 	public String getMaxValue() { return null; }
 	
-	public ConfigGroup getAsGroup()
-	{ return null; }
-	
 	public ConfigEntry clone()
 	{
 		ConfigEntry e = ConfigEntry.getEntry(type, ID);
-		e.setJson(getJson(LMJsonUtils.serializationContext), LMJsonUtils.deserializationContext);
+		e.setJson(getJson());
 		return e;
 	}
+	
+	public ConfigGroup getAsGroup()
+	{ return null; }
+	
+	public abstract String getAsString();
+	
+	public String[] getAsStringArray()
+	{ return new String[] { getAsString() }; }
+	
+	public boolean getAsBoolean()
+	{ return false; }
+	
+	public int getAsInt()
+	{ return 0; }
+	
+	public double getAsDouble()
+	{ return 0D; }
+	
+	public int[] getAsIntArray()
+	{ return new int[] { getAsInt() }; }
+	
+	public double[] getAsDoubleArray()
+	{ return new double[] { getAsDouble() }; }
 }

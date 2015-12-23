@@ -18,14 +18,11 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	public int getIndex()
 	{ return values.indexOf(value); }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ value = o.getAsString(); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(value); }
-	
-	public String getValue()
-	{ return value; }
 	
 	public void write(ByteIOStream io)
 	{ io.writeUTF(value); }
@@ -44,4 +41,13 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public void onClicked()
 	{ value = values.get((getIndex() + 1) % values.size()); }
+	
+	public String getAsString()
+	{ return value; }
+	
+	public boolean getAsBoolean()
+	{ return value != null; }
+	
+	public int getAsInt()
+	{ return getIndex(); }
 }

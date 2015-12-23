@@ -24,14 +24,11 @@ public class ConfigEntryDouble extends ConfigEntry
 	public double get()
 	{ return value; }
 	
-	public final void setJson(JsonElement o, JsonDeserializationContext c)
+	public final void setJson(JsonElement o)
 	{ set(o.getAsDouble()); }
 	
-	public final JsonElement getJson(JsonSerializationContext c)
+	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
-	
-	public String getValue()
-	{ return Double.toString(get()); }
 	
 	public void write(ByteIOStream io)
 	{ io.writeDouble(get()); }
@@ -65,4 +62,13 @@ public class ConfigEntryDouble extends ConfigEntry
 		if(bounds.minValue == Double.POSITIVE_INFINITY) return null;
 		return MathHelperLM.formatDouble(bounds.maxValue);
 	}
+	
+	public String getAsString()
+	{ return Double.toString(get()); }
+	
+	public int getAsInt()
+	{ return (int)get(); }
+	
+	public double getAsDouble()
+	{ return get(); }
 }
