@@ -10,13 +10,16 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	public final File file;
 	public final ConfigGroup configGroup;
 	
-	public ConfigFile(String id, File f)
+	public ConfigFile(ConfigGroup group, File f)
 	{
-		super(id);
-		configGroup = new ConfigGroup(id);
+		super(group.ID);
+		configGroup = group;
 		configGroup.parentFile = this;
 		file = LMFileUtils.newFile(f);
 	}
+	
+	public ConfigFile(String id, File f)
+	{ this(new ConfigGroup(id), f); }
 	
 	public ConfigGroup getGroup()
 	{ return configGroup; }
