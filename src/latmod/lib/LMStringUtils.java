@@ -24,10 +24,8 @@ public class LMStringUtils
 	
 	public static String readString(InputStream is) throws Exception
 	{
-		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String s = null; while((s = br.readLine()) != null) { sb.append(s); sb.append('\n'); }
-		return sb.toString();
+		try (@SuppressWarnings("resource") Scanner s = new Scanner(is).useDelimiter("\\A"))
+		{ return s.hasNext() ? s.next() : ""; }
 	}
 	
 	public static FastList<String> toStringList(String s, String regex)
@@ -36,14 +34,19 @@ public class LMStringUtils
 		String[] s1 = s.split(regex);
 		if(s1 != null && s1.length > 0)
 		for(int i = 0; i < s1.length; i++)
-		al.add(s1[i].trim()); return al;
+			al.add(s1[i].trim());
+		return al;
 	}
 	
 	public static String fromStringList(List<String> l)
 	{
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < l.size(); i++)
-		{ sb.append(l.get(i)); if(i != l.size() - 1) sb.append('\n'); }
+		{
+			sb.append(l.get(i));
+			if(i != l.size() - 1)
+				sb.append('\n');
+		}
 		return sb.toString();
 	}
 	

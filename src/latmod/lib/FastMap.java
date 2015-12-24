@@ -144,4 +144,30 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 		for(int i = 0; i < list.size(); i++)
 		{ Obj o = list.get(i); put(o.key, o.val); }
 	}
+
+	public void sort()
+	{
+		if(size() < 2) return;
+		
+		class Obj implements Comparable<Obj>
+		{
+			public final K key;
+			public final V val;
+			
+			public Obj(K k, V v)
+			{ key = k; val = v; }
+			
+			@SuppressWarnings("unchecked")
+			public int compareTo(Obj o)
+			{ return ((Comparable<K>)key).compareTo(o.key); }
+		}
+		
+		FastList<Obj> list = new FastList<Obj>();
+		for(Entry<K, V> e : entrySet())
+			list.add(new Obj(e.getKey(), e.getValue()));
+		list.sort(null);
+		clear();
+		for(int i = 0; i < list.size(); i++)
+		{ Obj o = list.get(i); put(o.key, o.val); }
+	}
 }

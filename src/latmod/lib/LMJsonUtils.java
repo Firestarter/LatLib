@@ -132,13 +132,16 @@ public class LMJsonUtils
 	public static JsonElement getJsonElement(String json)
 	{ return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
 	
+	public static JsonElement getJsonElement(Reader json)
+	{ return (json == null) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
+	
 	public static JsonElement getJsonElement(File json)
 	{
 		try
 		{
 			if(json == null || !json.exists()) return JsonNull.INSTANCE;
 			Reader reader = new FileReader(json);
-			JsonElement e = new JsonParser().parse(reader);
+			JsonElement e = getJsonElement(reader);
 			reader.close();
 			return e;
 		}
