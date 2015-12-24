@@ -1,7 +1,6 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-
 import latmod.lib.*;
 
 class ConfigEntryJsonElement extends ConfigEntry

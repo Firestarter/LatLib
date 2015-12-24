@@ -1,4 +1,5 @@
 package latmod.lib;
+
 import java.util.*;
 
 /** Made by LatvianModder */

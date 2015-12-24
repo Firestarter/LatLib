@@ -1,11 +1,10 @@
 package latmod.lib.config;
 
+import com.google.gson.*;
+import latmod.lib.*;
+
 import java.lang.reflect.*;
 import java.util.*;
-
-import com.google.gson.*;
-
-import latmod.lib.*;
 
 public final class ConfigGroup extends ConfigEntry
 {

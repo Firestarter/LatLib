@@ -1,12 +1,11 @@
 package latmod.lib.json;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.*;
-
 import latmod.lib.LMStringUtils;
+
+import java.io.IOException;
+import java.util.UUID;
 
 public class UUIDTypeAdapterLM extends TypeAdapter<UUID>
 {

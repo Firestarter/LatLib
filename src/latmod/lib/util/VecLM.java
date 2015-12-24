@@ -1,7 +1,8 @@
 package latmod.lib.util;
-import java.util.Random;
 
 import latmod.lib.MathHelperLM;
+
+import java.util.Random;
 
 /** Made by LatvianModder */
 public final class VecLM implements Cloneable

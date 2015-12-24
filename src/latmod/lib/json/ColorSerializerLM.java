@@ -1,12 +1,11 @@
 package latmod.lib.json;
 
-import java.awt.Color;
-import java.io.IOException;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.*;
-
 import latmod.lib.LMColorUtils;
+
+import java.awt.*;
+import java.io.IOException;
 
 public class ColorSerializerLM extends TypeAdapter<Color>
 {

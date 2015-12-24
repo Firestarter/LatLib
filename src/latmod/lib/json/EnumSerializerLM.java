@@ -1,11 +1,11 @@
 package latmod.lib.json;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.*;
+
+import java.io.IOException;
+import java.util.*;
 
 public class EnumSerializerLM implements TypeAdapterFactory
 {

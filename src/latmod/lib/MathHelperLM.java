@@ -1,8 +1,9 @@
 package latmod.lib;
-import java.text.DecimalFormat;
-import java.util.Random;
 
 import latmod.lib.util.VecLM;
+
+import java.text.DecimalFormat;
+import java.util.Random;
 
 /** Made by LatvianModder */
 public class MathHelperLM

@@ -1,10 +1,10 @@
 package latmod.lib;
 
-import java.io.IOException;
-import java.util.Calendar;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.*;
+
+import java.io.IOException;
+import java.util.Calendar;
 
 public final class Time implements Comparable<Time>
 {

@@ -1,11 +1,11 @@
 package latmod.lib;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.util.Map;
-
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.*;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Map;
 
 public enum PrimitiveType
 {

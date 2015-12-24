@@ -1,9 +1,9 @@
 package latmod.lib.net;
 
+import latmod.lib.*;
+
 import java.io.OutputStream;
 import java.net.*;
-
-import latmod.lib.*;
 
 public class LMURLConnection
 {

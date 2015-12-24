@@ -1,7 +1,6 @@
 package latmod.lib.config;
 
 import com.google.gson.JsonElement;
-
 import latmod.lib.*;
 
 public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEntry

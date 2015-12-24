@@ -1,14 +1,13 @@
 package latmod.lib;
 
-import java.awt.Color;
+import com.google.gson.*;
+import latmod.lib.config.ConfigGroup;
+import latmod.lib.json.*;
+
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
-
-import com.google.gson.*;
-
-import latmod.lib.config.ConfigGroup;
-import latmod.lib.json.*;
 
 /** Type for Lists: new TypeToken<List<E>>() {}.getType() */
 public class LMJsonUtils

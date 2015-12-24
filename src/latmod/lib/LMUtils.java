@@ -1,10 +1,11 @@
 package latmod.lib;
+
+import latmod.lib.util.*;
+
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.*;
 import java.util.*;
-
-import latmod.lib.util.*;
 
 /** Made by LatvianModder */
 public class LMUtils

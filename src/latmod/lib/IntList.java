@@ -1,9 +1,9 @@
 package latmod.lib;
 
+import com.google.gson.*;
+
 import java.lang.reflect.Type;
 import java.util.*;
-
-import com.google.gson.*;
 
 public class IntList implements Iterable<Integer>// Improve this // FastList
 {

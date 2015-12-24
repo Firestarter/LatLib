@@ -1,9 +1,9 @@
 package latmod.lib.config;
 
-import java.io.File;
-
 import latmod.lib.*;
 import latmod.lib.util.IDObject;
+
+import java.io.File;
 
 public final class ConfigFile extends IDObject implements IConfigFile
 {

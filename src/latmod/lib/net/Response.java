@@ -1,8 +1,9 @@
 package latmod.lib.net;
 
-import java.io.InputStream;
+import com.google.gson.JsonElement;
+import latmod.lib.*;
 
-import latmod.lib.LMStringUtils;
+import java.io.*;
 
 public final class Response
 {
@@ -22,4 +23,7 @@ public final class Response
 	
 	public String asString() throws Exception
 	{ return LMStringUtils.readString(stream); }
+	
+	public JsonElement asJson() throws Exception
+	{ return LMJsonUtils.getJsonElement(new InputStreamReader(stream)); }
 }

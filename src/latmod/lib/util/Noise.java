@@ -1,7 +1,8 @@
 package latmod.lib.util;
-import java.util.Random;
 
 import latmod.lib.MathHelperLM;
+
+import java.util.Random;
 
 /** Originally made by Progressing.org
  * <br>updated by LatvianModder */
