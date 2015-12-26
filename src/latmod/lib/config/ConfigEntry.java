@@ -100,6 +100,12 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 		e.setJson(getJson());
 		return e;
 	}
+
+	public int compareTo(Object o)
+	{
+		int i = Boolean.compare(getAsGroup() != null, ((ConfigEntry)o).getAsGroup() != null);
+		return (i == 0) ? super.compareTo(o) : i;
+	}
 	
 	public ConfigGroup getAsGroup()
 	{ return null; }

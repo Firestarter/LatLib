@@ -83,6 +83,16 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 			s[++i] = String.valueOf(o);
 		return s;
 	}
+
+	public String[] getValueStringArray()
+	{
+		String[] s = new String[size()];
+		if(s.length == 0) return s;
+		int i = -1;
+		for(Object o : values())
+			s[++i] = String.valueOf(o);
+		return s;
+	}
 	
 	public FastMap<V, K> inverse()
 	{

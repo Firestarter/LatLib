@@ -8,5 +8,6 @@ public enum RequestMethod
 	OPTIONS,
 	PUT,
 	DELETE,
-	TRACE
+	TRACE,
+	SIMPLE_GET
 }

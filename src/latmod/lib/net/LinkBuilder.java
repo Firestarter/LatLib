@@ -1,30 +1,44 @@
 package latmod.lib.net;
 
+import latmod.lib.FastMap;
+
+import java.util.Map;
+
 public class LinkBuilder
 {
-	private final StringBuilder string;
-	private boolean first = true;
-	
+	private final StringBuilder base;
+	private final FastMap<String, Object> args;
+
 	public LinkBuilder(String init)
 	{
-		string = new StringBuilder();
-		if(init != null && !init.isEmpty())
-		{
-			string.append(init);
-			string.append('?');
-		}
+		base = new StringBuilder(init);
+		args = new FastMap<>();
 	}
-	
-	public LinkBuilder append(String key, Object val)
-	{
-		if(first) first = false;
-		else string.append('&');
-		string.append(key);
-		string.append('=');
-		string.append(val);
-		return this;
-	}
+
+	public LinkBuilder append(String s)
+	{ base.append(s); return this; }
+
+	public LinkBuilder put(String s, Object o)
+	{ args.put(s, o); return this; }
 	
 	public String toString()
-	{ return string.toString(); }
+	{
+		StringBuilder sb = new StringBuilder(base);
+
+		if(!args.isEmpty())
+		{
+			boolean first = true;
+
+			for(Map.Entry<String, Object> e : args.entrySet())
+			{
+				sb.append(first ? '?' : '&');
+				sb.append(e.getKey());
+				sb.append('=');
+				sb.append(e.getValue());
+				first = false;
+			}
+		}
+
+		return sb.toString();
+	}
 }
