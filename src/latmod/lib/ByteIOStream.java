@@ -19,10 +19,13 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public ByteIOStream()
 	{ this(16); }
-	
-	public boolean hasData()
-	{ return pos > 0; }
-	
+
+	public int getDataPos()
+	{ return pos; }
+
+	public int available()
+	{ return bytes.length - pos; }
+
 	public byte[] toByteArray()
 	{
 		if(pos == bytes.length) return bytes;
@@ -94,13 +97,13 @@ public final class ByteIOStream implements DataInput, DataOutput
 		InputStream is = new InputStream()
 		{
 			public int read() throws IOException
-			{ return (available() <= 0) ? -1 : readUnsignedByte(); }
+			{ return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte(); }
 			
 			public int read(byte b[], int off, int len) throws IOException
-			{ readFully(b, off, len); return len; }
+			{ ByteIOStream.this.readFully(b, off, len); return len; }
 			
 			public int available()
-			{ return bytes.length - pos; }
+			{ return ByteIOStream.this.available(); }
 		};
 		
 		return is;

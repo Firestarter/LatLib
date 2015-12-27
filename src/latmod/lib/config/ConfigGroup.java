@@ -8,22 +8,19 @@ import java.util.*;
 
 public final class ConfigGroup extends ConfigEntry
 {
-	private final FastMap<String, ConfigEntry> entries;
+	public final FastMap<String, ConfigEntry> entryMap;
 	private String displayName = null;
 	public IConfigFile parentFile = null;
 	
 	public ConfigGroup(String s)
 	{
 		super(s, PrimitiveType.MAP);
-		entries = new FastMap<>();
+		entryMap = new FastMap<>();
 	}
 
-	public Collection<ConfigEntry> entries()
-	{ return entries.values(); }
+	public List<ConfigEntry> entries()
+	{ return entryMap.values(null); }
 
-	public FastMap<String, ConfigEntry> entryMap()
-	{ return entries; }
-	
 	public IConfigFile getParentFile()
 	{
 		if(parentFile != null) return parentFile;
@@ -35,15 +32,15 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		if(e != null)
 		{
-			entries.put(e.ID, e);
+			entryMap.put(e.ID, e);
 			e.parentGroup = this;
 		}
 	}
 
 	public ConfigGroup addAll(Class<?> c)
-	{ return addAll(c, null); }
+	{ return addAll(c, null, false); }
 	
-	public ConfigGroup addAll(Class<?> c, Object obj)
+	public ConfigGroup addAll(Class<?> c, Object obj, boolean copy)
 	{
 		try
 		{
@@ -58,7 +55,7 @@ public final class ConfigGroup extends ConfigEntry
 					if(ConfigEntry.class.isAssignableFrom(f[i].getType()))
 					{
 						ConfigEntry entry = (ConfigEntry)f[i].get(obj);
-						if(entry != null && entry != this) add(entry);
+						if(entry != null && entry != this) add(copy ? entry.clone() : entry);
 					}
 				}
 				catch(Exception e1) { }
@@ -83,8 +80,8 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		ConfigGroup g = new ConfigGroup((id == null || id.isEmpty()) ? ID : id);
 		g.displayName = displayName;
-		for(int i = 0; i < entries.size(); i++)
-			g.add(newEntries ? entries.get(i).clone() : entries.get(i));
+		for(int i = 0; i < entryMap.size(); i++)
+			g.add(newEntries ? entryMap.get(i).clone() : entryMap.get(i));
 		return g;
 	}
 	
@@ -92,7 +89,7 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		if(o0 == null || !o0.isJsonObject()) return;
 		
-		entries.clear();
+		entryMap.clear();
 		
 		JsonObject o = o0.getAsJsonObject();
 		
@@ -114,7 +111,7 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		JsonObject o = new JsonObject();
 		
-		for(ConfigEntry e : entries.values(null))
+		for(ConfigEntry e : entryMap.values(null))
 		{
 			if(!e.isExcluded())
 			{
@@ -131,8 +128,8 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public void write(ByteIOStream io)
 	{
-		io.writeShort(entries.size());
-		for(ConfigEntry e : entries.values())
+		io.writeShort(entryMap.size());
+		for(ConfigEntry e : entryMap.values())
 		{
 			e.onPreLoaded();
 			io.writeByte(e.type.ordinal());
@@ -144,7 +141,7 @@ public final class ConfigGroup extends ConfigEntry
 	public void read(ByteIOStream io)
 	{
 		int s = io.readUnsignedShort();
-		entries.clear();
+		entryMap.clear();
 		for(int i = 0; i < s; i++)
 		{
 			int type = io.readUnsignedByte();
@@ -158,8 +155,8 @@ public final class ConfigGroup extends ConfigEntry
 	public void writeExtended(ByteIOStream io)
 	{
 		io.writeUTF(displayName);
-		io.writeShort(entries.size());
-		for(ConfigEntry e : entries.values())
+		io.writeShort(entryMap.size());
+		for(ConfigEntry e : entryMap.values())
 		{
 			e.onPreLoaded();
 			io.writeByte(e.type.ordinal());
@@ -174,7 +171,7 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		displayName = io.readUTF();
 		int s = io.readUnsignedShort();
-		entries.clear();
+		entryMap.clear();
 		for(int i = 0; i < s; i++)
 		{
 			int type = io.readUnsignedByte();
@@ -206,13 +203,13 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public int loadFromGroup(ConfigGroup l)
 	{
-		if(l == null || l.entries.isEmpty()) return 0;
+		if(l == null || l.entryMap.isEmpty()) return 0;
 		
 		int result = 0;
 		
-		for(ConfigEntry e1 : l.entries.values())
+		for(ConfigEntry e1 : l.entryMap.values())
 		{
-			ConfigEntry e0 = entries.get(e1.ID);
+			ConfigEntry e0 = entryMap.get(e1.ID);
 			
 			if(e0 != null)
 			{
@@ -244,10 +241,10 @@ public final class ConfigGroup extends ConfigEntry
 	}
 	
 	public boolean hasKey(Object key)
-	{ return entries.containsKey(LMUtils.getID(key)); }
+	{ return entryMap.containsKey(LMUtils.getID(key)); }
 	
 	public ConfigEntry getEntry(Object key)
-	{ return entries.get(LMUtils.getID(key)); }
+	{ return entryMap.get(LMUtils.getID(key)); }
 	
 	public ConfigGroup getGroup(Object key)
 	{
@@ -258,7 +255,7 @@ public final class ConfigGroup extends ConfigEntry
 	public FastList<ConfigGroup> getGroups()
 	{
 		FastList<ConfigGroup> list = new FastList<ConfigGroup>();
-		for(ConfigEntry e : entries)
+		for(ConfigEntry e : entryMap)
 		{
 			ConfigGroup g = e.getAsGroup();
 			if(g != null) list.add(g);
@@ -273,9 +270,9 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		int count = 0;
 		
-		for(int i = 0; i < entries.size(); i++)
+		for(int i = 0; i < entryMap.size(); i++)
 		{
-			ConfigGroup g = entries.get(i).getAsGroup();
+			ConfigGroup g = entryMap.get(i).getAsGroup();
 			if(g == null) count++;
 			else count += g.getTotalEntryCount();
 		}

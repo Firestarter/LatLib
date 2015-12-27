@@ -36,7 +36,7 @@ public class LMURLConnection
 		con.setRequestProperty("User-Agent", "HTTP/1.1");
 		con.setDoInput(true);
 		
-		if(data.hasData())
+		if(data.getDataPos() > 0)
 		{
 			//System.out.println("Sending '" + con.getRequestMethod() + "' data '" + new String(data.toByteArray()) + "'");
 			con.setDoOutput(true);
