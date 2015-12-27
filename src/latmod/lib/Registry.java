@@ -2,13 +2,13 @@ package latmod.lib;
 
 public class Registry<E>
 {
-	public class Entry implements Comparable<Entry>
+	public static class Entry<T> implements Comparable<Entry>
 	{
 		public final String key;
-		public final E value;
+		public final T value;
 		public int ID;
 		
-		public Entry(String k, E v)
+		public Entry(String k, T v)
 		{ key = k; value = v; }
 		
 		public String toString()
@@ -25,12 +25,12 @@ public class Registry<E>
 	}
 	
 	public final boolean shortKeys;
-	public final FastList<Entry> entries;
+	public final FastList<Entry<E>> entries;
 	
 	public Registry(boolean b)
 	{
 		shortKeys = b;
-		entries = new FastList<Entry>();
+		entries = new FastList<>();
 	}
 	
 	public void sort()
@@ -58,40 +58,40 @@ public class Registry<E>
 	
 	public E register(String key, E value)
 	{
-		Entry e = new Entry(key, value);
+		Entry<E> e = new Entry<>(key, value);
 		int index = entries.indexOf(key);
 		if(index == -1) entries.add(e);
 		else entries.set(index, e);
 		return value;
 	}
 	
-	public Entry get(String key)
+	public Entry<E> get(String key)
 	{ return entries.getObj(key); }
 	
-	public Entry getFromValue(E value)
+	public Entry<E> getFromValue(E value)
 	{
 		for(int i = 0; i < entries.size(); i++)
 		{
-			Entry e = entries.get(i);
+			Entry<E> e = entries.get(i);
 			if(e.value == value) return e;
 		}
 		
 		for(int i = 0; i < entries.size(); i++)
 		{
-			Entry e = entries.get(i);
+			Entry<E> e = entries.get(i);
 			if(e.value.equals(value)) return e;
 		}
 		
 		return null;
 	}
 	
-	public Entry getFromID(int ID)
+	public Entry<E> getFromID(int ID)
 	{
 		if(ID <= 0) return null;
 		
 		for(int i = 0; i < entries.size(); i++)
 		{
-			Entry e = entries.get(i);
+			Entry<E> e = entries.get(i);
 			if(e.ID == ID) return e;
 		}
 		
@@ -129,7 +129,7 @@ public class Registry<E>
 			String key = io.readUTF();
 			int id = sk ? io.readUnsignedShort() : io.readInt();
 			
-			Entry e = get(key);
+			Entry<E> e = get(key);
 			if(e != null)
 			{
 				e.ID = id;
