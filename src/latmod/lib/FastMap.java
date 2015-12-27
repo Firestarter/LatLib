@@ -101,84 +101,52 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 			map.put(e.getValue(), e.getKey());
 		return map;
 	}
-	
-	public void sortFromKeyStrings(final boolean ignoreCase)
+
+	public List<Entry<K, V>> sortedEntryList(Comparator<? super Entry<K, V>> c)
 	{
-		if(size() < 2) return;
-		
-		class Obj implements Comparable<Obj>
+		FastList<Entry<K, V>> list = new FastList<>();
+
+		if(c == null) c = new Comparator<Entry<K, V>>()
 		{
-			public final K key;
-			public final V val;
-			
-			public Obj(K k, V v)
-			{ key = k; val = v; }
-			
-			public int compareTo(Obj o)
-			{
-				if(!ignoreCase) return key.toString().compareTo(o.key.toString());
-				return key.toString().compareToIgnoreCase(o.key.toString());
-			}
-		}
-		
-		FastList<Obj> list = new FastList<Obj>();
-		for(Entry<K, V> e : entrySet())
-			list.add(new Obj(e.getKey(), e.getValue()));
-		list.sort(null);
-		clear();
-		for(int i = 0; i < list.size(); i++)
-		{ Obj o = list.get(i); put(o.key, o.val); }
-	}
-	
-	public void sortFromKeyNums()
-	{
-		if(size() < 2) return;
-		
-		class Obj implements Comparable<Obj>
-		{
-			public final K key;
-			public final V val;
-			public final long keyLong;
-			
-			public Obj(K k, V v)
-			{ key = k; val = v; keyLong = ((Number)k).longValue(); }
-			
-			public int compareTo(Obj o)
-			{ return Long.compare(keyLong, o.keyLong); }
-		}
-		
-		FastList<Obj> list = new FastList<Obj>();
-		for(Entry<K, V> e : entrySet())
-			list.add(new Obj(e.getKey(), e.getValue()));
-		list.sort(null);
-		clear();
-		for(int i = 0; i < list.size(); i++)
-		{ Obj o = list.get(i); put(o.key, o.val); }
+			public int compare(Entry<K, V> o1, Entry<K, V> o2)
+			{ return ((Comparable)o1.getKey()).compareTo(o2.getKey()); }
+		};
+
+		list.addAll(entrySet());
+		list.sort(c);
+		return list;
 	}
 
-	public void sort()
+	public List<V> values(Comparator<Entry<K, V>> c)
 	{
-		if(size() < 2) return;
-		
-		class Obj implements Comparable<Obj>
+		FastList<V> list = new FastList<>();
+		for(Entry<K, V> entry : sortedEntryList(c))
+			list.add(entry.getValue());
+		return list;
+	}
+
+	public Comparator<Entry<K, V>> byKeyNames(final boolean ignoreCase)
+	{
+		return new Comparator<Entry<K, V>>()
 		{
-			public final K key;
-			public final V val;
-			
-			public Obj(K k, V v)
-			{ key = k; val = v; }
-			
-			@SuppressWarnings("unchecked")
-			public int compareTo(Obj o)
-			{ return ((Comparable<K>)key).compareTo(o.key); }
-		}
-		
-		FastList<Obj> list = new FastList<Obj>();
-		for(Entry<K, V> e : entrySet())
-			list.add(new Obj(e.getKey(), e.getValue()));
-		list.sort(null);
-		clear();
-		for(int i = 0; i < list.size(); i++)
-		{ Obj o = list.get(i); put(o.key, o.val); }
+			public int compare(Entry<K, V> o1, Entry<K, V> o2)
+			{
+				if(ignoreCase) return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey()));
+				else return String.valueOf(o1.getKey()).compareTo(String.valueOf(o2.getKey()));
+			}
+		};
+	}
+
+	public Comparator<Entry<K, V>> byKeyNumbers()
+	{
+		return new Comparator<Entry<K, V>>()
+		{
+			public int compare(Entry<K, V> o1, Entry<K, V> o2)
+			{
+				Number n1 = ((Number)o1.getKey());
+				Number n2 = ((Number)o1.getKey());
+				return Long.compare((n1 == null) ? 0L : n1.longValue(), (n2 == null) ? 0L : n2.longValue());
+			}
+		};
 	}
 }

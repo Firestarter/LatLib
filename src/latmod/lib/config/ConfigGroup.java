@@ -15,7 +15,7 @@ public final class ConfigGroup extends ConfigEntry
 	public ConfigGroup(String s)
 	{
 		super(s, PrimitiveType.MAP);
-		entries = new FastMap<String, ConfigEntry>();
+		entries = new FastMap<>();
 	}
 
 	public Collection<ConfigEntry> entries()
@@ -114,7 +114,7 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		JsonObject o = new JsonObject();
 		
-		for(ConfigEntry e : entries.values())
+		for(ConfigEntry e : entries.values(null))
 		{
 			if(!e.isExcluded())
 			{
@@ -201,17 +201,6 @@ public final class ConfigGroup extends ConfigEntry
 			ConfigGroup g = new ConfigGroup("");
 			g.setJson(json.getAsJsonObject());
 			return g;
-		}
-	}
-	
-	public void sort()
-	{
-		entries.sort();
-		
-		for(ConfigEntry e : entries.values())
-		{
-			ConfigGroup g = e.getAsGroup();
-			if(g != null) g.sort();
 		}
 	}
 	

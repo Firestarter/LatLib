@@ -41,9 +41,5 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	}
 	
 	public final String toJsonString(boolean pretty)
-	{
-		configGroup.sort();
-		String s = LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup);
-		return s;
-	}
+	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup); }
 }

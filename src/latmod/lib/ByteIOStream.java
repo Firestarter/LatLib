@@ -83,7 +83,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 			{ ByteIOStream.this.write(b); }
 			
 			public void write(byte b[], int off, int len) throws IOException
-			{ write(b, off, len); }
+			{ ByteIOStream.this.write(b, off, len); }
 		};
 		
 		return os;
