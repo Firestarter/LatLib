@@ -52,19 +52,20 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 		
 		if(s > 0)
 		{
-			int i = -1;
+			int i = 0;
 			for(Entry<K, V> e : entrySet())
 			{
 				sb.append(e.getKey());
 				sb.append(':');
 				sb.append(' ');
 				sb.append(e.getValue());
-				
-				if((i++) != s - 1)
+
+				if(i != s - 1)
 				{
 					sb.append(',');
 					sb.append(' ');
 				}
+				i++;
 			}
 			
 			sb.append(' ');

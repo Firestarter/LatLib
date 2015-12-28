@@ -1,6 +1,6 @@
 package latmod.lib.util;
 
-public class Pos2I
+public class Pos2I implements Cloneable
 {
 	public int x, y;
 	
@@ -16,7 +16,7 @@ public class Pos2I
 	{ return new Pos2D(x, y); }
 	
 	public int hashCode()
-	{ return (x == 0 && y == 0) ? 0 : (x * 31 + y); }
+	{ return x * 31 + y; }
 	
 	public boolean equalsPos(Pos2I o)
 	{ return o.x == x && o.y == y; }
@@ -34,4 +34,7 @@ public class Pos2I
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2I)o)); }
+
+	public Pos2I clone()
+	{ return new Pos2I(x, y); }
 }
