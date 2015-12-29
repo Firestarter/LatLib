@@ -1,6 +1,8 @@
 package latmod.lib.util;
 
-public class Pos2D
+import latmod.lib.MathHelperLM;
+
+public class Pos2D implements Cloneable
 {
 	public double x, y;
 	
@@ -16,7 +18,7 @@ public class Pos2D
 	{ return new Pos2I((int)x, (int)y); }
 	
 	public int hashCode()
-	{ return (x == 0D && y == 0D) ? 0 : (Double.hashCode(x) * 31 + Double.hashCode(y)); }
+	{ return Double.hashCode(x) * 31 + Double.hashCode(y); }
 	
 	public boolean equalsPos(Pos2D o)
 	{ return o.x == x && o.y == y; }
@@ -25,13 +27,17 @@ public class Pos2D
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
-		sb.append(x);
+		sb.append(MathHelperLM.formatDouble(x));
 		sb.append(',');
-		sb.append(y);
+		sb.append(' ');
+		sb.append(MathHelperLM.formatDouble(y));
 		sb.append(']');
 		return sb.toString();
 	}
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2D)o)); }
+
+	public Pos2D clone()
+	{ return new Pos2D(x, y); }
 }

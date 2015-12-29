@@ -27,6 +27,7 @@ public class Pos2I implements Cloneable
 		sb.append('[');
 		sb.append(x);
 		sb.append(',');
+		sb.append(' ');
 		sb.append(y);
 		sb.append(']');
 		return sb.toString();
