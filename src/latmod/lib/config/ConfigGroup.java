@@ -28,18 +28,24 @@ public final class ConfigGroup extends ConfigEntry
 		else return null;
 	}
 	
-	public void add(ConfigEntry e)
+	public void add(ConfigEntry e, boolean copy)
 	{
 		if(e != null)
 		{
-			entryMap.put(e.ID, e);
-			e.parentGroup = this;
+			if(copy)
+			{
+				ConfigEntry e1 = e.clone();
+				entryMap.put(e1.ID, e1);
+				e1.parentGroup = this;
+			}
+			else
+			{
+				entryMap.put(e.ID, e);
+				e.parentGroup = this;
+			}
 		}
 	}
 
-	public ConfigGroup addAll(Class<?> c)
-	{ return addAll(c, null, false); }
-	
 	public ConfigGroup addAll(Class<?> c, Object obj, boolean copy)
 	{
 		try
@@ -55,7 +61,7 @@ public final class ConfigGroup extends ConfigEntry
 					if(ConfigEntry.class.isAssignableFrom(f[i].getType()))
 					{
 						ConfigEntry entry = (ConfigEntry)f[i].get(obj);
-						if(entry != null && entry != this) add(copy ? entry.clone() : entry);
+						if(entry != null && entry != this) add(entry, copy);
 					}
 				}
 				catch(Exception e1) { }
@@ -74,14 +80,11 @@ public final class ConfigGroup extends ConfigEntry
 	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
 	
 	public ConfigGroup clone()
-	{ return clone(ID, true); }
-	
-	public ConfigGroup clone(String id, boolean newEntries)
 	{
-		ConfigGroup g = new ConfigGroup((id == null || id.isEmpty()) ? ID : id);
+		ConfigGroup g = new ConfigGroup(ID);
 		g.displayName = displayName;
-		for(int i = 0; i < entryMap.size(); i++)
-			g.add(newEntries ? entryMap.get(i).clone() : entryMap.get(i));
+		for(ConfigEntry e : entries())
+			g.add(e, true);
 		return g;
 	}
 	
@@ -103,7 +106,7 @@ public final class ConfigGroup extends ConfigEntry
 				entry.onPostLoaded();
 			}
 			
-			add(entry);
+			add(entry, false);
 		}
 	}
 	
@@ -122,7 +125,7 @@ public final class ConfigGroup extends ConfigEntry
 		
 		return o;
 	}
-	
+
 	public String getAsString()
 	{ return ">"; }
 	
@@ -148,7 +151,7 @@ public final class ConfigGroup extends ConfigEntry
 			String id = io.readUTF();
 			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
 			e.read(io);
-			add(e);
+			add(e, false);
 		}
 	}
 	
@@ -180,7 +183,7 @@ public final class ConfigGroup extends ConfigEntry
 			e.readExtended(io);
 			e.info = io.readUTF();
 			e.defaultValue = io.readUTF();
-			add(e);
+			add(e, false);
 		}
 	}
 	
@@ -282,4 +285,30 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public int getDepth()
 	{ return (parentGroup == null) ? 0 : (parentGroup.getDepth() + 1); }
+
+	public ConfigGroup generateSynced(boolean copy)
+	{ return generateSynced0(this, copy); }
+
+	private static ConfigGroup generateSynced0(ConfigGroup g0, boolean copy)
+	{
+		ConfigGroup g = new ConfigGroup(g0.ID);
+
+		for(ConfigEntry e : g0.entryMap.values())
+		{
+			if(e.shouldSync())
+				g.add(e, copy);
+			else
+			{
+				ConfigGroup g1 = e.getAsGroup();
+				if(g1 != null && !g1.entryMap.isEmpty())
+				{
+					ConfigGroup g2 = generateSynced0(g1, copy);
+					if(!g2.entryMap.isEmpty())
+						g.add(g2, false);
+				}
+			}
+		}
+
+		return g;
+	}
 }

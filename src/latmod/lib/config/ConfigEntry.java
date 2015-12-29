@@ -28,6 +28,9 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	
 	public void readExtended(ByteIOStream io)
 	{ read(io); }
+
+	public final String getPrettyJsonString(boolean pretty)
+	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), getJson()); }
 	
 	public static ConfigEntry getEntry(PrimitiveType t, String id)
 	{
