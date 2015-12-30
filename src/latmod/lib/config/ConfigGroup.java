@@ -239,8 +239,13 @@ public final class ConfigGroup extends ConfigEntry
 				}
 			}
 		}
-		
+
+		if(result > 0) onLoadedFromGroup(l);
 		return result;
+	}
+
+	protected void onLoadedFromGroup(ConfigGroup l)
+	{
 	}
 	
 	public boolean hasKey(Object key)
