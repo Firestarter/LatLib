@@ -114,7 +114,7 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 		};
 
 		list.addAll(entrySet());
-		list.sort(c);
+		Collections.sort(list, c);
 		return list;
 	}
 

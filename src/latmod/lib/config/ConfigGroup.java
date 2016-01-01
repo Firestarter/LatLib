@@ -262,7 +262,7 @@ public final class ConfigGroup extends ConfigEntry
 	
 	public FastList<ConfigGroup> getGroups()
 	{
-		FastList<ConfigGroup> list = new FastList<ConfigGroup>();
+		FastList<ConfigGroup> list = new FastList<>();
 		for(ConfigEntry e : entryMap)
 		{
 			ConfigGroup g = e.getAsGroup();

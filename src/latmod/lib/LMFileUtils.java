@@ -81,7 +81,7 @@ public class LMFileUtils
 	}
 	
 	public static FastList<File> listAll(File f)
-	{ FastList<File> l = new FastList<File>(); addAllFiles(l, f); return l; }
+	{ FastList<File> l = new FastList<>(); addAllFiles(l, f); return l; }
 	
 	private static void addAllFiles(FastList<File> l, File f)
 	{
@@ -161,9 +161,8 @@ public class LMFileUtils
 			
 			dst = newFile(dst);
 			
-			FileChannel srcC = null;
-			FileChannel dstC = null;
-			
+			FileChannel srcC, dstC;
+
 			try
 			{
 				srcC = new FileInputStream(src).getChannel();

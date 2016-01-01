@@ -46,11 +46,11 @@ public class LMUtils
 	public static String classpath(Class<?> c)
 	{ return (c == null) ? null : c.getName(); }
 	
-	public static FastList<Class<?>> addSubclasses(Class<?> c, FastList<Class<?>> al, boolean all)
+	public static List<Class<?>> addSubclasses(Class<?> c, List<Class<?>> al, boolean all)
 	{
 		if(c == null) return null;
-		if(al == null) al = new FastList<Class<?>>();
-		FastList<Class<?>> al1 = new FastList<Class<?>>();
+		if(al == null) al = new FastList<>();
+		FastList<Class<?>> al1 = new FastList<>();
 		al1.addAll(c.getDeclaredClasses());
 		if(all && !al1.isEmpty()) for(int i = 0; i < al1.size(); i++)
 		al.addAll(addSubclasses(al1.get(i), null, true));

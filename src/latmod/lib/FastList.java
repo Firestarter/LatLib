@@ -16,6 +16,12 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	@SuppressWarnings("all")
 	public FastList(E... o)
 	{ this((o == null) ? 10 : o.length); addAll(o); }
+
+	public FastList(Collection<E> c)
+	{
+		this((c != null && !c.isEmpty()) ? c.size() : 10);
+		if(c != null && !c.isEmpty()) addAll(c);
+	}
 	
 	public FastList<E> setWeakIndexing()
 	{ weakIndexing = true; return this; }
@@ -92,18 +98,18 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	
 	public FastList<E> clone()
 	{
-		FastList<E> l = new FastList<E>();
+		FastList<E> l = new FastList<>();
 		l.cloneFrom(this);
 		return l;
 	}
 	
-	public void cloneFrom(FastList<E> l)
+	public void cloneFrom(Collection<E> l)
 	{ clear(); addAll(l); }
 	
 	public FastList<E> sortToNew(Comparator<? super E> c)
 	{
 		FastList<E> l = clone();
-		l.sort(c);
+		Collections.sort(l, c);
 		return l;
 	}
 	
@@ -130,38 +136,7 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 		sb.append(']');
 		return sb.toString();
 	}
-	
-	@SuppressWarnings("rawtypes")
-	public void clearTree()
-	{
-		for(int i = 0; i < size(); i++)
-		{
-			E e = get(i);
-			
-			if(e instanceof FastList)
-				((FastList)e).clearTree();
-			else if(e instanceof Collection)
-				((Collection)e).clear();
-			else if(e instanceof Map)
-			{
-				Collection c = ((Map)e).values();
-				for(Object o : c)
-				{
-					if(o instanceof FastList)
-						((FastList)o).clearTree();
-					else if(o instanceof Collection)
-						((List)o).clear();
-					else if(o instanceof Map)
-						((Map)o).clear();
-				}
-				
-				((Map)e).clear();
-			}
-		}
-		
-		super.clear();
-	}
-	
+
 	public boolean containsAny(Collection<?> c)
 	{
 		for(Object o : c) if(contains(o))
@@ -191,14 +166,14 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	{
 		int s = size();
 		if(s == 0) return this;
-		FastList<E> al1 = new FastList<E>();
+		FastList<E> al1 = new FastList<>();
 		al1.ensureCapacity(s);
 		for(int i = 0; i < s; i++)
 			al1.add(get(s - i - 1));
 		return al1;
 	}
 	
-	public boolean allObjectsEquals(E e)
+	public boolean allObjectsEquals(Object e)
 	{
 		if(e == null) return (size() > 0) ? allObjectsEquals(get(0)) : false;
 		
@@ -209,15 +184,6 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 		}
 		
 		return true;
-	}
-	
-	public static <T> FastList<T> asList(Collection<T> c)
-	{
-		if(c == null) return null;
-		if(c instanceof FastList<?>) return (FastList<T>)c;
-		FastList<T> l = new FastList<T>();
-		l.addAll(c);
-		return l;
 	}
 	
 	public void removeNullValues()

@@ -11,7 +11,7 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	public ConfigEntryEnumExtended(String id)
 	{
 		super(id, PrimitiveType.ENUM);
-		values = new FastList<String>();
+		values = new FastList<>();
 	}
 	
 	public int getIndex()

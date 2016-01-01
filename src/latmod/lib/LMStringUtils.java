@@ -31,7 +31,7 @@ public class LMStringUtils
 	
 	public static FastList<String> toStringList(String s, String regex)
 	{
-		FastList<String> al = new FastList<String>();
+		FastList<String> al = new FastList<>();
 		String[] s1 = s.split(regex);
 		if(s1 != null && s1.length > 0)
 		for(int i = 0; i < s1.length; i++)
@@ -53,7 +53,7 @@ public class LMStringUtils
 	
 	public static FastList<String> readStringList(InputStream is) throws Exception
 	{
-		FastList<String> l = new FastList<String>();
+		FastList<String> l = new FastList<>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String s = null; while((s = reader.readLine()) != null)
 			l.add(s); reader.close(); return l;

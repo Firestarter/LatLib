@@ -26,41 +26,43 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	
 	public void setDefVal(int value)
 	{ defVal = value; }
-	
-	public void add(int value)
+
+	public void expand(int s)
 	{
-		if(size == array.length)
+		if(size + s > array.length)
 		{
-			int ai[] = new int[size + 10];
+			int ai[] = new int[size + Math.max(s, 10)];
 			System.arraycopy(array, 0, ai, 0, size);
 			array = ai;
 		}
-		
+	}
+	
+	public void add(int value)
+	{
+		expand(1);
 		array[size] = value;
 		size++;
 	}
 	
 	public void addAll(int... values)
 	{
-		if(values == null || values.length == 0) return;
-		int size1 = size + values.length;
-		
-		if(size1 >= array.length)
+		if(values != null && values.length > 0)
 		{
-			int ai[] = new int[size1];
-			System.arraycopy(array, 0, ai, 0, size);
-			array = ai;
+			expand(values.length);
+			System.arraycopy(values, 0, array, size, values.length);
+			size += values.length;
 		}
-		
-		System.arraycopy(values, 0, array, size, values.length);
-		size = size1;
 	}
 	
 	public void addAll(IntList l)
-	{ if(l != null && l.size > 0) addAll(l.toArray()); }
-	
-	public void setAll(int... values)
-	{ clear(); addAll(values); }
+	{
+		if(l != null && l.size > 0)
+		{
+			expand(l.size);
+			System.arraycopy(l.array, 0, array, size, l.size);
+			size += l.size;
+		}
+	}
 	
 	public int get(int index)
 	{ return (index >= 0 && index < size()) ? array[index] : defVal; }
@@ -105,11 +107,13 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 	}
 	
 	public void sort()
+	{ Arrays.sort(array, 0, size); }
+
+	public int[] toSortedArray()
 	{
 		int[] a = toArray();
 		Arrays.sort(a);
-		clear();
-		addAll(a);
+		return a;
 	}
 
 	public IntList copy()

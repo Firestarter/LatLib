@@ -10,7 +10,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	public ConfigEntryStringArray(String id, FastList<String> def)
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
-		value = new FastList<String>();
+		value = new FastList<>();
 		set(def);
 		updateDefault();
 	}
@@ -18,10 +18,10 @@ public class ConfigEntryStringArray extends ConfigEntry
 	public ConfigEntryStringArray(String id, String... def)
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
-		value = new FastList<String>();
+		value = new FastList<>();
 		
 		if(def != null && def.length > 0)
-			set(new FastList<String>(def));
+			set(new FastList<>(def));
 		
 		updateDefault();
 	}
