@@ -97,7 +97,7 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 	
 	public FastMap<V, K> inverse()
 	{
-		FastMap<V, K> map = new FastMap<V, K>();
+		FastMap<V, K> map = new FastMap<>();
 		for(Entry<K, V> e : entrySet())
 			map.put(e.getValue(), e.getKey());
 		return map;
@@ -149,5 +149,26 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 				return Long.compare((n1 == null) ? 0L : n1.longValue(), (n2 == null) ? 0L : n2.longValue());
 			}
 		};
+	}
+
+	public void removeAll(RemoveFilter<K, V> f)
+	{
+		if(f == null) clear();
+		else
+		{
+			FastList<Entry<K, V>> set = new FastList<>(entrySet());
+			clear();
+
+			for(Entry<K, V> e : set)
+			{
+				if(!f.remove(e))
+					put(e.getKey(), e.getValue());
+			}
+		}
+	}
+
+	public static interface RemoveFilter<K1, V1>
+	{
+		public boolean remove(Entry<K1, V1> e);
 	}
 }

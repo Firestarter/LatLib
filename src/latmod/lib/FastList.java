@@ -197,4 +197,19 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 		for(int i = 0; i < l.size(); i++)
 			remove(l.get(i));
 	}
+
+	public void removeAll(RemoveFilter<E> f)
+	{
+		if(f == null) clear();
+		else
+		{
+			for(int i = size() - 1; i >= 0; i--)
+			{ if(f.remove(get(i))) remove(i); }
+		}
+	}
+
+	public static interface RemoveFilter<E>
+	{
+		public boolean remove(E e);
+	}
 }
