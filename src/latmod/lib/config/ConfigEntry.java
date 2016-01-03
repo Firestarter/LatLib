@@ -4,15 +4,16 @@ import com.google.gson.JsonElement;
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
-public abstract class ConfigEntry extends FinalIDObject implements Cloneable
+import java.io.*;
+
+public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject
 {
 	public final PrimitiveType type;
 	private boolean isHidden = false;
 	private boolean isExcluded = false;
 	private boolean sync = false;
 	public String info = null;
-	public String defaultValue = null;
-	
+
 	public ConfigGroup parentGroup = null;
 	
 	ConfigEntry(String id, PrimitiveType t)
@@ -20,13 +21,13 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	
 	public abstract void setJson(JsonElement o);
 	public abstract JsonElement getJson();
-	public abstract void write(ByteIOStream io);
-	public abstract void read(ByteIOStream io);
+	public abstract void write(DataOutput io) throws Exception;
+	public abstract void read(DataInput io) throws Exception;
 	
-	public void writeExtended(ByteIOStream io)
+	public void writeExtended(DataOutput io) throws Exception
 	{ write(io); }
 	
-	public void readExtended(ByteIOStream io)
+	public void readExtended(DataInput io) throws Exception
 	{ read(io); }
 
 	public final String getPrettyJsonString(boolean pretty)
@@ -91,9 +92,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable
 	public final <E extends ConfigEntry> E setInfo(String s)
 	{ info = s; return (E)this; }
 	
-	public void updateDefault()
-	{ try { defaultValue = getAsString(); } catch(Exception e) { } }
-	
+	public String getDefValue() { return getAsString(); }
 	public String getMinValue() { return null; }
 	public String getMaxValue() { return null; }
 	

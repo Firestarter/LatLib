@@ -1,17 +1,20 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.*;
+import latmod.lib.PrimitiveType;
+
+import java.io.*;
 
 public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntry
 {
+	public boolean defValue;
 	private boolean value;
 	
 	public ConfigEntryBool(String id, boolean def)
 	{
 		super(id, PrimitiveType.BOOLEAN);
 		set(def);
-		updateDefault();
+		defValue = def;
 	}
 	
 	public void set(boolean v)
@@ -26,11 +29,23 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{ io.writeBoolean(get()); }
 	
-	public void read(ByteIOStream io)
+	public void read(DataInput io) throws Exception
 	{ set(io.readBoolean()); }
+
+	public void writeExtended(DataOutput io) throws Exception
+	{
+		write(io);
+		io.writeBoolean(defValue);
+	}
+
+	public void readExtended(DataInput io) throws Exception
+	{
+		read(io);
+		defValue = io.readBoolean();
+	}
 	
 	public void onClicked()
 	{ set(!get()); }
@@ -46,4 +61,7 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	
 	public double getAsDouble()
 	{ return get() ? 1D : 0D; }
+
+	public String getDefValue()
+	{ return defValue ? "true" : "false"; }
 }

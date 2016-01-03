@@ -3,10 +3,13 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
+import java.io.*;
+
 public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableConfigEntry
 {
 	public final FastList<String> values;
 	public String value;
+	public String defValue;
 	
 	public ConfigEntryEnumExtended(String id)
 	{
@@ -23,19 +26,20 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(value); }
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{ io.writeUTF(value); }
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{ value = io.readUTF(); }
-	
-	public void readExtended(ByteIOStream io)
+
+	public void readExtended(DataInput io) throws Exception
 	{
 		value = io.readUTF();
 		values.clear();
 		int s = io.readUnsignedByte();
 		for(int i = 0; i < s; i++)
 			values.add(io.readUTF());
+		defValue = values.get(io.readUnsignedByte());
 	}
 	
 	public void onClicked()
@@ -49,4 +53,7 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public int getAsInt()
 	{ return getIndex(); }
+
+	public String getDefValue()
+	{ return defValue; }
 }

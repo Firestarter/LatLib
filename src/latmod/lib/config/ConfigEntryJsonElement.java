@@ -3,6 +3,8 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
+import java.io.*;
+
 class ConfigEntryJsonElement extends ConfigEntry
 {
 	private JsonElement value;
@@ -19,11 +21,11 @@ class ConfigEntryJsonElement extends ConfigEntry
 	
 	public final JsonElement getJson()
 	{ return value; }
-	
-	public void write(ByteIOStream io)
+
+	public void write(DataOutput io) throws Exception
 	{ }
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{ }
 	
 	public boolean isNull()
@@ -78,4 +80,7 @@ class ConfigEntryJsonElement extends ConfigEntry
 			ai[i] = (a.get(i).getAsDouble());
 		return ai;
 	}
+
+	public String getDefValue()
+	{ return null; }
 }

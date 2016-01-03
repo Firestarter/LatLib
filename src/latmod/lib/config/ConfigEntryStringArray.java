@@ -3,8 +3,11 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
+import java.io.*;
+
 public class ConfigEntryStringArray extends ConfigEntry
 {
+	public FastList<String> defValue;
 	private FastList<String> value;
 	
 	public ConfigEntryStringArray(String id, FastList<String> def)
@@ -12,18 +15,16 @@ public class ConfigEntryStringArray extends ConfigEntry
 		super(id, PrimitiveType.STRING_ARRAY);
 		value = new FastList<>();
 		set(def);
-		updateDefault();
+		defValue = def == null ? new FastList<String>() : def;
 	}
 	
 	public ConfigEntryStringArray(String id, String... def)
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
 		value = new FastList<>();
-		
 		if(def != null && def.length > 0)
 			set(new FastList<>(def));
-		
-		updateDefault();
+		defValue = new FastList<>(def);
 	}
 	
 	public void set(FastList<String> o)
@@ -53,21 +54,38 @@ public class ConfigEntryStringArray extends ConfigEntry
 		return a;
 	}
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{
 		value = get();
 		io.writeShort(value.size());
 		for(int i = 0; i < value.size(); i++)
 			io.writeUTF(value.get(i));
 	}
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{
 		value.clear();
 		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
 			value.add(io.readUTF());
 		set(value.clone());
+	}
+
+	public void writeExtended(DataOutput io) throws Exception
+	{
+		write(io);
+		io.writeShort(defValue.size());
+		for(int i = 0; i < defValue.size(); i++)
+			io.writeUTF(defValue.get(i));
+	}
+
+	public void readExtended(DataInput io) throws Exception
+	{
+		read(io);
+		int s = io.readUnsignedShort();
+		defValue.clear();
+		for(int i = 0; i < s; i++)
+			defValue.add(io.readUTF());
 	}
 	
 	public String getAsString()
@@ -96,4 +114,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 			ai[i] = Double.parseDouble(value.get(i));
 		return ai;
 	}
+
+	public String getDefValue()
+	{ return defValue.toString(); }
 }

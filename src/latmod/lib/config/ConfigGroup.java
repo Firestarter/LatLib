@@ -3,6 +3,7 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -127,9 +128,24 @@ public final class ConfigGroup extends ConfigEntry
 	}
 
 	public String getAsString()
-	{ return ">"; }
+	{ return getJson().getAsString(); }
+
+	public String[] getAsStringArray()
+	{
+		String[] a = new String[entryMap.size()];
+		int i = -1;
+		for(ConfigEntry e : entryMap.values(null))
+			a[++i] = e.getAsString();
+		return a;
+	}
+
+	public boolean getAsBoolean()
+	{ return !entryMap.isEmpty(); }
+
+	public int getAsInt()
+	{ return entryMap.size(); }
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{
 		io.writeShort(entryMap.size());
 		for(ConfigEntry e : entryMap.values())
@@ -140,8 +156,8 @@ public final class ConfigGroup extends ConfigEntry
 			e.write(io);
 		}
 	}
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{
 		int s = io.readUnsignedShort();
 		entryMap.clear();
@@ -154,8 +170,8 @@ public final class ConfigGroup extends ConfigEntry
 			add(e, false);
 		}
 	}
-	
-	public void writeExtended(ByteIOStream io)
+
+	public void writeExtended(DataOutput io) throws Exception
 	{
 		io.writeUTF(displayName);
 		io.writeShort(entryMap.size());
@@ -166,11 +182,10 @@ public final class ConfigGroup extends ConfigEntry
 			io.writeUTF(e.ID);
 			e.writeExtended(io);
 			io.writeUTF(e.info);
-			io.writeUTF(e.defaultValue);
 		}
 	}
-	
-	public void readExtended(ByteIOStream io)
+
+	public void readExtended(DataInput io) throws Exception
 	{
 		displayName = io.readUTF();
 		int s = io.readUnsignedShort();
@@ -182,11 +197,10 @@ public final class ConfigGroup extends ConfigEntry
 			ConfigEntry e = ConfigEntry.getEntry(PrimitiveType.VALUES[type], id);
 			e.readExtended(io);
 			e.info = io.readUTF();
-			e.defaultValue = io.readUTF();
 			add(e, false);
 		}
 	}
-	
+
 	public static class Serializer implements JsonSerializer<ConfigGroup>, JsonDeserializer<ConfigGroup>
 	{
 		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)

@@ -1,20 +1,21 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.*;
+import latmod.lib.PrimitiveType;
 import latmod.lib.util.IntBounds;
+
+import java.io.*;
 
 public class ConfigEntryInt extends ConfigEntry
 {
 	private int value;
-	private IntBounds bounds;
+	public IntBounds bounds;
 	
 	public ConfigEntryInt(String id, IntBounds b)
 	{
 		super(id, PrimitiveType.INT);
 		bounds = (b == null) ? new IntBounds(0) : b;
 		set(bounds.defValue);
-		updateDefault();
 	}
 	
 	public void set(int v)
@@ -32,25 +33,27 @@ public class ConfigEntryInt extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{ io.writeInt(get()); }
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{ set(io.readInt()); }
-	
-	public void writeExtended(ByteIOStream io)
+
+	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
+		io.writeInt(bounds.defValue);
 		io.writeInt(bounds.minValue);
 		io.writeInt(bounds.maxValue);
 	}
-	
-	public void readExtended(ByteIOStream io)
+
+	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
+		int def = io.readInt();
 		int min = io.readInt();
 		int max = io.readInt();
-		bounds = new IntBounds(bounds.defValue, min, max);
+		bounds = new IntBounds(def, min, max);
 	}
 	
 	public String getMinValue()
@@ -76,4 +79,7 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public double getAsDouble()
 	{ return get(); }
+
+	public String getDefValue()
+	{ return Integer.toString(bounds.defValue); }
 }

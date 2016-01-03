@@ -5,7 +5,7 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public class IntList implements Iterable<Integer>// Improve this // FastList
+public class IntList implements Iterable<Integer>, Cloneable // Improve this // FastList
 {
 	private final int init;
 	private int defVal = -1;
@@ -116,15 +116,6 @@ public class IntList implements Iterable<Integer>// Improve this // FastList
 		return a;
 	}
 
-	public IntList copy()
-	{
-		IntList l = new IntList(init);
-		l.defVal = defVal;
-		l.array = toArray();
-		l.size = size;
-		return l;
-	}
-	
 	public int hashCode()
 	{
 		int h = 0;

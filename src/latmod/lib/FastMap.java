@@ -7,8 +7,6 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 {
 	private static final long serialVersionUID = 1L;
 	
-	private boolean nullRemoves = true;
-	
 	public FastMap(int init, float loadFactor)
 	{ super(init, loadFactor); }
 	
@@ -17,22 +15,7 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 	
 	public FastMap()
 	{ super(); }
-	
-	public FastMap<K, V> allowNullValues()
-	{ nullRemoves = false; return this; }
-	
-	public V put(K k, V v)
-	{
-		if(v == null && nullRemoves)
-		{
-			V v0 = get(k);
-			remove(k);
-			return v0;
-		}
-		
-		return super.put(k, v);
-	}
-	
+
 	public void removeAllKeys(List<? extends K> al)
 	{
 		for(int i = 0; i < al.size(); i++)
@@ -151,7 +134,7 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 		};
 	}
 
-	public void removeAll(RemoveFilter<K, V> f)
+	public void removeAll(RemoveFilter<Entry<K, V>> f)
 	{
 		if(f == null) clear();
 		else
@@ -165,10 +148,5 @@ public class FastMap<K, V> extends HashMap<K, V> implements Iterable<V>
 					put(e.getKey(), e.getValue());
 			}
 		}
-	}
-
-	public static interface RemoveFilter<K1, V1>
-	{
-		public boolean remove(Entry<K1, V1> e);
 	}
 }

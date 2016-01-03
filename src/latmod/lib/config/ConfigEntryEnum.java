@@ -4,23 +4,25 @@ import com.google.gson.*;
 import latmod.lib.*;
 import latmod.lib.util.EnumEnabled;
 
+import java.io.*;
+
 @SuppressWarnings("all")
 public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements IClickableConfigEntry // EnumTypeAdapterFactory
 {
 	public final Class<E> enumClass;
 	public final FastList<E> values;
 	private E value;
+	public final E defValue;
 	
 	public ConfigEntryEnum(String id, Class<E> c, E[] val, E def, boolean addNull)
 	{
 		super(id, PrimitiveType.ENUM);
 		enumClass = c;
 		values = new FastList<E>();
-		values.setWeakIndexing();
 		if(addNull) values.add(null);
 		values.addAll(val);
 		set(def);
-		updateDefault();
+		defValue = def;
 	}
 	
 	public static ConfigEntryEnum<EnumEnabled> enabledWithNull(String id, EnumEnabled def)
@@ -64,20 +66,21 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(getName(get())); }
 	
-	public void write(ByteIOStream io)
+	public void write(DataOutput io) throws Exception
 	{ io.writeUTF(getName(get())); }
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{ fromString(io.readUTF()); }
-	
-	public void writeExtended(ByteIOStream io)
+
+	public void writeExtended(DataOutput io) throws Exception
 	{
 		io.writeUTF(getName(get()));
 		io.writeByte(values.size());
 		for(int i = 0; i < values.size(); i++)
 			io.writeUTF(getName(values.get(i)));
+		io.writeByte(getIndex());
 	}
-	
+
 	public void onClicked()
 	{ set(values.get((getIndex() + 1) % values.size())); }
 	
@@ -89,4 +92,7 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public int getAsInt()
 	{ return getIndex(); }
+
+	public String getDefValue()
+	{ return getName(defValue); }
 }

@@ -5,8 +5,7 @@ import java.util.*;
 public class FastList<E> extends ArrayList<E> implements Set<E>
 {
 	private static final long serialVersionUID = 1L;
-	private boolean weakIndexing = false;
-	
+
 	public FastList(int init)
 	{ super(init); }
 	
@@ -22,9 +21,6 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 		this((c != null && !c.isEmpty()) ? c.size() : 10);
 		if(c != null && !c.isEmpty()) addAll(c);
 	}
-	
-	public FastList<E> setWeakIndexing()
-	{ weakIndexing = true; return this; }
 	
 	public int hashCode()
 	{
@@ -65,11 +61,11 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 	
 	public int indexOf(Object o)
 	{
-		if(size() == 0 || (!weakIndexing && o == null)) return -1;
-		for(int i = 0; i < size(); i++)
+		int s = size();
+		if(s == 0) return -1;
+		for(int i = 0; i < s; i++)
 			if(get(i) == o) return i;
-		if(weakIndexing) return -1;
-		for(int i = 0; i < size(); i++)
+		for(int i = 0; i < s; i++)
 			if(get(i) != null && get(i).equals(o)) return i;
 		return -1;
 	}
@@ -206,10 +202,5 @@ public class FastList<E> extends ArrayList<E> implements Set<E>
 			for(int i = size() - 1; i >= 0; i--)
 			{ if(f.remove(get(i))) remove(i); }
 		}
-	}
-
-	public static interface RemoveFilter<E>
-	{
-		public boolean remove(E e);
 	}
 }

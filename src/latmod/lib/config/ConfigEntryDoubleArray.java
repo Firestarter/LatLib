@@ -1,17 +1,20 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.*;
+import latmod.lib.PrimitiveType;
+
+import java.io.*;
 
 public class ConfigEntryDoubleArray extends ConfigEntry
 {
+	public double[] defValue;
 	private double[] value;
 	
 	public ConfigEntryDoubleArray(String id, double[] def)
 	{
 		super(id, PrimitiveType.DOUBLE_ARRAY);
 		set(def);
-		updateDefault();
+		defValue = def == null ? new double[0] : def;
 	}
 	
 	public void set(double[] o)
@@ -37,21 +40,37 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 			a.add(new JsonPrimitive(value[i]));
 		return a;
 	}
-	
-	public void write(ByteIOStream io)
+
+	public void write(DataOutput io) throws Exception
 	{
 		value = get();
 		io.writeShort(value.length);
 		for(int i = 0; i < value.length; i++)
 			io.writeDouble(value[i]);
 	}
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{
 		value = new double[io.readUnsignedShort()];
 		for(int i = 0; i < value.length; i++)
 			value[i] = io.readFloat();
 		set(value);
+	}
+
+	public void writeExtended(DataOutput io) throws Exception
+	{
+		write(io);
+		io.writeShort(defValue.length);
+		for(int i = 0; i < defValue.length; i++)
+			io.writeDouble(defValue[i]);
+	}
+
+	public void readExtended(DataInput io) throws Exception
+	{
+		read(io);
+		defValue = new double[io.readUnsignedShort()];
+		for(int i = 0; i < value.length; i++)
+			defValue[i] = io.readFloat();
 	}
 	
 	public String getAsString()
@@ -102,4 +121,30 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 	
 	public double[] getAsDoubleArray()
 	{ return value; }
+
+	public String getDefValue()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		sb.append(' ');
+
+		if(defValue.length > 0)
+		{
+			for(int i = 0; i < defValue.length; i++)
+			{
+				sb.append(defValue[i]);
+
+				if(i != defValue.length - 1)
+				{
+					sb.append(',');
+					sb.append(' ');
+				}
+			}
+
+			sb.append(' ');
+		}
+
+		sb.append(']');
+		return sb.toString();
+	}
 }

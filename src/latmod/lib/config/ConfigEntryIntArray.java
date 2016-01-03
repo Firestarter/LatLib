@@ -3,16 +3,19 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
+import java.io.*;
+
 public class ConfigEntryIntArray extends ConfigEntry
 {
+	public final IntList defValue;
 	private IntList value;
-	
+
 	public ConfigEntryIntArray(String id, IntList def)
 	{
 		super(id, PrimitiveType.INT_ARRAY);
 		value = new IntList();
 		set(def);
-		updateDefault();
+		defValue = def == null ? new IntList() : def.clone();
 	}
 	
 	public ConfigEntryIntArray(String id, int[] def)
@@ -44,16 +47,16 @@ public class ConfigEntryIntArray extends ConfigEntry
 			a.add(new JsonPrimitive(value.get(i)));
 		return a;
 	}
-	
-	public void write(ByteIOStream io)
+
+	public void write(DataOutput io) throws Exception
 	{
 		value = get();
 		io.writeShort(value.size());
 		for(int i = 0; i < value.size(); i++)
 			io.writeInt(value.get(i));
 	}
-	
-	public void read(ByteIOStream io)
+
+	public void read(DataInput io) throws Exception
 	{
 		value.clear();
 		int s = io.readUnsignedShort();
@@ -61,7 +64,24 @@ public class ConfigEntryIntArray extends ConfigEntry
 			value.add(io.readInt());
 		set(value.clone());
 	}
-	
+
+	public void writeExtended(DataOutput io) throws Exception
+	{
+		write(io);
+		io.writeShort(defValue.size());
+		for(int i = 0; i < defValue.size(); i++)
+			io.writeInt(defValue.get(i));
+	}
+
+	public void readExtended(DataInput io) throws Exception
+	{
+		read(io);
+		defValue.clear();
+		int s = io.readUnsignedShort();
+		for(int i = 0; i < s; i++)
+			defValue.add(io.readInt());
+	}
+
 	public String getAsString()
 	{ return get().toString(); }
 	
@@ -86,4 +106,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 			a1[i] = a[i];
 		return a1;
 	}
+
+	public String getDefValue()
+	{ return defValue.toString(); }
 }
