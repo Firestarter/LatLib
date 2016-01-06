@@ -49,9 +49,9 @@ public class LMUtils
 	public static List<Class<?>> addSubclasses(Class<?> c, List<Class<?>> al, boolean all)
 	{
 		if(c == null) return null;
-		if(al == null) al = new FastList<>();
-		FastList<Class<?>> al1 = new FastList<>();
-		al1.addAll(c.getDeclaredClasses());
+		if(al == null) al = new ArrayList<>();
+		ArrayList<Class<?>> al1 = new ArrayList<>();
+		LMListUtils.addAll(al1, c.getDeclaredClasses());
 		if(all && !al1.isEmpty()) for(int i = 0; i < al1.size(); i++)
 		al.addAll(addSubclasses(al1.get(i), null, true));
 		al.addAll(al1); return al;

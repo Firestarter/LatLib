@@ -59,7 +59,7 @@ public class LMFileUtils
 	public static void save(File f, String s) throws Exception
 	{ BufferedWriter br = new BufferedWriter(new FileWriter(newFile(f))); br.write(s); br.close(); }
 	
-	public static FastList<String> load(File f) throws Exception
+	public static List<String> load(File f) throws Exception
 	{ return LMStringUtils.readStringList(new FileInputStream(f)); }
 	
 	public static String loadAsText(File f) throws Exception
@@ -80,10 +80,10 @@ public class LMFileUtils
 		return false;
 	}
 	
-	public static FastList<File> listAll(File f)
-	{ FastList<File> l = new FastList<>(); addAllFiles(l, f); return l; }
+	public static List<File> listAll(File f)
+	{ ArrayList<File> l = new ArrayList<>(); addAllFiles(l, f); return l; }
 	
-	private static void addAllFiles(FastList<File> l, File f)
+	private static void addAllFiles(ArrayList<File> l, File f)
 	{
 		if(f.isDirectory())
 		{
@@ -148,9 +148,7 @@ public class LMFileUtils
 		{
 			if(src.isDirectory() && dst.isDirectory())
 			{
-				FastList<File> files = listAll(src);
-				
-				for(File f : files)
+				for(File f : listAll(src))
 				{
 					File dst1 = new File(dst.getAbsolutePath() + File.separatorChar + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
 					Exception e = copyFile(f, dst1); if(e != null) return e;

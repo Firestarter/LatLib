@@ -108,6 +108,9 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 		int i = Boolean.compare(getAsGroup() != null, ((ConfigEntry)o).getAsGroup() != null);
 		return (i == 0) ? super.compareTo(o) : i;
 	}
+
+	public final String toString()
+	{ return getAsString(); }
 	
 	public ConfigGroup getAsGroup()
 	{ return null; }

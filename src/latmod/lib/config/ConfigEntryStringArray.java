@@ -4,36 +4,37 @@ import com.google.gson.*;
 import latmod.lib.*;
 
 import java.io.*;
+import java.util.*;
 
 public class ConfigEntryStringArray extends ConfigEntry
 {
-	public FastList<String> defValue;
-	private FastList<String> value;
+	public List<String> defValue;
+	private List<String> value;
 	
-	public ConfigEntryStringArray(String id, FastList<String> def)
+	public ConfigEntryStringArray(String id, List<String> def)
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
-		value = new FastList<>();
+		value = new ArrayList<>();
 		set(def);
-		defValue = def == null ? new FastList<String>() : def;
+		defValue = def == null ? new ArrayList<String>() : def;
 	}
 	
 	public ConfigEntryStringArray(String id, String... def)
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
-		value = new FastList<>();
+		value = new ArrayList<>();
 		if(def != null && def.length > 0)
-			set(new FastList<>(def));
-		defValue = new FastList<>(def);
+			set(Arrays.asList(def));
+		defValue = Arrays.asList(def);
 	}
 	
-	public void set(FastList<String> o)
+	public void set(List<String> o)
 	{
 		value.clear();
 		value.addAll(o);
 	}
 	
-	public FastList<String> get()
+	public List<String> get()
 	{ return value; }
 	
 	public final void setJson(JsonElement o)
@@ -42,7 +43,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		value.clear();
 		for(int i = 0; i < a.size(); i++)
 			value.add(a.get(i).getAsString());
-		set(value.clone());
+		set(LMListUtils.clone(value));
 	}
 	
 	public final JsonElement getJson()
@@ -68,7 +69,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
 			value.add(io.readUTF());
-		set(value.clone());
+		set(LMListUtils.clone(value));
 	}
 
 	public void writeExtended(DataOutput io) throws Exception
@@ -92,7 +93,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	{ return get().toString(); }
 	
 	public String[] getAsStringArray()
-	{ return get().toStringArray(); }
+	{ return LMListUtils.toStringArray(get()); }
 	
 	public boolean getAsBoolean()
 	{ return !get().isEmpty(); }

@@ -5,12 +5,13 @@ import latmod.lib.*;
 import latmod.lib.util.EnumEnabled;
 
 import java.io.*;
+import java.util.*;
 
 @SuppressWarnings("all")
 public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements IClickableConfigEntry // EnumTypeAdapterFactory
 {
 	public final Class<E> enumClass;
-	public final FastList<E> values;
+	public final List<E> values;
 	private E value;
 	public final E defValue;
 	
@@ -18,9 +19,9 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	{
 		super(id, PrimitiveType.ENUM);
 		enumClass = c;
-		values = new FastList<E>();
+		values = new ArrayList<E>();
 		if(addNull) values.add(null);
-		values.addAll(val);
+		LMListUtils.addAll(values, val);
 		set(def);
 		defValue = def;
 	}

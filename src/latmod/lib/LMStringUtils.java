@@ -29,9 +29,9 @@ public class LMStringUtils
 		{ return s.hasNext() ? s.next() : ""; }
 	}
 	
-	public static FastList<String> toStringList(String s, String regex)
+	public static List<String> toStringList(String s, String regex)
 	{
-		FastList<String> al = new FastList<>();
+		ArrayList<String> al = new ArrayList<>();
 		String[] s1 = s.split(regex);
 		if(s1 != null && s1.length > 0)
 		for(int i = 0; i < s1.length; i++)
@@ -51,11 +51,11 @@ public class LMStringUtils
 		return sb.toString();
 	}
 	
-	public static FastList<String> readStringList(InputStream is) throws Exception
+	public static List<String> readStringList(InputStream is) throws Exception
 	{
-		FastList<String> l = new FastList<>();
+		ArrayList<String> l = new ArrayList<>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		String s = null; while((s = reader.readLine()) != null)
+		String s; while((s = reader.readLine()) != null)
 			l.add(s); reader.close(); return l;
 	}
 	
@@ -71,7 +71,7 @@ public class LMStringUtils
 		return !onlyAZ09 && (ALLOWED_TEXT_CHARS.indexOf(c) != -1);
 	}
 	
-	public static void replace(FastList<String> txt, String s, String s1)
+	public static void replace(List<String> txt, String s, String s1)
 	{
 		for(int i = 0; i < txt.size(); i++)
 		{
@@ -429,14 +429,5 @@ public class LMStringUtils
 				c[i] = (char)(b[i] & 0xFF);
 			return new String(c);
 		}
-	}
-	
-	public static String[] toStringArray(Set<?> l)
-	{
-		String[] s = new String[l.size()];
-		int i = -1;
-		for(Object o : l)
-			s[++i] = String.valueOf(o);
-		return s;
 	}
 }

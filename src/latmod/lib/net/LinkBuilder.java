@@ -1,18 +1,16 @@
 package latmod.lib.net;
 
-import latmod.lib.FastMap;
-
-import java.util.Map;
+import java.util.*;
 
 public class LinkBuilder
 {
 	private final StringBuilder base;
-	private final FastMap<String, Object> args;
+	private final HashMap<String, Object> args;
 
 	public LinkBuilder(String init)
 	{
 		base = new StringBuilder(init);
-		args = new FastMap<>();
+		args = new HashMap<>();
 	}
 
 	public LinkBuilder append(String s)

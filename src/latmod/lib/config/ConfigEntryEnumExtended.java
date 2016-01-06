@@ -1,20 +1,21 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.*;
+import latmod.lib.PrimitiveType;
 
 import java.io.*;
+import java.util.*;
 
 public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableConfigEntry
 {
-	public final FastList<String> values;
+	public final List<String> values;
 	public String value;
 	public String defValue;
 	
 	public ConfigEntryEnumExtended(String id)
 	{
 		super(id, PrimitiveType.ENUM);
-		values = new FastList<>();
+		values = new ArrayList<>();
 	}
 	
 	public int getIndex()

@@ -3,7 +3,7 @@ package latmod.lib;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.*;
 
 public class IntMap
 {
@@ -106,12 +106,20 @@ public class IntMap
 		m.fromIntArray(ai); return m;
 	}
 	
-	public FastMap<Integer, Integer> toMap()
+	public Map<Integer, Integer> toMap()
 	{
-		FastMap<Integer, Integer> map = new FastMap<Integer, Integer>();
+		HashMap<Integer, Integer> map = new HashMap<>();
 		for(int i = 0; i < size(); i++)
 			map.put(keys.get(i), values.get(i));
 		return map;
+	}
+
+	public List<Map.Entry<Integer, Integer>> entries()
+	{
+		ArrayList<Map.Entry<Integer, Integer>> set = new ArrayList<>();
+		for(int i = 0; i < size(); i++)
+			set.add(new MapEntry<>(Integer.valueOf(keys.get(i)), Integer.valueOf(values.get(i))));
+		return set;
 	}
 	
 	public boolean isEmpty()

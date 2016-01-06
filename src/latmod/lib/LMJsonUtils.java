@@ -14,8 +14,8 @@ public class LMJsonUtils
 {
 	private static Gson gson = null;
 	private static Gson gson_pretty = null;
-	private static final FastMap<Class<?>, Object> typeAdapters = new FastMap<>();
-	private static final FastList<TypeAdapterFactory> typeAdapterFactories = new FastList<>();
+	private static final HashMap<Class<?>, Object> typeAdapters = new HashMap<>();
+	private static final ArrayList<TypeAdapterFactory> typeAdapterFactories = new ArrayList<>();
 	private static boolean inited = false;
 	public static JsonDeserializationContext deserializationContext;
 	public static JsonSerializationContext serializationContext, prettySerializationContext;

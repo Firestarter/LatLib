@@ -9,18 +9,18 @@ import java.util.*;
 
 public final class ConfigGroup extends ConfigEntry
 {
-	public final FastMap<String, ConfigEntry> entryMap;
+	public final HashMap<String, ConfigEntry> entryMap;
 	private String displayName = null;
 	public IConfigFile parentFile = null;
 	
 	public ConfigGroup(String s)
 	{
 		super(s, PrimitiveType.MAP);
-		entryMap = new FastMap<>();
+		entryMap = new HashMap<>();
 	}
 
 	public List<ConfigEntry> entries()
-	{ return entryMap.values(null); }
+	{ return LMMapUtils.values(entryMap, null); }
 
 	public IConfigFile getParentFile()
 	{
@@ -115,7 +115,7 @@ public final class ConfigGroup extends ConfigEntry
 	{
 		JsonObject o = new JsonObject();
 		
-		for(ConfigEntry e : entryMap.values(null))
+		for(ConfigEntry e : entries())
 		{
 			if(!e.isExcluded())
 			{
@@ -131,13 +131,7 @@ public final class ConfigGroup extends ConfigEntry
 	{ return getJson().getAsString(); }
 
 	public String[] getAsStringArray()
-	{
-		String[] a = new String[entryMap.size()];
-		int i = -1;
-		for(ConfigEntry e : entryMap.values(null))
-			a[++i] = e.getAsString();
-		return a;
-	}
+	{ return LMListUtils.toStringArray(entries()); }
 
 	public boolean getAsBoolean()
 	{ return !entryMap.isEmpty(); }
@@ -274,10 +268,10 @@ public final class ConfigGroup extends ConfigEntry
 		return (e == null) ? null : e.getAsGroup();
 	}
 	
-	public FastList<ConfigGroup> getGroups()
+	public List<ConfigGroup> getGroups()
 	{
-		FastList<ConfigGroup> list = new FastList<>();
-		for(ConfigEntry e : entryMap)
+		ArrayList<ConfigGroup> list = new ArrayList<>();
+		for(ConfigEntry e : entryMap.values())
 		{
 			ConfigGroup g = e.getAsGroup();
 			if(g != null) list.add(g);
