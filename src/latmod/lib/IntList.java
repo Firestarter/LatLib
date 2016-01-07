@@ -17,6 +17,13 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	
 	public IntList()
 	{ this(5); }
+
+	public IntList(int[] ai)
+	{
+		init = ai.length;
+		size = ai.length;
+		array = ai.clone();
+	}
 	
 	public int size()
 	{ return size; }
