@@ -23,8 +23,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	{
 		super(id, PrimitiveType.STRING_ARRAY);
 		value = new ArrayList<>();
-		if(def != null && def.length > 0)
-			set(Arrays.asList(def));
+		if(def != null && def.length > 0) set(Arrays.asList(def));
 		defValue = Arrays.asList(def);
 	}
 	

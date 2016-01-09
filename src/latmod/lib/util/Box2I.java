@@ -15,7 +15,10 @@ public class Box2I
 	}
 	
 	public void setPos(int x, int y)
-	{ posX = x; posY = y; }
+	{
+		posX = x;
+		posY = y;
+	}
 	
 	public boolean isAt(int x, int y)
 	{ return x >= posX && y >= posY && x <= posX + width && y <= posY + height; }

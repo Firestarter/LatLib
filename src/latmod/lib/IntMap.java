@@ -24,7 +24,11 @@ public class IntMap
 	{ this(10); }
 	
 	public void setDefVal(int i)
-	{ defVal = i; keys.setDefVal(i); values.setDefVal(i); }
+	{
+		defVal = i;
+		keys.setDefVal(i);
+		values.setDefVal(i);
+	}
 	
 	public int size()
 	{ return keys.size(); }
@@ -39,11 +43,18 @@ public class IntMap
 	{
 		int i = indexOf(key);
 		if(i != -1) values.set(i, value);
-		else { keys.add(key); values.add(value); }
+		else
+		{
+			keys.add(key);
+			values.add(value);
+		}
 	}
 	
 	public void clear()
-	{ keys.clear(); values.clear(); }
+	{
+		keys.clear();
+		values.clear();
+	}
 	
 	public IntMap clone()
 	{
@@ -103,7 +114,8 @@ public class IntMap
 	public static IntMap fromIntArrayS(int[] ai)
 	{
 		IntMap m = new IntMap(ai.length / 2);
-		m.fromIntArray(ai); return m;
+		m.fromIntArray(ai);
+		return m;
 	}
 	
 	public Map<Integer, Integer> toMap()

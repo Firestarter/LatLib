@@ -20,10 +20,10 @@ public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEnt
 	{ return "edit"; }
 	
 	public void write(DataOutput io) throws Exception
-	{  }
+	{ }
 	
 	public void read(DataInput io) throws Exception
-	{  }
+	{ }
 	
 	public void onClicked()
 	{

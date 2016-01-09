@@ -5,7 +5,9 @@ import latmod.lib.util.VecLM;
 import java.text.DecimalFormat;
 import java.util.Random;
 
-/** Made by LatvianModder */
+/**
+ * Made by LatvianModder
+ */
 public class MathHelperLM
 {
 	public static final Random rand = new Random();
@@ -15,12 +17,12 @@ public class MathHelperLM
 	public static final double DEG = 180D / Math.PI;
 	public static final double TWO_PI = Math.PI * 2D;
 	public static final double HALF_PI = Math.PI / 2D;
-	public static final float PI_F = (float)Math.PI;
-	public static final float TWO_PI_F = (float)TWO_PI;
-	public static final float HALF_PI_F = (float)HALF_PI;
+	public static final float PI_F = (float) Math.PI;
+	public static final float TWO_PI_F = (float) TWO_PI;
+	public static final float HALF_PI_F = (float) HALF_PI;
 	
-	public static final float RAD_F = (float)RAD;
-	public static final float DEG_F = (float)DEG;
+	public static final float RAD_F = (float) RAD;
+	public static final float DEG_F = (float) DEG;
 	
 	private static final int SIN_TABLE_SIZE = 65536;
 	private static final int SIN_TABLE_SIZE_1 = SIN_TABLE_SIZE - 1;
@@ -30,16 +32,16 @@ public class MathHelperLM
 	
 	static
 	{
-		double ds = TWO_PI / (double)SIN_TABLE_SIZE;
+		double ds = TWO_PI / (double) SIN_TABLE_SIZE;
 		for(int i = 0; i < SIN_TABLE_SIZE; i++)
 			SIN_TABLE[i] = Math.sin(i * ds);
 	}
 	
 	public static double sin(double d)
-	{ return SIN_TABLE[(int)(d * SIN_SCALE) & SIN_TABLE_SIZE_1]; }
+	{ return SIN_TABLE[(int) (d * SIN_SCALE) & SIN_TABLE_SIZE_1]; }
 	
 	public static double cos(double d)
-	{ return SIN_TABLE[(int)(d * SIN_SCALE + COS_SHIFT) & SIN_TABLE_SIZE_1]; }
+	{ return SIN_TABLE[(int) (d * SIN_SCALE + COS_SHIFT) & SIN_TABLE_SIZE_1]; }
 	
 	public static double tan(double d)
 	{ return sin(d) / cos(d); }
@@ -119,17 +121,23 @@ public class MathHelperLM
 		if(v == null) v = new VecLM();
 		double f = cos(pitch * RAD);
 		double x1 = cos(-yaw * RAD + HALF_PI);
-        double z1 = sin(-yaw * RAD + HALF_PI);
-        double y1 = sin(pitch * RAD);
-        v.set(x1 * f * dist, y1 * dist, z1 * f * dist);
-        return v;
+		double z1 = sin(-yaw * RAD + HALF_PI);
+		double y1 = sin(pitch * RAD);
+		v.set(x1 * f * dist, y1 * dist, z1 * f * dist);
+		return v;
 	}
 	
 	public static int floor(double d)
-	{ int i = (int)d; return d < (double)i ? i - 1 : i; }
+	{
+		int i = (int) d;
+		return d < (double) i ? i - 1 : i;
+	}
 	
 	public static int ceil(double d)
-	{ int i = (int)d; return d > (double)i ? i + 1 : i; }
+	{
+		int i = (int) d;
+		return d > (double) i ? i + 1 : i;
+	}
 	
 	public static int chunk(int i)
 	{ return i >> 4; }
@@ -147,7 +155,7 @@ public class MathHelperLM
 		{
 			int min0 = min;
 			min = max;
-			max = min0; 
+			max = min0;
 		}
 		return min + r.nextInt(max - min + 1);
 	}
@@ -159,7 +167,7 @@ public class MathHelperLM
 		{
 			double min0 = min;
 			min = max;
-			max = min0; 
+			max = min0;
 		}
 		return min + r.nextDouble() * (max - min);
 	}
@@ -168,25 +176,43 @@ public class MathHelperLM
 	{ return Math.round(d) == d; }
 	
 	public static int lerpInt(int i1, int i2, double f)
-	{ return i1 + (int)((i2 - i1) * f); }
+	{ return i1 + (int) ((i2 - i1) * f); }
 	
 	public static double lerp(double f1, double f2, double f)
 	{ return f1 + (f2 - f1) * f; }
 	
 	public static double clamp(double n, double min, double max)
-	{ if(n < min) return min; if(n > max) return max; return n; }
+	{
+		if(n < min) return min;
+		if(n > max) return max;
+		return n;
+	}
 	
 	public static int clampInt(int n, int min, int max)
-	{ if(n < min) return min; if(n > max) return max; return n; }
+	{
+		if(n < min) return min;
+		if(n > max) return max;
+		return n;
+	}
 	
 	public static float clampFloat(float n, float min, float max)
-	{ if(n < min) return min; if(n > max) return max; return n; }
+	{
+		if(n < min) return min;
+		if(n > max) return max;
+		return n;
+	}
 	
 	public static double[] clamp(double[] d, double min, double max)
-	{ for(int i = 0; i < d.length; i++) d[i] = clamp(d[i], min, max); return d; }
+	{
+		for(int i = 0; i < d.length; i++) d[i] = clamp(d[i], min, max);
+		return d;
+	}
 	
 	public static int[] clampInt(int[] i, int min, int max)
-	{ for(int j = 0; j < i.length; j++) i[j] = clampInt(i[j], min, max); return i; }
+	{
+		for(int j = 0; j < i.length; j++) i[j] = clampInt(i[j], min, max);
+		return i;
+	}
 	
 	public static String toSmallDouble(double d)
 	{ return smallDoubleFormatter.format(d); }
@@ -198,8 +224,13 @@ public class MathHelperLM
 	{ return min2 + (max2 - min2) * ((val - min1) / (max1 - min1)); }
 	
 	public static final VecLM getMidPoint(double x1, double y1, double z1, double x2, double y2, double z2, double p)
-	{ double x = x2 - x1; double y = y2 - y1; double z = z2 - z1; double d = Math.sqrt(x * x + y * y + z * z);
-	return new VecLM(x1 + (x / d) * (d * p), y1 + (y / d) * (d * p), z1 + (z / d) * (d * p)); }
+	{
+		double x = x2 - x1;
+		double y = y2 - y1;
+		double z = z2 - z1;
+		double d = Math.sqrt(x * x + y * y + z * z);
+		return new VecLM(x1 + (x / d) * (d * p), y1 + (y / d) * (d * p), z1 + (z / d) * (d * p));
+	}
 	
 	public static VecLM getMidPoint(VecLM v1, VecLM v2, double p)
 	{ return getMidPoint(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, p); }
@@ -210,9 +241,10 @@ public class MathHelperLM
 		else if(d == Double.NEGATIVE_INFINITY) return "Inf";
 		else if(d == Double.NaN) return "NaN";
 
-		d = ((long)(d * 1000D)) / 1000D;
-		String s = String.valueOf(d); if(s.endsWith(".0"))
-		return s.substring(0, s.length() - 2); return s;
+		d = ((long) (d * 1000D)) / 1000D;
+		String s = String.valueOf(d);
+		if(s.endsWith(".0")) return s.substring(0, s.length() - 2);
+		return s;
 	}
 	
 	public static final int getRotations(double yaw, int max)
@@ -238,7 +270,7 @@ public class MathHelperLM
 	{ return d >= min && d <= max; }
 	
 	public static int percent(double d, double max)
-	{ return (int)(d / max * 100D); }
+	{ return (int) (d / max * 100D); }
 	
 	public static Number min(Number... v)
 	{
@@ -280,10 +312,18 @@ public class MathHelperLM
 	}
 	
 	public static double wrap(double i, double n)
-	{ i = i % n; if(i < 0) i += n; return i; }
+	{
+		i = i % n;
+		if(i < 0) i += n;
+		return i;
+	}
 	
 	public static int wrap(int i, int n)
-	{ i = i % n; if(i < 0) i += n; return i; }
+	{
+		i = i % n;
+		if(i < 0) i += n;
+		return i;
+	}
 	
 	public static boolean isPow2(int i)
 	{ return i != 0 && (i & i - 1) == 0; }

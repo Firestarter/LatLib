@@ -6,15 +6,15 @@ import java.util.zip.*;
 public class ByteCompressor
 {
 	public static byte[] compress(byte[] data, int off, int len) throws Exception
-	{  
+	{
 		Deflater d = new Deflater();
 		d.setInput(data, off, len);
-		ByteArrayOutputStream os = new ByteArrayOutputStream(len);   
-		d.finish();  
+		ByteArrayOutputStream os = new ByteArrayOutputStream(len);
+		d.finish();
 		
 		byte[] buffer = new byte[1024];
 		while(!d.finished())
-		{  
+		{
 			int count = d.deflate(buffer);
 			os.write(buffer, 0, count);
 		}
@@ -30,9 +30,9 @@ public class ByteCompressor
 		Inflater i = new Inflater();
 		i.setInput(data, off, len);
 		
-		ByteArrayOutputStream os = new ByteArrayOutputStream(len);  
+		ByteArrayOutputStream os = new ByteArrayOutputStream(len);
 		byte[] buffer = new byte[1024];
-		while (!i.finished())
+		while(!i.finished())
 		{
 			int count = i.inflate(buffer);
 			os.write(buffer, 0, count);

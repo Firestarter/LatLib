@@ -30,7 +30,7 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	{ return new ConfigEntryEnum<EnumEnabled>(id, EnumEnabled.class, EnumEnabled.VALUES, def, true); }
 	
 	public void set(Object o)
-	{ value = (E)o; }
+	{ value = (E) o; }
 	
 	public E get()
 	{ return value; }
@@ -50,13 +50,15 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 			
 			for(int i = 0; i < o1.length; i++)
 			{
-				Enum<?> e = (Enum<?>)o1[i];
+				Enum<?> e = (Enum<?>) o1[i];
 				if(e.name().equalsIgnoreCase(s))
-				{ return (E)e; }
+				{ return (E) e; }
 			}
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		
 		return null;
 	}

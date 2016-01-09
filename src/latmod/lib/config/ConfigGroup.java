@@ -7,7 +7,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-public final class ConfigGroup extends ConfigEntry
+public class ConfigGroup extends ConfigEntry
 {
 	public final HashMap<String, ConfigEntry> entryMap;
 	private String displayName = null;
@@ -53,15 +53,14 @@ public final class ConfigGroup extends ConfigEntry
 		{
 			Field f[] = c.getDeclaredFields();
 			
-			if(f != null && f.length > 0)
-			for(int i = 0; i < f.length; i++)
+			if(f != null && f.length > 0) for(int i = 0; i < f.length; i++)
 			{
 				try
 				{
 					f[i].setAccessible(true);
 					if(ConfigEntry.class.isAssignableFrom(f[i].getType()))
 					{
-						ConfigEntry entry = (ConfigEntry)f[i].get(obj);
+						ConfigEntry entry = (ConfigEntry) f[i].get(obj);
 						if(entry != null && entry != this) add(entry, copy);
 					}
 				}
@@ -69,13 +68,18 @@ public final class ConfigGroup extends ConfigEntry
 			}
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		
 		return this;
 	}
 	
 	public ConfigGroup setName(String s)
-	{ displayName = s; return this; }
+	{
+		displayName = s;
+		return this;
+	}
 	
 	public String getDisplayName()
 	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
@@ -128,7 +132,7 @@ public final class ConfigGroup extends ConfigEntry
 	}
 
 	public String getAsString()
-	{ return getJson().getAsString(); }
+	{ return getJson().toString(); }
 
 	public String[] getAsStringArray()
 	{ return LMListUtils.toStringArray(entries()); }
@@ -308,16 +312,14 @@ public final class ConfigGroup extends ConfigEntry
 
 		for(ConfigEntry e : g0.entryMap.values())
 		{
-			if(e.shouldSync())
-				g.add(e, copy);
+			if(e.shouldSync()) g.add(e, copy);
 			else
 			{
 				ConfigGroup g1 = e.getAsGroup();
 				if(g1 != null && !g1.entryMap.isEmpty())
 				{
 					ConfigGroup g2 = generateSynced0(g1, copy);
-					if(!g2.entryMap.isEmpty())
-						g.add(g2, false);
+					if(!g2.entryMap.isEmpty()) g.add(g2, false);
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 package latmod.lib.config;
 
 import com.google.gson.JsonElement;
+import latmod.lib.Bits;
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
@@ -9,15 +10,24 @@ import java.io.*;
 public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject
 {
 	public final PrimitiveType type;
-	private boolean isHidden = false;
-	private boolean isExcluded = false;
-	private boolean sync = false;
 	public String info = null;
+	private byte flags = 0;
+	private static final int FLAG_HIDDEN = 1;
+	private static final int FLAG_EXCLUDED = 2;
+	private static final int FLAG_SYNC = 3;
+	private static final int FLAG_1 = 4;
+	private static final int FLAG_2 = 5;
+	private static final int FLAG_3 = 6;
+	protected static final int FLAG_EXTRA_1 = 7;
+	protected static final int FLAG_EXTRA_2 = 8;
 
 	public ConfigGroup parentGroup = null;
 	
 	ConfigEntry(String id, PrimitiveType t)
-	{ super(id); type = t; }
+	{
+		super(id);
+		type = t;
+	}
 	
 	public abstract void setJson(JsonElement o);
 	public abstract JsonElement getJson();
@@ -42,15 +52,16 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 		else if(t == PrimitiveType.DOUBLE) return new ConfigEntryDouble(id, null);
 		else if(t == PrimitiveType.DOUBLE_ARRAY) return new ConfigEntryDoubleArray(id, null);
 		else if(t == PrimitiveType.INT) return new ConfigEntryInt(id, null);
-		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, (IntList)null);
+		else if(t == PrimitiveType.INT_ARRAY) return new ConfigEntryIntArray(id, (IntList) null);
 		else if(t == PrimitiveType.STRING) return new ConfigEntryString(id, null);
 		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id);
 		else if(t == PrimitiveType.ENUM) return new ConfigEntryEnumExtended(id);
-		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, 0, false);
+		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, 0);
 		return null;
 	}
 	
 	public void onPreLoaded() { }
+
 	public void onPostLoaded() { }
 	
 	public String getFullID()
@@ -66,34 +77,53 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public boolean isValid()
 	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
-	
+
+	protected final boolean getFlag(int f)
+	{
+		boolean[] flags1 = new boolean[8];
+		Bits.fromBits(flags1, flags);
+		return flags1[f];
+	}
+
 	@SuppressWarnings("unchecked")
+	protected final <E extends ConfigEntry> E setFlag(int f, boolean b)
+	{
+		boolean[] flags1 = new boolean[8];
+		Bits.fromBits(flags1, flags);
+		flags1[f] = b;
+		flags = (byte) Bits.toBits(flags1);
+		return (E) this;
+	}
+	
 	public final <E extends ConfigEntry> E setHidden()
-	{ isHidden = true; return (E)this; }
+	{ return setFlag(FLAG_HIDDEN, true); }
 	
 	public boolean isHidden()
-	{ return isHidden; }
-	
-	@SuppressWarnings("unchecked")
+	{ return getFlag(FLAG_HIDDEN); }
+
 	public final <E extends ConfigEntry> E setExcluded()
-	{ isExcluded = true; return (E)this; }
-	
+	{ return setFlag(FLAG_EXCLUDED, true); }
+
 	public boolean isExcluded()
-	{ return isExcluded; }
-	
-	@SuppressWarnings("unchecked")
+	{ return getFlag(FLAG_EXCLUDED); }
+
 	public final <E extends ConfigEntry> E sync()
-	{ sync = true; return (E)this; }
-	
+	{ return setFlag(FLAG_SYNC, true); }
+
 	public boolean shouldSync()
-	{ return sync; }
-	
+	{ return getFlag(FLAG_SYNC); }
+
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setInfo(String s)
-	{ info = s; return (E)this; }
+	{
+		info = s;
+		return (E) this;
+	}
 	
 	public String getDefValue() { return getAsString(); }
+
 	public String getMinValue() { return null; }
+
 	public String getMaxValue() { return null; }
 	
 	public ConfigEntry clone()
@@ -105,7 +135,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 
 	public int compareTo(Object o)
 	{
-		int i = Boolean.compare(getAsGroup() != null, ((ConfigEntry)o).getAsGroup() != null);
+		int i = Boolean.compare(getAsGroup() != null, ((ConfigEntry) o).getAsGroup() != null);
 		return (i == 0) ? super.compareTo(o) : i;
 	}
 
@@ -118,7 +148,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	public abstract String getAsString();
 	
 	public String[] getAsStringArray()
-	{ return new String[] { getAsString() }; }
+	{ return new String[] {getAsString()}; }
 	
 	public boolean getAsBoolean()
 	{ return false; }
@@ -130,8 +160,8 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	{ return 0D; }
 	
 	public int[] getAsIntArray()
-	{ return new int[] { getAsInt() }; }
+	{ return new int[] {getAsInt()}; }
 	
 	public double[] getAsDoubleArray()
-	{ return new double[] { getAsDouble() }; }
+	{ return new double[] {getAsDouble()}; }
 }

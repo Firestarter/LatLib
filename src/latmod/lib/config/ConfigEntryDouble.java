@@ -72,7 +72,7 @@ public class ConfigEntryDouble extends ConfigEntry
 	{ return Double.toString(get()); }
 	
 	public int getAsInt()
-	{ return (int)get(); }
+	{ return (int) get(); }
 	
 	public double getAsDouble()
 	{ return get(); }

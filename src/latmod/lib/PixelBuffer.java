@@ -23,8 +23,7 @@ public class PixelBuffer
 	
 	public void setPixels(int[] rgbArray)
 	{
-		if(rgbArray.length == pixels.length)
-			System.arraycopy(rgbArray, 0, pixels, 0, pixels.length);
+		if(rgbArray.length == pixels.length) System.arraycopy(rgbArray, 0, pixels, 0, pixels.length);
 	}
 	
 	public void setRGB(int x, int y, int col)
@@ -46,8 +45,7 @@ public class PixelBuffer
 	
 	public int[] getRGB(int startX, int startY, int w, int h, int[] rgbArray)
 	{
-		if(rgbArray == null || rgbArray.length != w * h)
-			rgbArray = new int[w * h];
+		if(rgbArray == null || rgbArray.length != w * h) rgbArray = new int[w * h];
 		int off = -1;
 		for(int y = startY; y < startY + h; y++)
 			for(int x = startX; x < startX + w; x++)
@@ -68,8 +66,8 @@ public class PixelBuffer
 	public void fill(int startX, int startY, int w, int h, int col)
 	{
 		for(int y = startY; y < startY + h; y++)
-		for(int x = startX; x < startX + w; x++)
-			setRGB(x, y, col);
+			for(int x = startX; x < startX + w; x++)
+				setRGB(x, y, col);
 	}
 	
 	public boolean equals(Object o)
@@ -78,12 +76,11 @@ public class PixelBuffer
 		else if(o == this) return true;
 		if(o instanceof PixelBuffer)
 		{
-			PixelBuffer b = (PixelBuffer)o;
+			PixelBuffer b = (PixelBuffer) o;
 			if(width == b.width && height == b.height)
 			{
 				for(int i = 0; i < pixels.length; i++)
-					if(pixels[i] != b.pixels[i])
-						return false;
+					if(pixels[i] != b.pixels[i]) return false;
 				return true;
 			}
 		}

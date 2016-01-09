@@ -14,10 +14,16 @@ public class LinkBuilder
 	}
 
 	public LinkBuilder append(String s)
-	{ base.append(s); return this; }
+	{
+		base.append(s);
+		return this;
+	}
 
 	public LinkBuilder put(String s, Object o)
-	{ args.put(s, o); return this; }
+	{
+		args.put(s, o);
+		return this;
+	}
 	
 	public String toString()
 	{

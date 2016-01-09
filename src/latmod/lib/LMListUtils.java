@@ -102,7 +102,11 @@ public class LMListUtils
 	{
 		if(list != null && list.size() > t)
 		{
-			while(list.size() > t) { list.remove(t); t--; }
+			while(list.size() > t)
+			{
+				list.remove(t);
+				t--;
+			}
 			return true;
 		}
 
@@ -131,8 +135,7 @@ public class LMListUtils
 	{
 		for(Object o : c1)
 		{
-			if(c.contains(o))
-				return true;
+			if(c.contains(o)) return true;
 		}
 
 		return false;

@@ -7,6 +7,6 @@ import com.google.gson.JsonElement;
  */
 public interface IJsonObject
 {
-	public void setJson(JsonElement e);
-	public JsonElement getJson();
+	void setJson(JsonElement e);
+	JsonElement getJson();
 }

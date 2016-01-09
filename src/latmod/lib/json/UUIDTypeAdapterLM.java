@@ -17,7 +17,11 @@ public class UUIDTypeAdapterLM extends TypeAdapter<UUID>
 	
 	public UUID read(JsonReader in) throws IOException
 	{
-		if(in.peek() == JsonToken.NULL) { in.nextNull(); return null; }
+		if(in.peek() == JsonToken.NULL)
+		{
+			in.nextNull();
+			return null;
+		}
 		return LMStringUtils.fromString(in.nextString());
 	}
 }

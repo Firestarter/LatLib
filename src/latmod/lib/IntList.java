@@ -13,7 +13,10 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	private int size;
 	
 	public IntList(int i)
-	{ init = i; array = new int[init]; }
+	{
+		init = i;
+		array = new int[init];
+	}
 	
 	public IntList()
 	{ this(5); }
@@ -29,7 +32,10 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	{ return size; }
 	
 	public void clear()
-	{ size = 0; array = new int[init]; }
+	{
+		size = 0;
+		array = new int[init];
+	}
 	
 	public void setDefVal(int value)
 	{ defVal = value; }
@@ -90,7 +96,7 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 		int rem = get(key);
 		size--;
 		for(int j = key; j < size; j++)
-		array[j] = array[j + 1];
+			array[j] = array[j + 1];
 		return rem;
 	}
 	
@@ -166,7 +172,11 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	}
 	
 	public static IntList asList(int... values)
-	{ IntList l = new IntList(values.length); l.addAll(values); return l; }
+	{
+		IntList l = new IntList(values.length);
+		l.addAll(values);
+		return l;
+	}
 	
 	public static class IntIterator implements Iterator<Integer>
 	{

@@ -7,59 +7,46 @@ import java.io.*;
 
 public class ConfigEntryColor extends ConfigEntry
 {
-	public int defValue;
-	private int value;
-	private boolean alpha;
-	
-	public ConfigEntryColor(String id, int def, boolean a)
+	public final LMColor value;
+	public final LMColor defValue;
+
+	public ConfigEntryColor(String id, int def)
 	{
 		super(id, PrimitiveType.INT);
-		alpha = a;
-		set(def);
-		defValue = format(def);
+		value = new LMColor(def);
+		defValue = new LMColor(def);
 	}
-	
-	private int format(int col)
-	{ return alpha ? col : (col | 0xFF000000); }
-	
-	public void set(int v)
-	{ value = format(v); }
-	
-	public int get()
-	{ return value; }
-	
+
 	public final void setJson(JsonElement o)
-	{ set(format(o.getAsInt())); }
+	{ value.setRGB(o.getAsInt()); }
 	
 	public final JsonElement getJson()
-	{ return new JsonPrimitive(get()); }
+	{ return new JsonPrimitive(value.color()); }
 	
 	public void write(DataOutput io) throws Exception
-	{ io.writeInt(get()); }
+	{ io.writeInt(value.color()); }
 
 	public void read(DataInput io) throws Exception
-	{ set(format(io.readInt())); }
+	{ value.setRGB(io.readInt()); }
 
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
-		io.writeBoolean(alpha);
-		io.writeInt(defValue);
+		io.writeInt(defValue.color());
 	}
 
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
-		alpha = io.readBoolean();
-		defValue = io.readInt();
+		defValue.setRGB(io.readInt());
 	}
 	
 	public String getAsString()
-	{ return LMColorUtils.getHex(get()); }
+	{ return value.toString(); }
 	
 	public int getAsInt()
-	{ return get(); }
+	{ return value.color(); }
 
 	public String getDefValue()
-	{ return LMColorUtils.getHex(defValue); }
+	{ return defValue.toString(); }
 }

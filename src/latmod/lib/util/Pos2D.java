@@ -12,10 +12,13 @@ public class Pos2D implements Cloneable
 	{ set(px, py); }
 	
 	public void set(double px, double py)
-	{ x = px; y = py; }
+	{
+		x = px;
+		y = py;
+	}
 	
 	public Pos2I toPos2I()
-	{ return new Pos2I((int)x, (int)y); }
+	{ return new Pos2I((int) x, (int) y); }
 	
 	public int hashCode()
 	{ return Double.hashCode(x) * 31 + Double.hashCode(y); }
@@ -36,7 +39,7 @@ public class Pos2D implements Cloneable
 	}
 	
 	public boolean equals(Object o)
-	{ return o != null && (o == this || equalsPos((Pos2D)o)); }
+	{ return o != null && (o == this || equalsPos((Pos2D) o)); }
 
 	public Pos2D clone()
 	{ return new Pos2D(x, y); }

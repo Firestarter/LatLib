@@ -4,7 +4,9 @@ import latmod.lib.MathHelperLM;
 
 import java.util.Random;
 
-/** Made by LatvianModder */
+/**
+ * Made by LatvianModder
+ */
 public final class VecLM implements Cloneable
 {
 	public double x;
@@ -14,16 +16,28 @@ public final class VecLM implements Cloneable
 	public VecLM() { }
 	
 	public VecLM(double nx, double ny, double nz)
-	{ x = nx; y = ny; z = nz; }
+	{
+		x = nx;
+		y = ny;
+		z = nz;
+	}
 	
 	public VecLM(Random r, boolean sin)
 	{
 		this(r.nextFloat(), r.nextFloat(), r.nextFloat());
-		if(sin) { scale(2D); add(-1D, -1D, -1D); }
+		if(sin)
+		{
+			scale(2D);
+			add(-1D, -1D, -1D);
+		}
 	}
 	
 	public void set(double nx, double ny, double nz)
-	{ x = nx; y = ny; z = nz; }
+	{
+		x = nx;
+		y = ny;
+		z = nz;
+	}
 	
 	public void set(VecLM v)
 	{ set(v.x, v.y, v.z); }
@@ -35,7 +49,11 @@ public final class VecLM implements Cloneable
 	{ add(v.x * s, v.y * s, v.z * s); }
 	
 	public void scale(double sx, double sy, double sz)
-	{ x *= sx; y *= sy; z *= sz; }
+	{
+		x *= sx;
+		y *= sy;
+		z *= sz;
+	}
 	
 	public void scale(VecLM v, double s)
 	{ scale(v.x * s, v.y * s, v.z * s); }
@@ -50,7 +68,7 @@ public final class VecLM implements Cloneable
 	{ return Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(y); }
 	
 	public boolean equals(Object o)
-	{ return (o instanceof VecLM && equalsPos((VecLM)o)); }
+	{ return (o instanceof VecLM && equalsPos((VecLM) o)); }
 	
 	public boolean equalsPos(VecLM v)
 	{ return v.x == x && v.y == y && v.z == z; }
@@ -101,5 +119,8 @@ public final class VecLM implements Cloneable
 	{ return Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z))); }
 	
 	public VecLM normalize()
-	{ double d = length(); return new VecLM(x / d, y / d, z / d); }
+	{
+		double d = length();
+		return new VecLM(x / d, y / d, z / d);
+	}
 }

@@ -9,7 +9,9 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 
-/** Type for Lists: new TypeToken<List<E>>() {}.getType() */
+/**
+ * Type for Lists: new TypeToken<List<E>>() {}.getType()
+ */
 public class LMJsonUtils
 {
 	private static Gson gson = null;
@@ -21,10 +23,18 @@ public class LMJsonUtils
 	public static JsonSerializationContext serializationContext, prettySerializationContext;
 	
 	public static final void register(Class<?> c, Object o)
-	{ typeAdapters.put(c, o); gson = null; gson_pretty = null; }
+	{
+		typeAdapters.put(c, o);
+		gson = null;
+		gson_pretty = null;
+	}
 	
 	public static final void registerFactory(TypeAdapterFactory f)
-	{ typeAdapterFactories.add(f); gson = null; gson_pretty = null; }
+	{
+		typeAdapterFactories.add(f);
+		gson = null;
+		gson_pretty = null;
+	}
 	
 	public static Gson getGson(boolean pretty)
 	{
@@ -88,17 +98,27 @@ public class LMJsonUtils
 	}
 	
 	public static <T> T fromJson(Gson gson, String s, Type t)
-	{ if(s == null) return null; return gson.fromJson(s, t); }
+	{
+		if(s == null) return null;
+		return gson.fromJson(s, t);
+	}
 	
 	public static <T> T fromJsonFile(Gson gson, File f, Type t)
 	{
 		if(!f.exists()) return null;
 		try { return fromJson(gson, LMStringUtils.readString(new FileInputStream(f)), t); }
-		catch(Exception e) { e.printStackTrace(); return null; }
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static String toJson(Gson gson, Object o)
-	{ if(o == null) return null; return gson.toJson(o); }
+	{
+		if(o == null) return null;
+		return gson.toJson(o);
+	}
 	
 	public static boolean toJsonFile(Gson gson, File f, Object o)
 	{
@@ -111,7 +131,9 @@ public class LMJsonUtils
 			return true;
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		
 		return false;
 	}

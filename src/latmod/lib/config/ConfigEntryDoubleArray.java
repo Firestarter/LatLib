@@ -115,7 +115,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 		value = get();
 		int[] a = new int[value.length];
 		for(int i = 0; i < a.length; i++)
-			a[i] = (int)value[i];
+			a[i] = (int) value[i];
 		return a;
 	}
 	

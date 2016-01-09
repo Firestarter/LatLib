@@ -79,7 +79,7 @@ public class LMMapUtils
 		if(c == null) c = new Comparator<Map.Entry<K, V>>()
 		{
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-			{ return ((Comparable)o1.getKey()).compareTo(o2.getKey()); }
+			{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
 		};
 
 		list.addAll(map.entrySet());
@@ -114,8 +114,8 @@ public class LMMapUtils
 		{
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{
-				Number n1 = ((Number)o1.getKey());
-				Number n2 = ((Number)o1.getKey());
+				Number n1 = ((Number) o1.getKey());
+				Number n2 = ((Number) o1.getKey());
 				return Long.compare((n1 == null) ? 0L : n1.longValue(), (n2 == null) ? 0L : n2.longValue());
 			}
 		};
@@ -132,8 +132,7 @@ public class LMMapUtils
 
 			for(Map.Entry<K, V> e : set)
 			{
-				if(!f.remove(e))
-					map.put(e.getKey(), e.getValue());
+				if(!f.remove(e)) map.put(e.getKey(), e.getValue());
 			}
 		}
 	}

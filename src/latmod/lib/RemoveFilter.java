@@ -5,5 +5,5 @@ package latmod.lib;
  */
 public interface RemoveFilter<E>
 {
-	public boolean remove(E e);
+	boolean remove(E e);
 }

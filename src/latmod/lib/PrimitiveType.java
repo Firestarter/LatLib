@@ -26,9 +26,8 @@ public enum PrimitiveType
 	
 	ENUM("enum", Enum.class),
 	COLOR("col", Color.class),
-	MAP("map", Map.class),
-	
-	; public static final PrimitiveType[] VALUES = values();
+	MAP("map", Map.class),;
+	public static final PrimitiveType[] VALUES = values();
 	
 	public final String ID;
 	public final Class<?> typeClass;
@@ -75,7 +74,10 @@ public enum PrimitiveType
 		public PrimitiveType read(JsonReader in) throws IOException
 		{
 			if(in.peek() == JsonToken.NULL)
-			{ in.nextNull(); return null; }
+			{
+				in.nextNull();
+				return null;
+			}
 			return get(in.nextString());
 		}
 		

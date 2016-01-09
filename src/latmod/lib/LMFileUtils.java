@@ -48,7 +48,9 @@ public class LMFileUtils
 			return f;
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		
 		return f;
 	}
@@ -57,7 +59,11 @@ public class LMFileUtils
 	{ save(f, LMStringUtils.fromStringList(al)); }
 	
 	public static void save(File f, String s) throws Exception
-	{ BufferedWriter br = new BufferedWriter(new FileWriter(newFile(f))); br.write(s); br.close(); }
+	{
+		BufferedWriter br = new BufferedWriter(new FileWriter(newFile(f)));
+		br.write(s);
+		br.close();
+	}
 	
 	public static List<String> load(File f) throws Exception
 	{ return LMStringUtils.readStringList(new FileInputStream(f)); }
@@ -81,7 +87,11 @@ public class LMFileUtils
 	}
 	
 	public static List<File> listAll(File f)
-	{ ArrayList<File> l = new ArrayList<>(); addAllFiles(l, f); return l; }
+	{
+		ArrayList<File> l = new ArrayList<>();
+		addAllFiles(l, f);
+		return l;
+	}
 	
 	private static void addAllFiles(ArrayList<File> l, File f)
 	{
@@ -106,10 +116,9 @@ public class LMFileUtils
 		{
 			long length = 0L;
 			File[] f1 = f.listFiles();
-		    if(f1 != null && f1.length > 0)
-		    	for(int i = 0; i < f1.length; i++)
-		    		length += getSize(f1[i]);
-		    return length;
+			if(f1 != null && f1.length > 0) for(int i = 0; i < f1.length; i++)
+				length += getSize(f1[i]);
+			return length;
 		}
 		return 0L;
 	}
@@ -119,19 +128,19 @@ public class LMFileUtils
 		if(b >= GB_D)
 		{
 			b /= GB_D;
-			b = (long)(b * 10D) / 10D;
+			b = (long) (b * 10D) / 10D;
 			return b + "GB";
 		}
 		else if(b >= MB_D)
 		{
 			b /= MB_D;
-			b = (long)(b * 10D) / 10D;
+			b = (long) (b * 10D) / 10D;
 			return b + "MB";
 		}
 		else if(b >= KB_D)
 		{
 			b /= KB_D;
-			b = (long)(b * 10D) / 10D;
+			b = (long) (b * 10D) / 10D;
 			return b + "KB";
 		}
 		
@@ -151,7 +160,8 @@ public class LMFileUtils
 				for(File f : listAll(src))
 				{
 					File dst1 = new File(dst.getAbsolutePath() + File.separatorChar + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
-					Exception e = copyFile(f, dst1); if(e != null) return e;
+					Exception e = copyFile(f, dst1);
+					if(e != null) return e;
 				}
 				
 				return null;

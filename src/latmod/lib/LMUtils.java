@@ -7,7 +7,9 @@ import java.lang.reflect.Constructor;
 import java.net.*;
 import java.util.*;
 
-/** Made by LatvianModder */
+/**
+ * Made by LatvianModder
+ */
 public class LMUtils
 {
 	// Class / Object //
@@ -27,7 +29,7 @@ public class LMUtils
 		{
 			Class<?>[] params = new Class<?>[o.length];
 			for(int i = 0; i < o.length; i++)
-			params[i] = o.getClass();
+				params[i] = o.getClass();
 			
 			Constructor<?> c1 = c.getConstructor(params);
 			return (E) c1.newInstance(o);
@@ -53,8 +55,9 @@ public class LMUtils
 		ArrayList<Class<?>> al1 = new ArrayList<>();
 		LMListUtils.addAll(al1, c.getDeclaredClasses());
 		if(all && !al1.isEmpty()) for(int i = 0; i < al1.size(); i++)
-		al.addAll(addSubclasses(al1.get(i), null, true));
-		al.addAll(al1); return al;
+			al.addAll(addSubclasses(al1.get(i), null, true));
+		al.addAll(al1);
+		return al;
 	}
 	
 	public static boolean areObjectsEqual(Object o1, Object o2, boolean allowNulls)
@@ -95,13 +98,15 @@ public class LMUtils
 	public static String getHostAddress()
 	{
 		try { return InetAddress.getLocalHost().getHostAddress(); }
-		catch(Exception e) { } return null;
+		catch(Exception e) { }
+		return null;
 	}
 	
 	public static String getExternalAddress()
 	{
 		try { return LMStringUtils.readString(new URL("http://checkip.amazonaws.com").openStream()); }
-		catch(Exception e) { } return null;
+		catch(Exception e) { }
+		return null;
 	}
 	
 	// Misc //
@@ -109,8 +114,8 @@ public class LMUtils
 	public static boolean openURI(URI uri) throws Exception
 	{
 		Class<?> oclass = Class.forName("java.awt.Desktop");
-		Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object)null, new Object[0]);
-		oclass.getMethod("browse", new Class[] { URI.class }).invoke(object, new Object[] { uri });
+		Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
+		oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
 		return true;
 	}
 	
@@ -121,16 +126,19 @@ public class LMUtils
 	{
 		byte[] buffer = new byte[1024];
 		int len;
-		while ((len = is.read(buffer, 0, buffer.length)) > 0)
-			os.write(buffer, 0, len);
+		while((len = is.read(buffer, 0, buffer.length)) > 0) os.write(buffer, 0, len);
 		os.flush();
 		
-		if(close) { is.close(); os.close(); }
+		if(close)
+		{
+			is.close();
+			os.close();
+		}
 	}
 	
 	@SuppressWarnings("all")
 	public static <T> T[] newArray(int length, Class<? extends T> typeClass)
-	{ return (T[])new Object[length]; }
+	{ return (T[]) new Object[length]; }
 	
 	@SuppressWarnings("all")
 	public static <T> T[] convertArray(Object[] array, Class<? extends T> typeClass)
@@ -144,8 +152,8 @@ public class LMUtils
 	public static final String getID(Object o)
 	{
 		if(o == null) return null;
-		else if(o instanceof FinalIDObject) return ((FinalIDObject)o).ID;
-		else if(o instanceof IDObject) return ((IDObject)o).ID;
+		else if(o instanceof FinalIDObject) return ((FinalIDObject) o).ID;
+		else if(o instanceof IDObject) return ((IDObject) o).ID;
 		else return o.toString();
 	}
 }

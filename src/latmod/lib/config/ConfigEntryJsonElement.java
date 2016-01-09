@@ -35,7 +35,7 @@ class ConfigEntryJsonElement extends ConfigEntry
 	{
 		if(isNull()) return null;
 		if(value.isJsonObject())
-			return (ConfigGroup)LMJsonUtils.deserializationContext.deserialize(value, ConfigGroup.class);
+			return (ConfigGroup) LMJsonUtils.deserializationContext.deserialize(value, ConfigGroup.class);
 		return null;
 	}
 	

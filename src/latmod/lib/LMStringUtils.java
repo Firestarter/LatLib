@@ -25,16 +25,17 @@ public class LMStringUtils
 	
 	public static String readString(InputStream is) throws Exception
 	{
-		try (@SuppressWarnings("resource") Scanner s = new Scanner(is).useDelimiter("\\A"))
-		{ return s.hasNext() ? s.next() : ""; }
+		try(@SuppressWarnings("resource") Scanner s = new Scanner(is).useDelimiter("\\A"))
+		{
+			return s.hasNext() ? s.next() : "";
+		}
 	}
 	
 	public static List<String> toStringList(String s, String regex)
 	{
 		ArrayList<String> al = new ArrayList<>();
 		String[] s1 = s.split(regex);
-		if(s1 != null && s1.length > 0)
-		for(int i = 0; i < s1.length; i++)
+		if(s1 != null && s1.length > 0) for(int i = 0; i < s1.length; i++)
 			al.add(s1[i].trim());
 		return al;
 	}
@@ -45,8 +46,7 @@ public class LMStringUtils
 		for(int i = 0; i < l.size(); i++)
 		{
 			sb.append(l.get(i));
-			if(i != l.size() - 1)
-				sb.append('\n');
+			if(i != l.size() - 1) sb.append('\n');
 		}
 		return sb.toString();
 	}
@@ -55,8 +55,10 @@ public class LMStringUtils
 	{
 		ArrayList<String> l = new ArrayList<>();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		String s; while((s = reader.readLine()) != null)
-			l.add(s); reader.close(); return l;
+		String s;
+		while((s = reader.readLine()) != null) l.add(s);
+		reader.close();
+		return l;
 	}
 	
 	public static boolean isASCIIChar(char c)
@@ -77,7 +79,10 @@ public class LMStringUtils
 		{
 			String s2 = txt.get(i);
 			if(s2 != null && s2.length() > 0 && s2.contains(s))
-			{ s2 = s2.replace(s, s1); txt.set(i, s2); }
+			{
+				s2 = s2.replace(s, s1);
+				txt.set(i, s2);
+			}
 		}
 	}
 	
@@ -111,8 +116,7 @@ public class LMStringUtils
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i]);
-			if(i != o.length - 1)
-				sb.append(STRIP_SEP);
+			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		
 		return sb.toString();
@@ -141,9 +145,8 @@ public class LMStringUtils
 		
 		for(int i = 0; i < o.length; i++)
 		{
-			sb.append((long)o[i]);
-			if(i != o.length - 1)
-				sb.append(STRIP_SEP);
+			sb.append((long) o[i]);
+			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		
 		return sb.toString();
@@ -158,8 +161,7 @@ public class LMStringUtils
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i]);
-			if(i != o.length - 1)
-				sb.append(STRIP_SEP);
+			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		
 		return sb.toString();
@@ -174,8 +176,7 @@ public class LMStringUtils
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i] ? '1' : '0');
-			if(i != o.length - 1)
-				sb.append(STRIP_SEP);
+			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		
 		return sb.toString();
@@ -190,8 +191,7 @@ public class LMStringUtils
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i]);
-			if(i != o.length - 1)
-				sb.append(STRIP_SEP);
+			if(i != o.length - 1) sb.append(STRIP_SEP);
 		}
 		
 		return sb.toString();
@@ -205,8 +205,7 @@ public class LMStringUtils
 		for(int i = 0; i < s.length; i++)
 		{
 			sb.append(s[i]);
-			if(i != s.length - 1)
-				sb.append(s1);
+			if(i != s.length - 1) sb.append(s1);
 		}
 		return sb.toString();
 	}
@@ -219,8 +218,7 @@ public class LMStringUtils
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i]);
-			if(i != o.length - 1)
-				sb.append(s1);
+			if(i != o.length - 1) sb.append(s1);
 		}
 		return sb.toString();
 	}
@@ -233,7 +231,7 @@ public class LMStringUtils
 		for(int i = startIndex; i < o.length; i++)
 		{
 			sb.append(o[i]);
-			if(i != o.length -1) sb.append(' ');
+			if(i != o.length - 1) sb.append(' ');
 		}
 		
 		return sb.toString();
@@ -245,7 +243,9 @@ public class LMStringUtils
 		char c = Character.toUpperCase(s.charAt(0));
 		if(s.length() == 1) return Character.toString(c);
 		StringBuilder sb = new StringBuilder();
-		sb.append(c); sb.append(s.substring(1)); return sb.toString();
+		sb.append(c);
+		sb.append(s.substring(1));
+		return sb.toString();
 	}
 	
 	public static boolean areStringsEqual(String s0, String s1)
@@ -275,8 +275,7 @@ public class LMStringUtils
 	{
 		if(s == null || s1 == null || s.length == 0) return false;
 		for(int i = 0; i < s.length; i++)
-			if(s[i] != null && (s[i] == s1 || s[i].equals(s1)))
-				return true;
+			if(s[i] != null && (s[i] == s1 || s[i].equals(s1))) return true;
 		return false;
 	}
 	
@@ -297,13 +296,13 @@ public class LMStringUtils
 	public static String removeAllWhitespace(String s)
 	{
 		if(s == null) return null;
-		s = s.trim(); if(s.length() == 0) return "";
+		s = s.trim();
+		if(s.length() == 0) return "";
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < s.length(); i++)
 		{
 			char c = s.charAt(i);
-			if(!Character.isWhitespace(c))
-				sb.append(c);
+			if(!Character.isWhitespace(c)) sb.append(c);
 		}
 		
 		return sb.toString();
@@ -376,12 +375,12 @@ public class LMStringUtils
 		return sb.toString();
 	}
 	
-    private static void digitsUUID(StringBuilder sb, long val, int digits)
-    {
-    	long hi = 1L << (digits * 4);
-    	String s = Long.toHexString(hi | (val & (hi - 1)));
-    	sb.append(s, 1, s.length());
-    }
+	private static void digitsUUID(StringBuilder sb, long val, int digits)
+	{
+		long hi = 1L << (digits * 4);
+		String s = Long.toHexString(hi | (val & (hi - 1)));
+		sb.append(s, 1, s.length());
+	}
 	
 	public static UUID fromString(String s)
 	{
@@ -394,14 +393,15 @@ public class LMStringUtils
 			for(int i = 0; i < l; i++)
 			{
 				sb.append(s.charAt(i));
-				if(i == 7 || i == 11 || i == 15 || i == 19)
-					sb.append('-');
+				if(i == 7 || i == 11 || i == 15 || i == 19) sb.append('-');
 			}
 			
 			return UUID.fromString(sb.toString());
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
@@ -413,7 +413,7 @@ public class LMStringUtils
 		{
 			byte[] b = new byte[s.length()];
 			for(int i = 0; i < b.length; i++)
-				b[i] = (byte)s.charAt(i);
+				b[i] = (byte) s.charAt(i);
 			return b;
 		}
 	}
@@ -426,7 +426,7 @@ public class LMStringUtils
 		{
 			char[] c = new char[b.length];
 			for(int i = 0; i < b.length; i++)
-				c[i] = (char)(b[i] & 0xFF);
+				c[i] = (char) (b[i] & 0xFF);
 			return new String(c);
 		}
 	}

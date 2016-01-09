@@ -17,7 +17,11 @@ public class ColorSerializerLM extends TypeAdapter<Color>
 	
 	public Color read(JsonReader in) throws IOException
 	{
-		if(in.peek() == JsonToken.NULL) { in.nextNull(); return null; }
+		if(in.peek() == JsonToken.NULL)
+		{
+			in.nextNull();
+			return null;
+		}
 		int col = Integer.decode(in.nextString());
 		return new Color(LMColorUtils.getRed(col), LMColorUtils.getGreen(col), LMColorUtils.getBlue(col), LMColorUtils.getAlpha(col));
 	}

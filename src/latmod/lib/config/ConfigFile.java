@@ -29,7 +29,7 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	
 	public void load()
 	{
-		ConfigGroup g = (ConfigGroup)LMJsonUtils.fromJsonFile(file, ConfigGroup.class);
+		ConfigGroup g = (ConfigGroup) LMJsonUtils.fromJsonFile(file, ConfigGroup.class);
 		if(g != null) configGroup.loadFromGroup(g);
 		save();
 	}

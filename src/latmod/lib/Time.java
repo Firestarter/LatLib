@@ -34,7 +34,7 @@ public final class Time implements Comparable<Time>
 	{ return Long.hashCode(millis); }
 	
 	public boolean equals(Object o)
-	{ return o != null && (o == this || (o instanceof Time && equalsTime(((Time)o).millis)) || (o instanceof Number && equalsTime(((Number)o).longValue()))); }
+	{ return o != null && (o == this || (o instanceof Time && equalsTime(((Time) o).millis)) || (o instanceof Number && equalsTime(((Number) o).longValue()))); }
 	
 	public String toString()
 	{
@@ -51,7 +51,7 @@ public final class Time implements Comparable<Time>
 		sb.append(',');
 		append00(sb, seconds);
 		sb.append(',');
-		append000(sb, (int)(millis % 1000L));
+		append000(sb, (int) (millis % 1000L));
 		return sb.toString();
 	}
 	
@@ -59,7 +59,10 @@ public final class Time implements Comparable<Time>
 	{ return Long.compare(millis, o.millis); }
 	
 	private static void append00(StringBuilder sb, int i)
-	{ if(i < 10) sb.append('0'); sb.append(i); }
+	{
+		if(i < 10) sb.append('0');
+		sb.append(i);
+	}
 	
 	private static void append000(StringBuilder sb, int i)
 	{
@@ -146,7 +149,7 @@ public final class Time implements Comparable<Time>
 	public static Time now()
 	{ return get(Calendar.getInstance()); }
 	
-	public static class Serializer extends TypeAdapter<Time>	
+	public static class Serializer extends TypeAdapter<Time>
 	{
 		public void write(JsonWriter out, Time value) throws IOException
 		{
@@ -156,7 +159,11 @@ public final class Time implements Comparable<Time>
 		
 		public Time read(JsonReader in) throws IOException
 		{
-			if(in.peek() == JsonToken.NULL) { in.nextNull(); return null; }
+			if(in.peek() == JsonToken.NULL)
+			{
+				in.nextNull();
+				return null;
+			}
 			return get(in.nextLong());
 		}
 	}

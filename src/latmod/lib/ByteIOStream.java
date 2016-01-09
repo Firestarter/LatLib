@@ -1,8 +1,11 @@
 package latmod.lib;
+
 import java.io.*;
 import java.util.UUID;
 
-/** Made by LatvianModder */
+/**
+ * Made by LatvianModder
+ */
 public final class ByteIOStream implements DataInput, DataOutput
 {
 	protected byte[] bytes;
@@ -55,12 +58,19 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{ pos = 0; }
 	
 	public void setData(byte[] b)
-	{ bytes = b; flip(); }
+	{
+		bytes = b;
+		flip();
+	}
 	
 	public void setCompressedData(byte[] b)
 	{
 		try { setData(ByteCompressor.decompress(b, 0, b.length)); }
-		catch(Exception e) { e.printStackTrace(); setData(null); }
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			setData(null);
+		}
 	}
 	
 	public String toString()
@@ -100,7 +110,10 @@ public final class ByteIOStream implements DataInput, DataOutput
 			{ return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte(); }
 			
 			public int read(byte b[], int off, int len) throws IOException
-			{ ByteIOStream.this.readFully(b, off, len); return len; }
+			{
+				ByteIOStream.this.readFully(b, off, len);
+				return len;
+			}
 			
 			public int available()
 			{ return ByteIOStream.this.available(); }
@@ -144,7 +157,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{ return readUnsignedByte() == 1; }
 	
 	public char readChar()
-	{ return (char)readUnsignedShort(); }
+	{ return (char) readUnsignedShort(); }
 	
 	public String readUTF()
 	{
@@ -163,7 +176,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 			c = (int) bytes[c1 + pos0] & 0xFF;
 			if(c > 127) break;
 			c1++;
-			utf_chars[cac++] = (char)c;
+			utf_chars[cac++] = (char) c;
 		}
 		
 		while(c1 < l)
@@ -172,28 +185,33 @@ public final class ByteIOStream implements DataInput, DataOutput
 			
 			switch(c >> 4)
 			{
-				case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
 					c1++;
-					utf_chars[cac++] = (char)c;
+					utf_chars[cac++] = (char) c;
 					break;
-				case 12: case 13:
+				case 12:
+				case 13:
 					c1 += 2;
-					if (c1 > l)
-						throwUTFException("malformed input: partial character at end");
+					if(c1 > l) throwUTFException("malformed input: partial character at end");
 					c2 = (int) bytes[c1 + pos0 - 1];
-					if ((c2 & 0xC0) != 0x80)
-						throwUTFException("malformed input around byte " + c1);
-					utf_chars[cac++]=(char)(((c & 0x1F) << 6) | (c2 & 0x3F));
+					if((c2 & 0xC0) != 0x80) throwUTFException("malformed input around byte " + c1);
+					utf_chars[cac++] = (char) (((c & 0x1F) << 6) | (c2 & 0x3F));
 					break;
 				case 14:
 					c1 += 3;
-					if (c1 > l)
-						throwUTFException("malformed input: partial character at end");
+					if(c1 > l) throwUTFException("malformed input: partial character at end");
 					c2 = (int) bytes[c1 + pos0 - 2];
 					c3 = (int) bytes[c1 + pos0 - 1];
-					if (((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
+					if(((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
 						throwUTFException("malformed input around byte " + (c1 - 1));
-					utf_chars[cac++] = (char)(((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F) << 0));
+					utf_chars[cac++] = (char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F) << 0));
 					break;
 				default:
 					throwUTFException("malformed input around byte " + c1);
@@ -217,7 +235,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	}
 	
 	public short readShort()
-	{ return (short)readUnsignedShort(); }
+	{ return (short) readUnsignedShort(); }
 	
 	public int readInt()
 	{
@@ -261,7 +279,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	public void writeByte(int i)
 	{
 		expand(1);
-		bytes[pos] = (byte)i;
+		bytes[pos] = (byte) i;
 		pos++;
 	}
 	
@@ -281,7 +299,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public void writeByteArray(byte[] b, ByteCount c)
 	{
-		if(b == null) { c.write(this, -1); return; }
+		if(b == null)
+		{
+			c.write(this, -1);
+			return;
+		}
 		c.write(this, b.length);
 		write(b);
 	}
@@ -294,17 +316,25 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public void writeUTF(String s)
 	{
-		if(s == null) { writeShort(-1); return; }
+		if(s == null)
+		{
+			writeShort(-1);
+			return;
+		}
 		int sl = s.length();
-		if(sl == 0) { writeShort(0); return; }
+		if(sl == 0)
+		{
+			writeShort(0);
+			return;
+		}
 		int l = 0;
 		int c;
 		
 		for(int i = 0; i < sl; i++)
 		{
 			c = s.charAt(i);
-			if ((c >= 0x0001) && (c <= 0x007F)) l++;
-			else if (c > 0x07FF) l += 3;
+			if((c >= 0x0001) && (c <= 0x007F)) l++;
+			else if(c > 0x07FF) l += 3;
 			else l += 2;
 		}
 		
@@ -316,26 +346,25 @@ public final class ByteIOStream implements DataInput, DataOutput
 		int i = 0;
 		for(i = 0; i < sl; i++)
 		{
-		   c = s.charAt(i);
-		   if (!(c >= 0x0001 && c <= 0x007F)) break;
-		   writeByte(c);
+			c = s.charAt(i);
+			if(!(c >= 0x0001 && c <= 0x007F)) break;
+			writeByte(c);
 		}
 		
-		for(;i < sl; i++)
+		for(; i < sl; i++)
 		{
 			c = s.charAt(i);
-			if (c >= 0x0001 && c <= 0x007F)
-				writeByte(c);
+			if(c >= 0x0001 && c <= 0x007F) writeByte(c);
 			else if(c > 0x07FF)
 			{
 				writeByte(0xE0 | ((c >> 12) & 0x0F));
-				writeByte(0x80 | ((c >>  6) & 0x3F));
-				writeByte(0x80 | ((c >>  0) & 0x3F));
+				writeByte(0x80 | ((c >> 6) & 0x3F));
+				writeByte(0x80 | ((c >> 0) & 0x3F));
 			}
 			else
 			{
-				writeByte(0xC0 | ((c >>  6) & 0x1F));
-				writeByte(0x80 | ((c >>  0) & 0x3F));
+				writeByte(0xC0 | ((c >> 6) & 0x1F));
+				writeByte(0x80 | ((c >> 0) & 0x3F));
 			}
 		}
 	}
@@ -344,7 +373,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{
 		if(s == null || s.isEmpty()) return;
 		for(int i = 0; i < s.length(); i++)
-			writeByte((byte)s.charAt(i));
+			writeByte((byte) s.charAt(i));
 	}
 	
 	public void writeChars(String s)
@@ -411,8 +440,8 @@ public final class ByteIOStream implements DataInput, DataOutput
 			for(int i = 0; i < data.length(); i++)
 			{
 				c = data.charAt(i);
-				if ((c >= 0x0001) && (c <= 0x007F)) len++;
-				else if (c > 0x07FF) len += 3;
+				if((c >= 0x0001) && (c <= 0x007F)) len++;
+				else if(c > 0x07FF) len += 3;
 				else len += 2;
 			}
 			

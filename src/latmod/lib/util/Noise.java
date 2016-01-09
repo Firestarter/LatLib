@@ -4,8 +4,10 @@ import latmod.lib.MathHelperLM;
 
 import java.util.Random;
 
-/** Originally made by Progressing.org
- * <br>updated by LatvianModder */
+/**
+ * Originally made by Progressing.org
+ * <br>updated by LatvianModder
+ */
 public class Noise
 {
 	public static final Noise def = new Noise();
@@ -16,7 +18,7 @@ public class Noise
 	{
 		double d = 0.5D * MathHelperLM.RAD;
 		for(int i = 0; i < perlin_cosTable.length; i++)
-			perlin_cosTable[i] = (float)MathHelperLM.cos(i * d);
+			perlin_cosTable[i] = (float) MathHelperLM.cos(i * d);
 		
 	}
 	
@@ -28,7 +30,7 @@ public class Noise
 	public Noise(Random r)
 	{
 		perlinRandom = (r == null ? new Random() : r);
-		for (int i = 0; i < perlin.length; i++)
+		for(int i = 0; i < perlin.length; i++)
 			perlin[i] = perlinRandom.nextFloat();
 	}
 	
@@ -42,7 +44,7 @@ public class Noise
 	{ return get(x, y, 0D); }
 	
 	public float get(double x, double y, double z)
-	{ return get0((float)x, (float)y, (float)z); }
+	{ return get0((float) x, (float) y, (float) z); }
 	
 	private float get0(float x, float y, float z)
 	{
@@ -57,7 +59,7 @@ public class Noise
 		float f6 = 0F;
 		float f7 = 0.5F;
 		
-		for (int m = 0; m < 4; m++)
+		for(int m = 0; m < 4; m++)
 		{
 			int n = i + (j << 4) + (k << 8);
 			float f4 = noise_fsc(f1);
@@ -82,15 +84,33 @@ public class Noise
 			f6 += f8 * f7;
 			
 			f7 *= 0.5F;
-		  	
-		  	i <<= 1; f1 *= 2D; if (f1 >= 1D) { i++; f1 -= 1D; }
-		  	j <<= 1; f2 *= 2D; if (f2 >= 1D) { j++; f2 -= 1D; }
-		  	k <<= 1; f3 *= 2D; if (f3 >= 1D) { k++; f3 -= 1D; }
+
+			i <<= 1;
+			f1 *= 2D;
+			if(f1 >= 1D)
+			{
+				i++;
+				f1 -= 1D;
+			}
+			j <<= 1;
+			f2 *= 2D;
+			if(f2 >= 1D)
+			{
+				j++;
+				f2 -= 1D;
+			}
+			k <<= 1;
+			f3 *= 2D;
+			if(f3 >= 1D)
+			{
+				k++;
+				f3 -= 1D;
+			}
 		}
 		
 		return f6;
 	}
 	
 	private float noise_fsc(double f)
-	{ return 0.5F * (1F - perlin_cosTable[((int)(f * perlin_PI) % perlin_TWOPI)]); }
+	{ return 0.5F * (1F - perlin_cosTable[((int) (f * perlin_PI) % perlin_TWOPI)]); }
 }
