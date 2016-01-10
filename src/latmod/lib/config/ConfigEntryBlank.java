@@ -28,7 +28,7 @@ public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEnt
 	public void onClicked()
 	{
 	}
-
+	
 	public String getDefValue()
 	{ return null; }
 }

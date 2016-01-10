@@ -20,7 +20,7 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	
 	public IntList()
 	{ this(5); }
-
+	
 	public IntList(int[] ai)
 	{
 		init = ai.length;
@@ -39,7 +39,7 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	
 	public void setDefVal(int value)
 	{ defVal = value; }
-
+	
 	public void expand(int s)
 	{
 		if(size + s > array.length)
@@ -121,14 +121,14 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	
 	public void sort()
 	{ Arrays.sort(array, 0, size); }
-
+	
 	public int[] toSortedArray()
 	{
 		int[] a = toArray();
 		Arrays.sort(a);
 		return a;
 	}
-
+	
 	public int hashCode()
 	{
 		int h = 0;

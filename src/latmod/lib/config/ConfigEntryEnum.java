@@ -71,10 +71,10 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public void write(DataOutput io) throws Exception
 	{ io.writeUTF(getName(get())); }
-
+	
 	public void read(DataInput io) throws Exception
 	{ fromString(io.readUTF()); }
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		io.writeUTF(getName(get()));
@@ -83,7 +83,7 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 			io.writeUTF(getName(values.get(i)));
 		io.writeByte(getIndex());
 	}
-
+	
 	public void onClicked()
 	{ set(values.get((getIndex() + 1) % values.size())); }
 	
@@ -95,7 +95,7 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public int getAsInt()
 	{ return getIndex(); }
-
+	
 	public String getDefValue()
 	{ return getName(defValue); }
 }

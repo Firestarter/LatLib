@@ -88,19 +88,13 @@ public final class VecLM implements Cloneable
 	public double dist(VecLM v)
 	{ return MathHelperLM.sqrt(distSq(v)); }
 	
-	public double atan2(VecLM v)
+	public double atanXZ(VecLM v)
 	{
 		if(v == null) return -1D;
-		return Math.atan2(x - v.x, z - v.z);
+		return Math.atan2(v.z - z, v.x - x);
 	}
 	
-	public double atan2Y(VecLM v)
-	{
-		if(v == null) return -1D;
-		return Math.atan2(x - v.x, y - v.y);
-	}
-	
-	public double atan(VecLM v)
+	public double atanY(VecLM v)
 	{
 		if(v == null) return -1D;
 		return Math.atan(y - v.y);
@@ -116,11 +110,15 @@ public final class VecLM implements Cloneable
 	{ return MathHelperLM.floor(z); }
 	
 	public double length()
-	{ return Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z))); }
+	{
+		if(isNull()) return 0D;
+		return MathHelperLM.dist(0D, 0D, 0D, x, y, z);
+	}
 	
 	public VecLM normalize()
 	{
 		double d = length();
+		if(d == 0D) return new VecLM(0D, 0D, 0D);
 		return new VecLM(x / d, y / d, z / d);
 	}
 }

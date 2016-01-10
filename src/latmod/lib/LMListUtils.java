@@ -15,23 +15,23 @@ public class LMListUtils
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
 		sb.append(' ');
-
+		
 		for(int i = 0; i < s.length; i++)
 		{
 			sb.append(s[i]);
-
+			
 			if(i != s.length - 1)
 			{
 				sb.append(',');
 				sb.append(' ');
 			}
 		}
-
+		
 		sb.append(' ');
 		sb.append(']');
 		return sb.toString();
 	}
-
+	
 	public static String[] toStringArray(Collection<?> c)
 	{
 		if(c == null) return null;
@@ -42,7 +42,7 @@ public class LMListUtils
 			s[++i] = String.valueOf(o);
 		return s;
 	}
-
+	
 	public static int[] toHashCodeArray(Collection<?> c)
 	{
 		if(c == null) return null;
@@ -52,7 +52,7 @@ public class LMListUtils
 			s[++i] = LMUtils.hashCodeOf(o);
 		return s;
 	}
-
+	
 	public <E> List<E> flip(List<E> list)
 	{
 		if(list == null || list.isEmpty()) return list;
@@ -62,21 +62,21 @@ public class LMListUtils
 			al1.add(list.get(s - i - 1));
 		return al1;
 	}
-
+	
 	public static void removeNullValues(List<?> list)
 	{
 		if(list == null) return;
 		for(int i = list.size() - 1; i >= 0; i--)
 			if(list.get(i) == null) list.remove(i);
 	}
-
+	
 	public static void removeAll(List<?> list, IntList l)
 	{
 		if(list == null) return;
 		for(int i = 0; i < l.size(); i++)
 			list.remove(l.get(i));
 	}
-
+	
 	public static <E> void removeAll(List<E> list, RemoveFilter<E> f)
 	{
 		if(list == null) return;
@@ -87,7 +87,7 @@ public class LMListUtils
 			{ if(f.remove(list.get(i))) list.remove(i); }
 		}
 	}
-
+	
 	public static <E> List<E> sortToNew(Collection<E> c, Comparator<? super E> comparator)
 	{
 		if(c == null) return null;
@@ -97,7 +97,7 @@ public class LMListUtils
 		Collections.sort(list, comparator);
 		return list;
 	}
-
+	
 	public static boolean trim(List<?> list, int t)
 	{
 		if(list != null && list.size() > t)
@@ -109,10 +109,10 @@ public class LMListUtils
 			}
 			return true;
 		}
-
+		
 		return false;
 	}
-
+	
 	public static <E> List<E> clone(Collection<E> c)
 	{
 		if(c == null) return null;
@@ -121,7 +121,7 @@ public class LMListUtils
 		list1.addAll(c);
 		return list1;
 	}
-
+	
 	public static <E> void addAll(Collection<E> c, E[] e)
 	{
 		if(c != null && e != null && e.length > 0)
@@ -130,14 +130,14 @@ public class LMListUtils
 				c.add(e[i]);
 		}
 	}
-
+	
 	public static boolean containsAny(Collection<?> c, Collection<?> c1)
 	{
 		for(Object o : c1)
 		{
 			if(c.contains(o)) return true;
 		}
-
+		
 		return false;
 	}
 }

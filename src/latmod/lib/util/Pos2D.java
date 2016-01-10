@@ -40,7 +40,7 @@ public class Pos2D implements Cloneable
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2D) o)); }
-
+	
 	public Pos2D clone()
 	{ return new Pos2D(x, y); }
 }

@@ -240,7 +240,7 @@ public class MathHelperLM
 		if(d == Double.POSITIVE_INFINITY) return "Inf";
 		else if(d == Double.NEGATIVE_INFINITY) return "Inf";
 		else if(d == Double.NaN) return "NaN";
-
+		
 		d = ((long) (d * 1000D)) / 1000D;
 		String s = String.valueOf(d);
 		if(s.endsWith(".0")) return s.substring(0, s.length() - 2);

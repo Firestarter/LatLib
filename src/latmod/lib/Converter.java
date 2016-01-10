@@ -138,23 +138,6 @@ public class Converter
 			if(bools[i] == isTrue) il.add(i);
 	}
 	
-	public static int decodeInt(String s)
-	{
-		Integer i = decode(s);
-		return (i == null) ? 0 : i.intValue();
-	}
-	
-	public static Integer decode(String s)
-	{
-		try
-		{
-			Integer i = Integer.decode(s);
-			return i;
-		}
-		catch(Exception e) { }
-		return null;
-	}
-	
 	public static boolean canParseInt(String s)
 	{
 		try
@@ -177,45 +160,12 @@ public class Converter
 		return false;
 	}
 	
-	public static Integer toInt(String text)
-	{
-		try
-		{
-			int i = Integer.parseInt(text);
-			return i;
-		}
-		catch(Exception e) { }
-		return null;
-	}
-	
 	public static int toInt(String text, int def)
 	{
 		try
 		{
 			int i = Integer.parseInt(text);
 			return i;
-		}
-		catch(Exception e) { }
-		return def;
-	}
-	
-	public static Float toFloat(String text)
-	{
-		try
-		{
-			float f = Float.parseFloat(text);
-			return f;
-		}
-		catch(Exception e) { }
-		return null;
-	}
-	
-	public static float toFloat(String text, float def)
-	{
-		try
-		{
-			float f = Float.parseFloat(text);
-			return f;
 		}
 		catch(Exception e) { }
 		return def;

@@ -1,6 +1,7 @@
 package latmod.lib;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 import latmod.lib.config.ConfigGroup;
 import latmod.lib.json.*;
 
@@ -105,8 +106,14 @@ public class LMJsonUtils
 	
 	public static <T> T fromJsonFile(Gson gson, File f, Type t)
 	{
-		if(!f.exists()) return null;
-		try { return fromJson(gson, LMStringUtils.readString(new FileInputStream(f)), t); }
+		if(f == null || !f.exists()) return null;
+		try
+		{
+			FileReader reader = new FileReader(f);
+			T obj = gson.fromJson(reader, t);
+			reader.close();
+			return obj;
+		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
@@ -122,12 +129,13 @@ public class LMJsonUtils
 	
 	public static boolean toJsonFile(Gson gson, File f, Object o)
 	{
-		String s = toJson(gson, o);
-		if(s == null) return false;
+		if(o == null) return false;
 		
 		try
 		{
-			LMFileUtils.save(f, s);
+			FileWriter writer = new FileWriter(LMFileUtils.newFile(f));
+			gson.toJson(o, o.getClass(), new JsonWriter(writer));
+			writer.close();
 			return true;
 		}
 		catch(Exception e)

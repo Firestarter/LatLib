@@ -29,10 +29,10 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public void write(DataOutput io) throws Exception
 	{ io.writeUTF(value); }
-
+	
 	public void read(DataInput io) throws Exception
 	{ value = io.readUTF(); }
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		value = io.readUTF();
@@ -54,7 +54,7 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public int getAsInt()
 	{ return getIndex(); }
-
+	
 	public String getDefValue()
 	{ return defValue; }
 }

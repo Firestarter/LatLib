@@ -5,22 +5,20 @@ import java.util.*;
 public class LinkBuilder
 {
 	private final StringBuilder base;
-	private final HashMap<String, Object> args;
-
+	private HashMap<String, Object> args;
+	
 	public LinkBuilder(String init)
-	{
-		base = new StringBuilder(init);
-		args = new HashMap<>();
-	}
-
+	{ base = new StringBuilder(init); }
+	
 	public LinkBuilder append(String s)
 	{
 		base.append(s);
 		return this;
 	}
-
+	
 	public LinkBuilder put(String s, Object o)
 	{
+		if(args == null) args = new HashMap<>();
 		args.put(s, o);
 		return this;
 	}
@@ -28,11 +26,11 @@ public class LinkBuilder
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder(base);
-
-		if(!args.isEmpty())
+		
+		if(args != null && !args.isEmpty())
 		{
 			boolean first = true;
-
+			
 			for(Map.Entry<String, Object> e : args.entrySet())
 			{
 				sb.append(first ? '?' : '&');
@@ -42,7 +40,7 @@ public class LinkBuilder
 				first = false;
 			}
 		}
-
+		
 		return sb.toString();
 	}
 }

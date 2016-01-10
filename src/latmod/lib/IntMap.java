@@ -125,7 +125,7 @@ public class IntMap
 			map.put(keys.get(i), values.get(i));
 		return map;
 	}
-
+	
 	public List<Map.Entry<Integer, Integer>> entries()
 	{
 		ArrayList<Map.Entry<Integer, Integer>> set = new ArrayList<>();
@@ -156,7 +156,7 @@ public class IntMap
 			
 			for(Map.Entry<String, JsonElement> e : o.entrySet())
 			{
-				Integer i = Converter.decode(e.getKey());
+				Integer i = Integer.parseInt(e.getKey());
 				if(i != null) map.put(i.intValue(), e.getValue().getAsInt());
 			}
 			

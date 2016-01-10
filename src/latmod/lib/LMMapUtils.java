@@ -13,9 +13,9 @@ public class LMMapUtils
 		StringBuilder sb = new StringBuilder();
 		sb.append('{');
 		sb.append(' ');
-
+		
 		int s = map.size();
-
+		
 		if(s > 0)
 		{
 			int i = 0;
@@ -25,7 +25,7 @@ public class LMMapUtils
 				sb.append(':');
 				sb.append(' ');
 				sb.append(e.getValue());
-
+				
 				if(i != s - 1)
 				{
 					sb.append(',');
@@ -33,26 +33,26 @@ public class LMMapUtils
 				}
 				i++;
 			}
-
+			
 			sb.append(' ');
 		}
-
+		
 		sb.append('}');
 		return sb.toString();
 	}
-
+	
 	public static String[] toKeyStringArray(Map<?, ?> map)
 	{
 		if(map == null) return null;
 		return LMListUtils.toStringArray(map.keySet());
 	}
-
+	
 	public static String[] toValueStringArray(Map<?, ?> map)
 	{
 		if(map == null) return null;
 		return LMListUtils.toStringArray(map.values());
 	}
-
+	
 	public static Map<String, String> toStringMap(Map<?, ?> map)
 	{
 		if(map == null) return null;
@@ -61,7 +61,7 @@ public class LMMapUtils
 			map1.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
 		return map1;
 	}
-
+	
 	public static <K, V> Map<V, K> inverse(Map<K, V> map)
 	{
 		if(map == null) return null;
@@ -70,23 +70,23 @@ public class LMMapUtils
 			map1.put(e.getValue(), e.getKey());
 		return map1;
 	}
-
+	
 	public static <K, V> List<Map.Entry<K, V>> sortedEntryList(Map<K, V> map, Comparator<? super Map.Entry<K, V>> c)
 	{
 		if(map == null) return null;
 		ArrayList<Map.Entry<K, V>> list = new ArrayList<>();
-
+		
 		if(c == null) c = new Comparator<Map.Entry<K, V>>()
 		{
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
 		};
-
+		
 		list.addAll(map.entrySet());
 		Collections.sort(list, c);
 		return list;
 	}
-
+	
 	public static <K, V> List<V> values(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
 		if(map == null) return null;
@@ -95,7 +95,7 @@ public class LMMapUtils
 			list.add(entry.getValue());
 		return list;
 	}
-
+	
 	public static <K, V> Comparator<Map.Entry<K, V>> byKeyNames(final boolean ignoreCase)
 	{
 		return new Comparator<Map.Entry<K, V>>()
@@ -107,7 +107,7 @@ public class LMMapUtils
 			}
 		};
 	}
-
+	
 	public static <K, V> Comparator<Map.Entry<K, V>> byKeyNumbers()
 	{
 		return new Comparator<Map.Entry<K, V>>()
@@ -120,7 +120,7 @@ public class LMMapUtils
 			}
 		};
 	}
-
+	
 	public static <K, V> void removeAll(Map<K, V> map, RemoveFilter<Map.Entry<K, V>> f)
 	{
 		if(map == null) return;
@@ -129,7 +129,7 @@ public class LMMapUtils
 		{
 			List<Map.Entry<K, V>> set = new ArrayList<>(map.entrySet());
 			map.clear();
-
+			
 			for(Map.Entry<K, V> e : set)
 			{
 				if(!f.remove(e)) map.put(e.getKey(), e.getValue());

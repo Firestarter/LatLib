@@ -23,7 +23,7 @@ public class ConfigEntryDouble extends ConfigEntry
 	
 	public double get()
 	{ return value; }
-
+	
 	public void add(double v)
 	{ set(get() + v); }
 	
@@ -35,10 +35,10 @@ public class ConfigEntryDouble extends ConfigEntry
 	
 	public void write(DataOutput io) throws Exception
 	{ io.writeDouble(get()); }
-
+	
 	public void read(DataInput io) throws Exception
 	{ set(io.readDouble()); }
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
@@ -46,7 +46,7 @@ public class ConfigEntryDouble extends ConfigEntry
 		io.writeDouble(bounds.minValue);
 		io.writeDouble(bounds.maxValue);
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -55,7 +55,7 @@ public class ConfigEntryDouble extends ConfigEntry
 		double max = io.readDouble();
 		bounds = new DoubleBounds(def, min, max);
 	}
-
+	
 	public String getMinValue()
 	{
 		if(bounds.minValue == Double.NEGATIVE_INFINITY) return null;
@@ -76,7 +76,7 @@ public class ConfigEntryDouble extends ConfigEntry
 	
 	public double getAsDouble()
 	{ return get(); }
-
+	
 	public String getDefValue()
 	{ return Double.toString(bounds.defValue); }
 }

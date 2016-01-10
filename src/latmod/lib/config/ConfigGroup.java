@@ -18,10 +18,10 @@ public class ConfigGroup extends ConfigEntry
 		super(s, PrimitiveType.MAP);
 		entryMap = new HashMap<>();
 	}
-
+	
 	public List<ConfigEntry> entries()
 	{ return LMMapUtils.values(entryMap, null); }
-
+	
 	public IConfigFile getParentFile()
 	{
 		if(parentFile != null) return parentFile;
@@ -46,7 +46,7 @@ public class ConfigGroup extends ConfigEntry
 			}
 		}
 	}
-
+	
 	public ConfigGroup addAll(Class<?> c, Object obj, boolean copy)
 	{
 		try
@@ -130,16 +130,16 @@ public class ConfigGroup extends ConfigEntry
 		
 		return o;
 	}
-
+	
 	public String getAsString()
 	{ return getJson().toString(); }
-
+	
 	public String[] getAsStringArray()
 	{ return LMListUtils.toStringArray(entries()); }
-
+	
 	public boolean getAsBoolean()
 	{ return !entryMap.isEmpty(); }
-
+	
 	public int getAsInt()
 	{ return entryMap.size(); }
 	
@@ -154,7 +154,7 @@ public class ConfigGroup extends ConfigEntry
 			e.write(io);
 		}
 	}
-
+	
 	public void read(DataInput io) throws Exception
 	{
 		int s = io.readUnsignedShort();
@@ -168,7 +168,7 @@ public class ConfigGroup extends ConfigEntry
 			add(e, false);
 		}
 	}
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		io.writeUTF(displayName);
@@ -182,7 +182,7 @@ public class ConfigGroup extends ConfigEntry
 			io.writeUTF(e.info);
 		}
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		displayName = io.readUTF();
@@ -198,7 +198,7 @@ public class ConfigGroup extends ConfigEntry
 			add(e, false);
 		}
 	}
-
+	
 	public static class Serializer implements JsonSerializer<ConfigGroup>, JsonDeserializer<ConfigGroup>
 	{
 		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)
@@ -251,11 +251,11 @@ public class ConfigGroup extends ConfigEntry
 				}
 			}
 		}
-
+		
 		if(result > 0) onLoadedFromGroup(l);
 		return result;
 	}
-
+	
 	protected void onLoadedFromGroup(ConfigGroup l)
 	{
 	}
@@ -302,14 +302,14 @@ public class ConfigGroup extends ConfigEntry
 	
 	public int getDepth()
 	{ return (parentGroup == null) ? 0 : (parentGroup.getDepth() + 1); }
-
+	
 	public ConfigGroup generateSynced(boolean copy)
 	{ return generateSynced0(this, copy); }
-
+	
 	private static ConfigGroup generateSynced0(ConfigGroup g0, boolean copy)
 	{
 		ConfigGroup g = new ConfigGroup(g0.ID);
-
+		
 		for(ConfigEntry e : g0.entryMap.values())
 		{
 			if(e.shouldSync()) g.add(e, copy);
@@ -323,7 +323,7 @@ public class ConfigGroup extends ConfigEntry
 				}
 			}
 		}
-
+		
 		return g;
 	}
 }

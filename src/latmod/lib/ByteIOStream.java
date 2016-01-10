@@ -22,13 +22,13 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public ByteIOStream()
 	{ this(16); }
-
+	
 	public int getDataPos()
 	{ return pos; }
-
+	
 	public int available()
 	{ return bytes.length - pos; }
-
+	
 	public byte[] toByteArray()
 	{
 		if(pos == bytes.length) return bytes;

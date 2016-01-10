@@ -35,10 +35,10 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public void write(DataOutput io) throws Exception
 	{ io.writeInt(get()); }
-
+	
 	public void read(DataInput io) throws Exception
 	{ set(io.readInt()); }
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
@@ -46,7 +46,7 @@ public class ConfigEntryInt extends ConfigEntry
 		io.writeInt(bounds.minValue);
 		io.writeInt(bounds.maxValue);
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -79,7 +79,7 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public double getAsDouble()
 	{ return get(); }
-
+	
 	public String getDefValue()
 	{ return Integer.toString(bounds.defValue); }
 }

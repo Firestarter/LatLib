@@ -7,6 +7,8 @@ import java.io.*;
 
 public class ConfigEntryDoubleArray extends ConfigEntry
 {
+	private static final double[] emptyDoubleArray = new double[0];
+	
 	public double[] defValue;
 	private double[] value;
 	
@@ -14,11 +16,11 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 	{
 		super(id, PrimitiveType.DOUBLE_ARRAY);
 		set(def);
-		defValue = def == null ? new double[0] : def;
+		defValue = def == null ? emptyDoubleArray : def;
 	}
 	
 	public void set(double[] o)
-	{ value = o == null ? new double[0] : o; }
+	{ value = o == null ? emptyDoubleArray : o; }
 	
 	public double[] get()
 	{ return value; }
@@ -40,7 +42,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 			a.add(new JsonPrimitive(value[i]));
 		return a;
 	}
-
+	
 	public void write(DataOutput io) throws Exception
 	{
 		value = get();
@@ -48,7 +50,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 		for(int i = 0; i < value.length; i++)
 			io.writeDouble(value[i]);
 	}
-
+	
 	public void read(DataInput io) throws Exception
 	{
 		value = new double[io.readUnsignedShort()];
@@ -56,7 +58,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 			value[i] = io.readFloat();
 		set(value);
 	}
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
@@ -64,7 +66,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 		for(int i = 0; i < defValue.length; i++)
 			io.writeDouble(defValue[i]);
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -121,29 +123,29 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 	
 	public double[] getAsDoubleArray()
 	{ return value; }
-
+	
 	public String getDefValue()
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
 		sb.append(' ');
-
+		
 		if(defValue.length > 0)
 		{
 			for(int i = 0; i < defValue.length; i++)
 			{
 				sb.append(defValue[i]);
-
+				
 				if(i != defValue.length - 1)
 				{
 					sb.append(',');
 					sb.append(' ');
 				}
 			}
-
+			
 			sb.append(' ');
 		}
-
+		
 		sb.append(']');
 		return sb.toString();
 	}

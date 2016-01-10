@@ -34,13 +34,13 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	
 	public void read(DataInput io) throws Exception
 	{ set(io.readBoolean()); }
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
 		io.writeBoolean(defValue);
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -61,7 +61,7 @@ public class ConfigEntryBool extends ConfigEntry implements IClickableConfigEntr
 	
 	public double getAsDouble()
 	{ return get() ? 1D : 0D; }
-
+	
 	public String getDefValue()
 	{ return defValue ? "true" : "false"; }
 }

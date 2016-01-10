@@ -21,10 +21,10 @@ class ConfigEntryJsonElement extends ConfigEntry
 	
 	public final JsonElement getJson()
 	{ return value; }
-
+	
 	public void write(DataOutput io) throws Exception
 	{ }
-
+	
 	public void read(DataInput io) throws Exception
 	{ }
 	
@@ -80,7 +80,7 @@ class ConfigEntryJsonElement extends ConfigEntry
 			ai[i] = (a.get(i).getAsDouble());
 		return ai;
 	}
-
+	
 	public String getDefValue()
 	{ return null; }
 }

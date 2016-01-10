@@ -37,16 +37,10 @@ public class Noise
 	public Noise()
 	{ this(null); }
 	
-	public float get(double x)
-	{ return get(x, 0D); }
+	private float noise_fsc(double f)
+	{ return 0.5F * (1F - perlin_cosTable[((int) (f * perlin_PI) % perlin_TWOPI)]); }
 	
-	public float get(double x, double y)
-	{ return get(x, y, 0D); }
-	
-	public float get(double x, double y, double z)
-	{ return get0((float) x, (float) y, (float) z); }
-	
-	private float get0(float x, float y, float z)
+	public float get(float x, float y, float z)
 	{
 		int i = (int) Math.abs(x);
 		int j = (int) Math.abs(y);
@@ -84,7 +78,7 @@ public class Noise
 			f6 += f8 * f7;
 			
 			f7 *= 0.5F;
-
+			
 			i <<= 1;
 			f1 *= 2D;
 			if(f1 >= 1D)
@@ -111,6 +105,18 @@ public class Noise
 		return f6;
 	}
 	
-	private float noise_fsc(double f)
-	{ return 0.5F * (1F - perlin_cosTable[((int) (f * perlin_PI) % perlin_TWOPI)]); }
+	public float getD(double x, double y, double z)
+	{ return get((float) x, (float) y, (float) z); }
+	
+	public float getD(double x, double y)
+	{ return get((float) x, (float) y, 0F); }
+	
+	public float getD(double x)
+	{ return get((float) x, 0F, 0F); }
+	
+	public float get(float x, float y)
+	{ return get(x, y, 0F); }
+	
+	public float get(float x)
+	{ return get(x, 0F, 0F); }
 }

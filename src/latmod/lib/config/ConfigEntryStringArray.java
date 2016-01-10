@@ -61,7 +61,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		for(int i = 0; i < value.size(); i++)
 			io.writeUTF(value.get(i));
 	}
-
+	
 	public void read(DataInput io) throws Exception
 	{
 		value.clear();
@@ -70,7 +70,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 			value.add(io.readUTF());
 		set(LMListUtils.clone(value));
 	}
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
@@ -78,7 +78,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		for(int i = 0; i < defValue.size(); i++)
 			io.writeUTF(defValue.get(i));
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -114,7 +114,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 			ai[i] = Double.parseDouble(value.get(i));
 		return ai;
 	}
-
+	
 	public String getDefValue()
 	{ return defValue.toString(); }
 }

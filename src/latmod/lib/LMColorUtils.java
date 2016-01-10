@@ -3,7 +3,6 @@ package latmod.lib;
 public class LMColorUtils
 {
 	public static final int[] chatFormattingColors = new int[16];
-	private static final float[] staticHSB = new float[3];
 	
 	public static final int BLACK = 0xFF000000;
 	public static final int WHITE = 0xFFFFFFFF;
@@ -60,24 +59,6 @@ public class LMColorUtils
 	public static int getRGBA(int c, int a)
 	{ return getRGBA(getRed(c), getGreen(c), getBlue(c), a); }
 	
-	public static int getHSB(float h, float s, float b)
-	{ return java.awt.Color.HSBtoRGB(h, s, b); }
-	
-	public static void setHSB(int r, int g, int b)
-	{ java.awt.Color.RGBtoHSB(r, g, b, staticHSB); }
-	
-	public static void setHSB(int c)
-	{ setHSB(getRed(c), getGreen(c), getBlue(c)); }
-	
-	public static float getHSBHue()
-	{ return staticHSB[0]; }
-	
-	public static float getHSBSaturation()
-	{ return staticHSB[1]; }
-	
-	public static float getHSBBrightness()
-	{ return staticHSB[2]; }
-	
 	public static int addBrightness(int c, int b)
 	{
 		int red = MathHelperLM.clampInt(getRed(c) + b, 0, 255);
@@ -86,13 +67,15 @@ public class LMColorUtils
 		return getRGBA(red, green, blue, getAlpha(c));
 	}
 	
-	public static void addHue(int pixels[], float f)
+	public static void addHue(int pixels[], float hue)
 	{
 		if(pixels == null || pixels.length == 0) return;
+		LMColor c;
 		for(int i = 0; i < pixels.length; i++)
 		{
-			setHSB(pixels[i]);
-			pixels[i] = getRGBA(getHSB(staticHSB[0] + f, staticHSB[1], staticHSB[2]), getAlpha(pixels[i]));
+			c = new LMColor(pixels[i]);
+			c.addHue(hue);
+			pixels[i] = c.color();
 		}
 	}
 	
@@ -110,9 +93,9 @@ public class LMColorUtils
 	
 	public static int multiply(int col1, int col2, int a)
 	{
-		float r = getRedF(col1) * getRedF(col2);
-		float g = getGreenF(col1) * getGreenF(col2);
-		float b = getBlueF(col1) * getBlueF(col2);
+		float r = MathHelperLM.clampFloat(getRedF(col1) * getRedF(col2), 0F, 1F);
+		float g = MathHelperLM.clampFloat(getGreenF(col1) * getGreenF(col2), 0F, 1F);
+		float b = MathHelperLM.clampFloat(getBlueF(col1) * getBlueF(col2), 0F, 1F);
 		return getRGBA((int) (r * 255F), (int) (g * 255F), (int) (b * 255F), a);
 	}
 }

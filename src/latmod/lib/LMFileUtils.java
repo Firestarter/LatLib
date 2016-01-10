@@ -60,13 +60,22 @@ public class LMFileUtils
 	
 	public static void save(File f, String s) throws Exception
 	{
-		BufferedWriter br = new BufferedWriter(new FileWriter(newFile(f)));
+		FileWriter fw = new FileWriter(newFile(f));
+		BufferedWriter br = new BufferedWriter(fw);
 		br.write(s);
 		br.close();
+		fw.close();
 	}
 	
 	public static List<String> load(File f) throws Exception
-	{ return LMStringUtils.readStringList(new FileInputStream(f)); }
+	{
+		ArrayList<String> l = new ArrayList<>();
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		String s;
+		while((s = reader.readLine()) != null) l.add(s.trim());
+		reader.close();
+		return l;
+	}
 	
 	public static String loadAsText(File f) throws Exception
 	{ return LMStringUtils.readString(new FileInputStream(f)); }
@@ -107,7 +116,7 @@ public class LMFileUtils
 		}
 		else if(f.isFile()) l.add(f);
 	}
-
+	
 	public static long getSize(File f)
 	{
 		if(f == null || !f.exists()) return 0L;
@@ -170,7 +179,7 @@ public class LMFileUtils
 			dst = newFile(dst);
 			
 			FileChannel srcC, dstC;
-
+			
 			try
 			{
 				srcC = new FileInputStream(src).getChannel();
@@ -198,7 +207,7 @@ public class LMFileUtils
 	
 	public static File getSourceDirectory(Class<?> c)
 	{ return new File(c.getProtectionDomain().getCodeSource().getLocation().getFile()); }
-
+	
 	public static String getRawFileName(File f)
 	{
 		if(f == null || !f.exists()) return null;

@@ -15,12 +15,12 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	private static final int FLAG_HIDDEN = 1;
 	private static final int FLAG_EXCLUDED = 2;
 	private static final int FLAG_SYNC = 3;
-	private static final int FLAG_1 = 4;
-	private static final int FLAG_2 = 5;
-	private static final int FLAG_3 = 6;
+	//private static final int FLAG_1 = 4;
+	//private static final int FLAG_2 = 5;
+	//private static final int FLAG_3 = 6;
 	protected static final int FLAG_EXTRA_1 = 7;
 	protected static final int FLAG_EXTRA_2 = 8;
-
+	
 	public ConfigGroup parentGroup = null;
 	
 	ConfigEntry(String id, PrimitiveType t)
@@ -39,7 +39,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public void readExtended(DataInput io) throws Exception
 	{ read(io); }
-
+	
 	public final String getPrettyJsonString(boolean pretty)
 	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), getJson()); }
 	
@@ -61,7 +61,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	}
 	
 	public void onPreLoaded() { }
-
+	
 	public void onPostLoaded() { }
 	
 	public String getFullID()
@@ -77,14 +77,14 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public boolean isValid()
 	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
-
+	
 	protected final boolean getFlag(int f)
 	{
 		boolean[] flags1 = new boolean[8];
 		Bits.fromBits(flags1, flags);
 		return flags1[f];
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	protected final <E extends ConfigEntry> E setFlag(int f, boolean b)
 	{
@@ -100,19 +100,19 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public boolean isHidden()
 	{ return getFlag(FLAG_HIDDEN); }
-
+	
 	public final <E extends ConfigEntry> E setExcluded()
 	{ return setFlag(FLAG_EXCLUDED, true); }
-
+	
 	public boolean isExcluded()
 	{ return getFlag(FLAG_EXCLUDED); }
-
+	
 	public final <E extends ConfigEntry> E sync()
 	{ return setFlag(FLAG_SYNC, true); }
-
+	
 	public boolean shouldSync()
 	{ return getFlag(FLAG_SYNC); }
-
+	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setInfo(String s)
 	{
@@ -121,9 +121,9 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	}
 	
 	public String getDefValue() { return getAsString(); }
-
+	
 	public String getMinValue() { return null; }
-
+	
 	public String getMaxValue() { return null; }
 	
 	public ConfigEntry clone()
@@ -132,13 +132,13 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 		e.setJson(getJson());
 		return e;
 	}
-
+	
 	public int compareTo(Object o)
 	{
 		int i = Boolean.compare(getAsGroup() != null, ((ConfigEntry) o).getAsGroup() != null);
 		return (i == 0) ? super.compareTo(o) : i;
 	}
-
+	
 	public final String toString()
 	{ return getAsString(); }
 	

@@ -65,7 +65,7 @@ public enum PrimitiveType
 			if(t.typeClass.equals(c)) return t;
 		return null;
 	}
-
+	
 	public static boolean isNull(PrimitiveType type)
 	{ return type == null || type == NULL; }
 	

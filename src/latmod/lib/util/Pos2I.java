@@ -38,7 +38,7 @@ public class Pos2I implements Cloneable
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2I) o)); }
-
+	
 	public Pos2I clone()
 	{ return new Pos2I(x, y); }
 }

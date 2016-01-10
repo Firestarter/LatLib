@@ -31,16 +31,16 @@ public class ConfigEntryString extends ConfigEntry
 	
 	public void write(DataOutput io) throws Exception
 	{ io.writeUTF(get()); }
-
+	
 	public void read(DataInput io) throws Exception
 	{ set(io.readUTF()); }
-
+	
 	public void writeExtended(DataOutput io) throws Exception
 	{
 		write(io);
 		io.writeUTF(defValue);
 	}
-
+	
 	public void readExtended(DataInput io) throws Exception
 	{
 		read(io);
@@ -58,7 +58,7 @@ public class ConfigEntryString extends ConfigEntry
 	
 	public double getAsDouble()
 	{ return Double.parseDouble(get()); }
-
+	
 	public String getDefValue()
 	{ return defValue; }
 }

@@ -75,10 +75,12 @@ public class LMStringUtils
 	
 	public static void replace(List<String> txt, String s, String s1)
 	{
+		if(txt == null || txt.isEmpty() || s == null || s1 == null) return;
+		String s2;
 		for(int i = 0; i < txt.size(); i++)
 		{
-			String s2 = txt.get(i);
-			if(s2 != null && s2.length() > 0 && s2.contains(s))
+			s2 = txt.get(i);
+			if(s2 != null && s2.length() > 0)
 			{
 				s2 = s2.replace(s, s1);
 				txt.set(i, s2);
@@ -213,8 +215,8 @@ public class LMStringUtils
 	public static String unsplit(Object[] o, String s1)
 	{
 		if(o == null) return null;
-		StringBuilder sb = new StringBuilder();
 		if(o.length == 1) return String.valueOf(o[0]);
+		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < o.length; i++)
 		{
 			sb.append(o[i]);
@@ -253,6 +255,7 @@ public class LMStringUtils
 		if(s0 == null && s1 == null) return true;
 		if(s0 == null || s1 == null) return false;
 		if(s0.length() != s1.length()) return false;
+		if(s0.isEmpty() && s1.isEmpty()) return true;
 		return s0.equals(s1);
 	}
 	
@@ -359,50 +362,6 @@ public class LMStringUtils
 		//sb.append('s');
 		
 		return sb.toString();
-	}
-	
-	public static String fromUUID(UUID id)
-	{
-		if(id == null) return null;
-		long msb = id.getMostSignificantBits();
-		long lsb = id.getLeastSignificantBits();
-		StringBuilder sb = new StringBuilder(32);
-		digitsUUID(sb, msb >> 32, 8);
-		digitsUUID(sb, msb >> 16, 4);
-		digitsUUID(sb, msb, 4);
-		digitsUUID(sb, lsb >> 48, 4);
-		digitsUUID(sb, lsb, 12);
-		return sb.toString();
-	}
-	
-	private static void digitsUUID(StringBuilder sb, long val, int digits)
-	{
-		long hi = 1L << (digits * 4);
-		String s = Long.toHexString(hi | (val & (hi - 1)));
-		sb.append(s, 1, s.length());
-	}
-	
-	public static UUID fromString(String s)
-	{
-		try
-		{
-			if(s.indexOf('-') != -1) return UUID.fromString(s);
-			
-			int l = s.length();
-			StringBuilder sb = new StringBuilder(32);
-			for(int i = 0; i < l; i++)
-			{
-				sb.append(s.charAt(i));
-				if(i == 7 || i == 11 || i == 15 || i == 19) sb.append('-');
-			}
-			
-			return UUID.fromString(sb.toString());
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public static byte[] toBytes(String s)
