@@ -4,7 +4,6 @@ import com.google.gson.*;
 import latmod.lib.*;
 import latmod.lib.util.EnumEnabled;
 
-import java.io.*;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -17,7 +16,7 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public ConfigEntryEnum(String id, Class<E> c, E[] val, E def, boolean addNull)
 	{
-		super(id, PrimitiveType.ENUM);
+		super(id);
 		enumClass = c;
 		values = new ArrayList<E>();
 		if(addNull) values.add(null);
@@ -25,6 +24,9 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 		set(def);
 		defValue = def;
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.ENUM; }
 	
 	public static ConfigEntryEnum<EnumEnabled> enabledWithNull(String id, EnumEnabled def)
 	{ return new ConfigEntryEnum<EnumEnabled>(id, EnumEnabled.class, EnumEnabled.VALUES, def, true); }
@@ -69,13 +71,13 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(getName(get())); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeUTF(getName(get())); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ fromString(io.readUTF()); }
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		io.writeUTF(getName(get()));
 		io.writeByte(values.size());

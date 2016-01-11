@@ -3,29 +3,27 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.io.*;
 import java.util.*;
 
 public class ConfigEntryStringArray extends ConfigEntry
 {
-	public List<String> defValue;
+	public final ArrayList<String> defValue;
 	private List<String> value;
 	
 	public ConfigEntryStringArray(String id, List<String> def)
 	{
-		super(id, PrimitiveType.STRING_ARRAY);
+		super(id);
 		value = new ArrayList<>();
+		defValue = new ArrayList<>();
 		set(def);
-		defValue = def == null ? new ArrayList<String>() : def;
+		defValue.addAll(def);
 	}
 	
 	public ConfigEntryStringArray(String id, String... def)
-	{
-		super(id, PrimitiveType.STRING_ARRAY);
-		value = new ArrayList<>();
-		if(def != null && def.length > 0) set(Arrays.asList(def));
-		defValue = Arrays.asList(def);
-	}
+	{ this(id, (def == null || def.length == 0) ? Collections.EMPTY_LIST : Arrays.asList(def)); }
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.STRING_ARRAY; }
 	
 	public void set(List<String> o)
 	{
@@ -54,7 +52,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		return a;
 	}
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{
 		value = get();
 		io.writeShort(value.size());
@@ -62,7 +60,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 			io.writeUTF(value.get(i));
 	}
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{
 		value.clear();
 		int s = io.readUnsignedShort();
@@ -71,7 +69,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 		set(LMListUtils.clone(value));
 	}
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeShort(defValue.size());
@@ -79,11 +77,11 @@ public class ConfigEntryStringArray extends ConfigEntry
 			io.writeUTF(defValue.get(i));
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
-		int s = io.readUnsignedShort();
 		defValue.clear();
+		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
 			defValue.add(io.readUTF());
 	}

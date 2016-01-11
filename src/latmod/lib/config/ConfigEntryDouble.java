@@ -4,8 +4,6 @@ import com.google.gson.*;
 import latmod.lib.*;
 import latmod.lib.util.DoubleBounds;
 
-import java.io.*;
-
 public class ConfigEntryDouble extends ConfigEntry
 {
 	private double value;
@@ -13,10 +11,13 @@ public class ConfigEntryDouble extends ConfigEntry
 	
 	public ConfigEntryDouble(String id, DoubleBounds b)
 	{
-		super(id, PrimitiveType.DOUBLE);
+		super(id);
 		bounds = (b == null) ? new DoubleBounds(0D) : b;
 		set(bounds.defValue);
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.DOUBLE; }
 	
 	public void set(double v)
 	{ value = bounds.getVal(v); }
@@ -33,13 +34,13 @@ public class ConfigEntryDouble extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeDouble(get()); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ set(io.readDouble()); }
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeDouble(bounds.defValue);
@@ -47,7 +48,7 @@ public class ConfigEntryDouble extends ConfigEntry
 		io.writeDouble(bounds.maxValue);
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		double def = io.readDouble();

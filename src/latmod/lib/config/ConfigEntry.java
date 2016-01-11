@@ -1,43 +1,32 @@
 package latmod.lib.config;
 
 import com.google.gson.JsonElement;
-import latmod.lib.Bits;
 import latmod.lib.*;
 import latmod.lib.util.FinalIDObject;
 
-import java.io.*;
-
 public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject
 {
-	public final PrimitiveType type;
 	public String info = null;
 	private byte flags = 0;
-	private static final int FLAG_HIDDEN = 1;
-	private static final int FLAG_EXCLUDED = 2;
-	private static final int FLAG_SYNC = 3;
-	//private static final int FLAG_1 = 4;
-	//private static final int FLAG_2 = 5;
-	//private static final int FLAG_3 = 6;
-	protected static final int FLAG_EXTRA_1 = 7;
-	protected static final int FLAG_EXTRA_2 = 8;
+	public static final int FLAG_HIDDEN = 1;
+	public static final int FLAG_EXCLUDED = 2;
+	public static final int FLAG_SYNC = 3;
 	
 	public ConfigGroup parentGroup = null;
 	
-	ConfigEntry(String id, PrimitiveType t)
-	{
-		super(id);
-		type = t;
-	}
+	ConfigEntry(String id)
+	{ super(id); }
 	
+	public abstract PrimitiveType getType();
 	public abstract void setJson(JsonElement o);
 	public abstract JsonElement getJson();
-	public abstract void write(DataOutput io) throws Exception;
-	public abstract void read(DataInput io) throws Exception;
+	public abstract void write(ByteIOStream io);
+	public abstract void read(ByteIOStream io);
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{ write(io); }
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{ read(io); }
 	
 	public final String getPrettyJsonString(boolean pretty)
@@ -68,50 +57,47 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	{
 		if(!isValid()) return null;
 		if(parentGroup == null) return ID;
-		StringBuilder sb = new StringBuilder();
-		sb.append(parentGroup.getFullID());
-		sb.append('.');
-		sb.append(ID);
-		return sb.toString();
+		return parentGroup.getFullID() + '.' + ID;
 	}
 	
 	public boolean isValid()
 	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
 	
-	protected final boolean getFlag(int f)
+	public final boolean getFlag(int f)
 	{
 		boolean[] flags1 = new boolean[8];
-		Bits.fromBits(flags1, flags);
+		Bits.fromBits(flags1, flags & 0xFF);
 		return flags1[f];
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected final <E extends ConfigEntry> E setFlag(int f, boolean b)
+	public final <E extends ConfigEntry> E setFlag(int f, boolean b)
 	{
 		boolean[] flags1 = new boolean[8];
-		Bits.fromBits(flags1, flags);
+		Bits.fromBits(flags1, flags & 0xFF);
 		flags1[f] = b;
 		flags = (byte) Bits.toBits(flags1);
 		return (E) this;
 	}
 	
+	public final IntList getFlags()
+	{
+		IntList l = new IntList();
+		boolean[] flags1 = new boolean[8];
+		Bits.fromBits(flags1, flags & 0xFF);
+		for(int i = 0; i < flags1.length; i++)
+			if(flags1[i]) l.add(i);
+		return l;
+	}
+	
 	public final <E extends ConfigEntry> E setHidden()
 	{ return setFlag(FLAG_HIDDEN, true); }
-	
-	public boolean isHidden()
-	{ return getFlag(FLAG_HIDDEN); }
 	
 	public final <E extends ConfigEntry> E setExcluded()
 	{ return setFlag(FLAG_EXCLUDED, true); }
 	
-	public boolean isExcluded()
-	{ return getFlag(FLAG_EXCLUDED); }
-	
 	public final <E extends ConfigEntry> E sync()
 	{ return setFlag(FLAG_SYNC, true); }
-	
-	public boolean shouldSync()
-	{ return getFlag(FLAG_SYNC); }
 	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setInfo(String s)
@@ -128,7 +114,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public ConfigEntry clone()
 	{
-		ConfigEntry e = ConfigEntry.getEntry(type, ID);
+		ConfigEntry e = ConfigEntry.getEntry(getType(), ID);
 		e.setJson(getJson());
 		return e;
 	}

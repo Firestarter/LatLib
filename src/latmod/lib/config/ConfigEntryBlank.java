@@ -1,14 +1,15 @@
 package latmod.lib.config;
 
 import com.google.gson.JsonElement;
-import latmod.lib.PrimitiveType;
-
-import java.io.*;
+import latmod.lib.*;
 
 public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEntry
 {
 	public ConfigEntryBlank(String id)
-	{ super(id, PrimitiveType.NULL); }
+	{ super(id); }
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.NULL; }
 	
 	public final void setJson(JsonElement o)
 	{ }
@@ -19,10 +20,10 @@ public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEnt
 	public String getAsString()
 	{ return "edit"; }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ }
 	
 	public void onClicked()

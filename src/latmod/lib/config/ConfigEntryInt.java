@@ -1,10 +1,8 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.PrimitiveType;
+import latmod.lib.*;
 import latmod.lib.util.IntBounds;
-
-import java.io.*;
 
 public class ConfigEntryInt extends ConfigEntry
 {
@@ -13,10 +11,13 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public ConfigEntryInt(String id, IntBounds b)
 	{
-		super(id, PrimitiveType.INT);
+		super(id);
 		bounds = (b == null) ? new IntBounds(0) : b;
 		set(bounds.defValue);
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.INT; }
 	
 	public void set(int v)
 	{ value = bounds.getVal(v); }
@@ -33,13 +34,13 @@ public class ConfigEntryInt extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeInt(get()); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ set(io.readInt()); }
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeInt(bounds.defValue);
@@ -47,7 +48,7 @@ public class ConfigEntryInt extends ConfigEntry
 		io.writeInt(bounds.maxValue);
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		int def = io.readInt();

@@ -1,9 +1,7 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.PrimitiveType;
-
-import java.io.*;
+import latmod.lib.*;
 
 public class ConfigEntryString extends ConfigEntry
 {
@@ -12,10 +10,13 @@ public class ConfigEntryString extends ConfigEntry
 	
 	public ConfigEntryString(String id, String def)
 	{
-		super(id, PrimitiveType.STRING);
+		super(id);
 		set(def);
 		defValue = def == null ? "" : def;
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.STRING; }
 	
 	public void set(String o)
 	{ value = o == null ? "" : o; }
@@ -29,19 +30,19 @@ public class ConfigEntryString extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeUTF(get()); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ set(io.readUTF()); }
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeUTF(defValue);
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		defValue = io.readUTF();

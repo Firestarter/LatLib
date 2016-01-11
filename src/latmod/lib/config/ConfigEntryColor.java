@@ -3,8 +3,6 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.io.*;
-
 public class ConfigEntryColor extends ConfigEntry
 {
 	public final LMColor value;
@@ -12,10 +10,13 @@ public class ConfigEntryColor extends ConfigEntry
 	
 	public ConfigEntryColor(String id, int def)
 	{
-		super(id, PrimitiveType.INT);
+		super(id);
 		value = new LMColor(def);
 		defValue = new LMColor(def);
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.COLOR; }
 	
 	public final void setJson(JsonElement o)
 	{ value.setRGB(o.getAsInt()); }
@@ -23,19 +24,19 @@ public class ConfigEntryColor extends ConfigEntry
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(value.color()); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeInt(value.color()); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ value.setRGB(io.readInt()); }
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeInt(defValue.color());
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		defValue.setRGB(io.readInt());

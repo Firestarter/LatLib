@@ -8,9 +8,9 @@ public final class DoubleBounds
 	
 	public DoubleBounds(double def, double min, double max)
 	{
-		defValue = MathHelperLM.clamp(def, min, max);
 		minValue = min;
 		maxValue = max;
+		defValue = getVal(def);
 	}
 	
 	public DoubleBounds(double def)
@@ -18,4 +18,7 @@ public final class DoubleBounds
 	
 	public double getVal(double v)
 	{ return MathHelperLM.clamp(v, minValue, maxValue); }
+	
+	public DoubleBounds copy(double def)
+	{ return new DoubleBounds(def, minValue, maxValue); }
 }

@@ -106,10 +106,10 @@ public class LMJsonUtils
 	
 	public static <T> T fromJsonFile(Gson gson, File f, Type t)
 	{
-		if(f == null || !f.exists()) return null;
+		if(gson == null || f == null || !f.exists()) return null;
 		try
 		{
-			FileReader reader = new FileReader(f);
+			BufferedReader reader = new BufferedReader(new FileReader(f));
 			T obj = gson.fromJson(reader, t);
 			reader.close();
 			return obj;
@@ -169,7 +169,7 @@ public class LMJsonUtils
 		try
 		{
 			if(json == null || !json.exists()) return JsonNull.INSTANCE;
-			Reader reader = new FileReader(json);
+			BufferedReader reader = new BufferedReader(new FileReader(json));
 			JsonElement e = getJsonElement(reader);
 			reader.close();
 			return e;

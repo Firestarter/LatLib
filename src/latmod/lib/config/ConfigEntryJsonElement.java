@@ -3,18 +3,19 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.io.*;
-
 class ConfigEntryJsonElement extends ConfigEntry
 {
 	private JsonElement value;
 	
 	ConfigEntryJsonElement(String id)
 	{
-		super(id, PrimitiveType.NULL);
+		super(id);
 		setHidden();
 		setExcluded();
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.NULL; }
 	
 	public final void setJson(JsonElement o)
 	{ value = o; }
@@ -22,10 +23,10 @@ class ConfigEntryJsonElement extends ConfigEntry
 	public final JsonElement getJson()
 	{ return value; }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ }
 	
 	public boolean isNull()

@@ -1,9 +1,8 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.PrimitiveType;
+import latmod.lib.*;
 
-import java.io.*;
 import java.util.*;
 
 public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableConfigEntry
@@ -14,9 +13,12 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public ConfigEntryEnumExtended(String id)
 	{
-		super(id, PrimitiveType.ENUM);
+		super(id);
 		values = new ArrayList<>();
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.ENUM; }
 	
 	public int getIndex()
 	{ return values.indexOf(value); }
@@ -27,13 +29,13 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(value); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{ io.writeUTF(value); }
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{ value = io.readUTF(); }
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		value = io.readUTF();
 		values.clear();

@@ -3,8 +3,6 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.io.*;
-
 public class ConfigEntryIntArray extends ConfigEntry
 {
 	public final IntList defValue;
@@ -12,11 +10,14 @@ public class ConfigEntryIntArray extends ConfigEntry
 	
 	public ConfigEntryIntArray(String id, IntList def)
 	{
-		super(id, PrimitiveType.INT_ARRAY);
+		super(id);
 		value = new IntList();
 		set(def);
 		defValue = def == null ? new IntList() : def.clone();
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.INT_ARRAY; }
 	
 	public ConfigEntryIntArray(String id, int[] def)
 	{ this(id, IntList.asList(def)); }
@@ -48,7 +49,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		return a;
 	}
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{
 		value = get();
 		io.writeShort(value.size());
@@ -56,7 +57,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 			io.writeInt(value.get(i));
 	}
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{
 		value.clear();
 		int s = io.readUnsignedShort();
@@ -65,7 +66,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		set(value.clone());
 	}
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeShort(defValue.size());
@@ -73,7 +74,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 			io.writeInt(defValue.get(i));
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		defValue.clear();

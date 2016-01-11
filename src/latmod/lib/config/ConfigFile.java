@@ -5,7 +5,7 @@ import latmod.lib.util.IDObject;
 
 import java.io.File;
 
-public final class ConfigFile extends IDObject implements IConfigFile
+public class ConfigFile extends IDObject implements IConfigFile
 {
 	public final File file;
 	public final ConfigGroup configGroup;
@@ -21,10 +21,10 @@ public final class ConfigFile extends IDObject implements IConfigFile
 	public ConfigFile(String id, File f)
 	{ this(new ConfigGroup(id), f); }
 	
-	public ConfigGroup getGroup()
+	public final ConfigGroup getGroup()
 	{ return configGroup; }
 	
-	public void add(ConfigEntry e)
+	public final void add(ConfigEntry e)
 	{ if(e != null) configGroup.add(e, false); }
 	
 	public void load()

@@ -3,7 +3,6 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -15,9 +14,12 @@ public class ConfigGroup extends ConfigEntry
 	
 	public ConfigGroup(String s)
 	{
-		super(s, PrimitiveType.MAP);
+		super(s);
 		entryMap = new HashMap<>();
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.MAP; }
 	
 	public List<ConfigEntry> entries()
 	{ return LMMapUtils.values(entryMap, null); }
@@ -29,7 +31,7 @@ public class ConfigGroup extends ConfigEntry
 		else return null;
 	}
 	
-	public void add(ConfigEntry e, boolean copy)
+	public ConfigGroup add(ConfigEntry e, boolean copy)
 	{
 		if(e != null)
 		{
@@ -45,6 +47,8 @@ public class ConfigGroup extends ConfigEntry
 				e.parentGroup = this;
 			}
 		}
+		
+		return this;
 	}
 	
 	public ConfigGroup addAll(Class<?> c, Object obj, boolean copy)
@@ -84,11 +88,11 @@ public class ConfigGroup extends ConfigEntry
 	public String getDisplayName()
 	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
 	
-	public ConfigGroup clone()
+	public ConfigEntry clone()
 	{
 		ConfigGroup g = new ConfigGroup(ID);
 		g.displayName = displayName;
-		for(ConfigEntry e : entries())
+		for(ConfigEntry e : entryMap.values())
 			g.add(e, true);
 		return g;
 	}
@@ -121,7 +125,7 @@ public class ConfigGroup extends ConfigEntry
 		
 		for(ConfigEntry e : entries())
 		{
-			if(!e.isExcluded())
+			if(!e.getFlag(FLAG_EXCLUDED))
 			{
 				e.onPreLoaded();
 				o.add(e.ID, e.getJson());
@@ -143,19 +147,19 @@ public class ConfigGroup extends ConfigEntry
 	public int getAsInt()
 	{ return entryMap.size(); }
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{
 		io.writeShort(entryMap.size());
 		for(ConfigEntry e : entryMap.values())
 		{
 			e.onPreLoaded();
-			io.writeByte(e.type.ordinal());
+			io.writeByte(e.getType().ordinal());
 			io.writeUTF(e.ID);
 			e.write(io);
 		}
 	}
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{
 		int s = io.readUnsignedShort();
 		entryMap.clear();
@@ -169,21 +173,21 @@ public class ConfigGroup extends ConfigEntry
 		}
 	}
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		io.writeUTF(displayName);
 		io.writeShort(entryMap.size());
 		for(ConfigEntry e : entryMap.values())
 		{
 			e.onPreLoaded();
-			io.writeByte(e.type.ordinal());
+			io.writeByte(e.getType().ordinal());
 			io.writeUTF(e.ID);
 			e.writeExtended(io);
 			io.writeUTF(e.info);
 		}
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		displayName = io.readUTF();
 		int s = io.readUnsignedShort();
@@ -245,7 +249,7 @@ public class ConfigGroup extends ConfigEntry
 					}
 					catch(Exception ex)
 					{
-						System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.type + ")");
+						System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.getType() + ")");
 						System.err.println(ex.toString());
 					}
 				}
@@ -304,26 +308,19 @@ public class ConfigGroup extends ConfigEntry
 	{ return (parentGroup == null) ? 0 : (parentGroup.getDepth() + 1); }
 	
 	public ConfigGroup generateSynced(boolean copy)
-	{ return generateSynced0(this, copy); }
-	
-	private static ConfigGroup generateSynced0(ConfigGroup g0, boolean copy)
 	{
-		ConfigGroup g = new ConfigGroup(g0.ID);
+		ConfigGroup out = new ConfigGroup(ID);
 		
-		for(ConfigEntry e : g0.entryMap.values())
+		for(ConfigEntry e : entryMap.values())
 		{
-			if(e.shouldSync()) g.add(e, copy);
-			else
+			if(e.getFlag(FLAG_SYNC)) out.add(e, copy);
+			else if(e.getAsGroup() != null)
 			{
-				ConfigGroup g1 = e.getAsGroup();
-				if(g1 != null && !g1.entryMap.isEmpty())
-				{
-					ConfigGroup g2 = generateSynced0(g1, copy);
-					if(!g2.entryMap.isEmpty()) g.add(g2, false);
-				}
+				ConfigGroup g = e.getAsGroup().generateSynced(copy);
+				if(!g.entryMap.isEmpty()) out.add(g, false);
 			}
 		}
 		
-		return g;
+		return out;
 	}
 }

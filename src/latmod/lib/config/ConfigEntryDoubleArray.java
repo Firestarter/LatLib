@@ -1,9 +1,7 @@
 package latmod.lib.config;
 
 import com.google.gson.*;
-import latmod.lib.PrimitiveType;
-
-import java.io.*;
+import latmod.lib.*;
 
 public class ConfigEntryDoubleArray extends ConfigEntry
 {
@@ -14,10 +12,13 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 	
 	public ConfigEntryDoubleArray(String id, double[] def)
 	{
-		super(id, PrimitiveType.DOUBLE_ARRAY);
+		super(id);
 		set(def);
 		defValue = def == null ? emptyDoubleArray : def;
 	}
+	
+	public PrimitiveType getType()
+	{ return PrimitiveType.DOUBLE_ARRAY; }
 	
 	public void set(double[] o)
 	{ value = o == null ? emptyDoubleArray : o; }
@@ -43,7 +44,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 		return a;
 	}
 	
-	public void write(DataOutput io) throws Exception
+	public void write(ByteIOStream io)
 	{
 		value = get();
 		io.writeShort(value.length);
@@ -51,7 +52,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 			io.writeDouble(value[i]);
 	}
 	
-	public void read(DataInput io) throws Exception
+	public void read(ByteIOStream io)
 	{
 		value = new double[io.readUnsignedShort()];
 		for(int i = 0; i < value.length; i++)
@@ -59,7 +60,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 		set(value);
 	}
 	
-	public void writeExtended(DataOutput io) throws Exception
+	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
 		io.writeShort(defValue.length);
@@ -67,7 +68,7 @@ public class ConfigEntryDoubleArray extends ConfigEntry
 			io.writeDouble(defValue[i]);
 	}
 	
-	public void readExtended(DataInput io) throws Exception
+	public void readExtended(ByteIOStream io)
 	{
 		read(io);
 		defValue = new double[io.readUnsignedShort()];
