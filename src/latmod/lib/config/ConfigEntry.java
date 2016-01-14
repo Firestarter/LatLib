@@ -64,30 +64,13 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
 	
 	public final boolean getFlag(int f)
-	{
-		boolean[] flags1 = new boolean[8];
-		Bits.fromBits(flags1, flags & 0xFF);
-		return flags1[f];
-	}
+	{ return Bits.getBit(flags, f); }
 	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setFlag(int f, boolean b)
 	{
-		boolean[] flags1 = new boolean[8];
-		Bits.fromBits(flags1, flags & 0xFF);
-		flags1[f] = b;
-		flags = (byte) Bits.toBits(flags1);
+		flags = Bits.setBit(flags, f, b);
 		return (E) this;
-	}
-	
-	public final IntList getFlags()
-	{
-		IntList l = new IntList();
-		boolean[] flags1 = new boolean[8];
-		Bits.fromBits(flags1, flags & 0xFF);
-		for(int i = 0; i < flags1.length; i++)
-			if(flags1[i]) l.add(i);
-		return l;
 	}
 	
 	public final <E extends ConfigEntry> E setHidden()

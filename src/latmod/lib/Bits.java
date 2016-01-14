@@ -25,21 +25,25 @@ public class Bits
 			b[j] = ((d >> j) & 1) == 1;
 	}
 	
-	public static int getBit(int bits, int i)
-	{ return (bits >> i) & 1; }
-	
-	public static boolean isBit(int bits, int i)
-	{ return getBit(bits, i) == 1; }
+	public static boolean getBit(byte bits, int i)
+	{ return ((bits >> i) & 1) == 1; }
 	
 	public static int toBit(boolean b, int i)
 	{ return (b ? 1 : 0) << i; }
 	
-	public static void fromBits(boolean b[], int bits)
-	{ for(int i = 0; i < b.length; i++) b[i] = isBit(bits, i); }
-	
-	public static int toBits(boolean[] b)
+	public static byte setBit(byte bits, int i, boolean v)
 	{
-		int i = 0;
+		if(v) return (byte) ((bits & 0xFF) | (1 << i));
+		else return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF));
+	}
+	
+	/*
+	public static void fromBits(boolean b[], byte bits)
+	{ for(int i = 0; i < b.length; i++) b[i] = getBit(bits, i); }
+	
+	public static byte toBits(boolean[] b)
+	{
+		byte i = 0;
 		for(int j = 0; j < b.length; j++) i |= toBit(b[j], j);
 		return i;
 	}
@@ -49,6 +53,10 @@ public class Bits
 		for(int i = 0; i < from.length; i++)
 			to[i] = !from[i];
 	}
+	*/
+	
+	public static int not(int bits)
+	{ return 255 - (bits & 0xFF); }
 	
 	//
 	
