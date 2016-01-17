@@ -78,11 +78,11 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 	}
 	
 	public int get(int index)
-	{ return (index >= 0 && index < size()) ? array[index] : defVal; }
+	{ return (index >= 0 && index < size) ? array[index] : defVal; }
 	
 	public int indexOf(int value)
 	{
-		for(int i = 0; i < size(); i++)
+		for(int i = 0; i < size; i++)
 			if(array[i] == value) return i;
 		return -1;
 	}

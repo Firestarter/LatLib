@@ -124,6 +124,7 @@ public class LMJsonUtils
 	public static String toJson(Gson gson, Object o)
 	{
 		if(o == null) return null;
+		if(o instanceof JsonElement) return gson.toJson((JsonElement) o);
 		return gson.toJson(o);
 	}
 	
@@ -134,7 +135,10 @@ public class LMJsonUtils
 		try
 		{
 			FileWriter writer = new FileWriter(LMFileUtils.newFile(f));
-			gson.toJson(o, o.getClass(), new JsonWriter(writer));
+			
+			if(o instanceof JsonElement) gson.toJson((JsonElement) o, new JsonWriter(writer));
+			else gson.toJson(o, o.getClass(), new JsonWriter(writer));
+			
 			writer.close();
 			return true;
 		}
