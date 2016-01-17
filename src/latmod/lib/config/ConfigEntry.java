@@ -7,10 +7,11 @@ import latmod.lib.util.FinalIDObject;
 public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject
 {
 	public String info = null;
-	private byte flags = 0;
+	public byte flags = 0;
 	public static final int FLAG_HIDDEN = 1;
 	public static final int FLAG_EXCLUDED = 2;
 	public static final int FLAG_SYNC = 3;
+	public static final int FLAG_CANT_EDIT = 4;
 	
 	public ConfigGroup parentGroup = null;
 	
@@ -81,6 +82,9 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public final <E extends ConfigEntry> E sync()
 	{ return setFlag(FLAG_SYNC, true); }
+	
+	public final <E extends ConfigEntry> E setCantEdit()
+	{ return setFlag(FLAG_CANT_EDIT, true); }
 	
 	@SuppressWarnings("unchecked")
 	public final <E extends ConfigEntry> E setInfo(String s)
