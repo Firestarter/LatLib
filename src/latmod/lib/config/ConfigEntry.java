@@ -2,6 +2,7 @@ package latmod.lib.config;
 
 import com.google.gson.JsonElement;
 import latmod.lib.*;
+import latmod.lib.json.IJsonObject;
 import latmod.lib.util.FinalIDObject;
 
 public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject
@@ -12,6 +13,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	public static final int FLAG_EXCLUDED = 2;
 	public static final int FLAG_SYNC = 3;
 	public static final int FLAG_CANT_EDIT = 4;
+	public static final int FLAG_CAN_ADD = 5;
 	
 	public ConfigGroup parentGroup = null;
 	

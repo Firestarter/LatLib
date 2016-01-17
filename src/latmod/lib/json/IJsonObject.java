@@ -1,4 +1,4 @@
-package latmod.lib;
+package latmod.lib.json;
 
 import com.google.gson.JsonElement;
 
