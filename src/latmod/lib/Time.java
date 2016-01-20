@@ -24,7 +24,7 @@ public final class Time implements Comparable<Time>
 		hours = c.get(Calendar.HOUR_OF_DAY);
 		day = c.get(Calendar.DAY_OF_MONTH);
 		month = c.get(Calendar.MONTH) + 1;
-		year = c.get(Calendar.YEAR) + 1900;
+		year = c.get(Calendar.YEAR);
 	}
 	
 	public boolean equalsTime(long t)

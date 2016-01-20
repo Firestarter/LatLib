@@ -13,7 +13,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	public static final int FLAG_EXCLUDED = 2;
 	public static final int FLAG_SYNC = 3;
 	public static final int FLAG_CANT_EDIT = 4;
-	public static final int FLAG_CAN_ADD = 5;
+	public static final int FLAG_CANT_ADD = 5;
 	
 	public ConfigGroup parentGroup = null;
 	

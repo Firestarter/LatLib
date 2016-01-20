@@ -15,6 +15,7 @@ public class ConfigGroup extends ConfigEntry
 	public ConfigGroup(String s)
 	{
 		super(s);
+		setFlag(FLAG_CANT_ADD, true);
 	}
 	
 	public PrimitiveType getType()
