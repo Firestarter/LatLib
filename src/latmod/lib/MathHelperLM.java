@@ -20,6 +20,7 @@ public class MathHelperLM
 	public static final float PI_F = (float) Math.PI;
 	public static final float TWO_PI_F = (float) TWO_PI;
 	public static final float HALF_PI_F = (float) HALF_PI;
+	public static final double SQRT_2 = Math.sqrt(2D);
 	
 	public static final float RAD_F = (float) RAD;
 	public static final float DEG_F = (float) DEG;
