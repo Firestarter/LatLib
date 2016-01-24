@@ -3,7 +3,7 @@ package latmod.lib.config;
 import com.google.gson.*;
 import latmod.lib.*;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class ConfigGroup extends ConfigEntry
@@ -209,23 +209,6 @@ public class ConfigGroup extends ConfigEntry
 			e.readExtended(io);
 			e.info = io.readUTF();
 			add(e, false);
-		}
-	}
-	
-	public static class Serializer implements JsonSerializer<ConfigGroup>, JsonDeserializer<ConfigGroup>
-	{
-		public JsonElement serialize(ConfigGroup src, Type typeOfSrc, JsonSerializationContext context)
-		{
-			if(src == null) return null;
-			return src.getJson();
-		}
-		
-		public ConfigGroup deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-		{
-			if(json.isJsonNull() || !json.isJsonObject()) return null;
-			ConfigGroup g = new ConfigGroup("");
-			g.setJson(json.getAsJsonObject());
-			return g;
 		}
 	}
 	

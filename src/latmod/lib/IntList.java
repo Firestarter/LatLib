@@ -1,11 +1,11 @@
 package latmod.lib;
 
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import latmod.lib.json.IJsonObject;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
-public class IntList implements Iterable<Integer>, Cloneable // Improve this // FastList
+public class IntList implements Iterable<Integer>, Cloneable, IJsonObject // Improve this // FastList
 {
 	private final int init;
 	private int defVal = -1;
@@ -178,6 +178,17 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 		return l;
 	}
 	
+	public void setJson(JsonElement e)
+	{
+		clear();
+		addAll(LMJsonUtils.fromArray(e));
+	}
+	
+	public JsonElement getJson()
+	{
+		return LMJsonUtils.toArray(array);
+	}
+	
 	public static class IntIterator implements Iterator<Integer>
 	{
 		public final int[] values;
@@ -191,27 +202,5 @@ public class IntList implements Iterable<Integer>, Cloneable // Improve this // 
 		
 		public Integer next()
 		{ return Integer.valueOf(values[++pos]); }
-	}
-	
-	public static class Serializer implements JsonDeserializer<IntList>, JsonSerializer<IntList>
-	{
-		public JsonElement serialize(IntList src, Type typeOfSrc, JsonSerializationContext context)
-		{
-			JsonArray o = new JsonArray();
-			for(int i = 0; i < src.size; i++)
-				o.add(new JsonPrimitive(src.array[i]));
-			return o;
-		}
-		
-		public IntList deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-		{
-			if(json.isJsonNull()) return null;
-			
-			IntList list = new IntList();
-			JsonArray o = json.getAsJsonArray();
-			for(int i = 0; i < o.size(); i++)
-				list.add(o.get(i).getAsInt());
-			return list;
-		}
 	}
 }

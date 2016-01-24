@@ -1,52 +1,28 @@
 package latmod.lib.json;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.*;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Locale;
 
-public class EnumSerializerLM implements TypeAdapterFactory
+public class EnumSerializerLM
 {
-	@SuppressWarnings("all")
-	public TypeAdapter create(Gson gson, TypeToken type)
+	public static JsonElement serialize(Enum e)
+	{ return new JsonPrimitive(lowerCaseName(e)); }
+	
+	public static <E extends Enum<E>> E deserialize(Class<?> type, JsonElement e)
 	{
-		Class<?> c = type.getRawType();
-		
-		if(!c.isEnum()) return null;
+		if(!type.isEnum() || e == null || !e.isJsonPrimitive()) return null;
 		else
 		{
-			final HashMap<String, Object> map = new HashMap<String, Object>();
-			Object[] o = c.getEnumConstants();
+			String id = e.getAsString();
+			Object[] o = type.getEnumConstants();
 			
 			for(int i = 0; i < o.length; i++)
-				map.put(lowerCaseName(o[i]), o[i]);
-			
-			return new TypeAdapter()
 			{
-				public void write(JsonWriter out, Object value) throws IOException
-				{
-					if(value == null) out.nullValue();
-					else out.value(lowerCaseName(value));
-				}
-				
-				public Object read(JsonReader in) throws IOException
-				{
-					if(in.peek() == JsonToken.NULL)
-					{
-						in.nextNull();
-						return null;
-					}
-					else
-					{
-						String s = in.nextString();
-						if(s != null) s = s.toLowerCase();
-						return map.get(s);
-					}
-				}
-			};
+				if(lowerCaseName(o[i]).equals(id)) return (E) o[i];
+			}
 		}
+		return null;
 	}
 	
 	public static String lowerCaseName(Object o)

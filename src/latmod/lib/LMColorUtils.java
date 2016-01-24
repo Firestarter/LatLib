@@ -1,5 +1,7 @@
 package latmod.lib;
 
+import com.google.gson.*;
+
 public class LMColorUtils
 {
 	public static final int[] chatFormattingColors = new int[16];
@@ -21,6 +23,15 @@ public class LMColorUtils
 			if(i == 6) r += 85;
 			chatFormattingColors[i] = getRGBA(r, g, b, 255);
 		}
+	}
+	
+	public static JsonElement serialize(int col)
+	{ return new JsonPrimitive('#' + Integer.toHexString(col).toUpperCase()); }
+	
+	public static int deserialize(JsonElement e)
+	{
+		if(e == null || !e.isJsonPrimitive()) return 0xFF000000;
+		return (int) Long.parseLong(e.getAsString().substring(1), 16);
 	}
 	
 	public static int getRGBA(int r, int g, int b, int a)

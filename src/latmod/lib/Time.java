@@ -1,12 +1,11 @@
 package latmod.lib;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.*;
+import com.google.gson.*;
+import latmod.lib.json.IJsonGet;
 
-import java.io.IOException;
 import java.util.Calendar;
 
-public final class Time implements Comparable<Time>
+public final class Time implements Comparable<Time>, IJsonGet
 {
 	public final long millis;
 	public final int seconds;
@@ -149,22 +148,12 @@ public final class Time implements Comparable<Time>
 	public static Time now()
 	{ return get(Calendar.getInstance()); }
 	
-	public static class Serializer extends TypeAdapter<Time>
+	public JsonElement getJson()
+	{ return new JsonPrimitive(millis); }
+	
+	public static Time deserialize(JsonElement e)
 	{
-		public void write(JsonWriter out, Time value) throws IOException
-		{
-			if(value == null) out.nullValue();
-			else out.value(value.millis);
-		}
-		
-		public Time read(JsonReader in) throws IOException
-		{
-			if(in.peek() == JsonToken.NULL)
-			{
-				in.nextNull();
-				return null;
-			}
-			return get(in.nextLong());
-		}
+		if(e == null || !e.isJsonPrimitive()) return null;
+		return get(e.getAsLong());
 	}
 }

@@ -1,13 +1,12 @@
 package latmod.lib;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.*;
+import com.google.gson.*;
+import latmod.lib.json.IJsonGet;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.Map;
 
-public enum PrimitiveType
+public enum PrimitiveType implements IJsonGet
 {
 	NULL("nil", Object.class),
 	BOOLEAN("bool", Boolean.class),
@@ -50,6 +49,9 @@ public enum PrimitiveType
 		isEnum = c == Enum.class;
 	}
 	
+	public JsonElement getJson()
+	{ return new JsonPrimitive(ID); }
+	
 	public static PrimitiveType get(String s)
 	{
 		if(s == null) return null;
@@ -68,23 +70,4 @@ public enum PrimitiveType
 	
 	public static boolean isNull(PrimitiveType type)
 	{ return type == null || type == NULL; }
-	
-	public static class Serializer extends TypeAdapter<PrimitiveType>
-	{
-		public PrimitiveType read(JsonReader in) throws IOException
-		{
-			if(in.peek() == JsonToken.NULL)
-			{
-				in.nextNull();
-				return null;
-			}
-			return get(in.nextString());
-		}
-		
-		public void write(JsonWriter out, PrimitiveType value) throws IOException
-		{
-			if(value == null) out.nullValue();
-			else out.value(value.ID);
-		}
-	}
 }

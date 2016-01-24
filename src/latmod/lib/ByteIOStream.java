@@ -21,7 +21,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{ bytes = new byte[size]; }
 	
 	public ByteIOStream()
-	{ this(16); }
+	{ this(0); }
 	
 	public int getDataPos()
 	{ return pos; }

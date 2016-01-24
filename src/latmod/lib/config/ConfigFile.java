@@ -1,5 +1,6 @@
 package latmod.lib.config;
 
+import com.google.gson.JsonElement;
 import latmod.lib.*;
 import latmod.lib.util.IDObject;
 
@@ -29,9 +30,14 @@ public class ConfigFile extends IDObject implements IConfigFile
 	
 	public void load()
 	{
-		ConfigGroup g = (ConfigGroup) LMJsonUtils.fromJsonFile(file, ConfigGroup.class);
-		if(g != null) configGroup.loadFromGroup(g);
-		save();
+		JsonElement e = LMJsonUtils.fromJson(file);
+		if(e.isJsonObject())
+		{
+			ConfigGroup g = new ConfigGroup("");
+			g.setJson(e);
+			configGroup.loadFromGroup(g);
+			save();
+		}
 	}
 	
 	public void save()
@@ -41,5 +47,5 @@ public class ConfigFile extends IDObject implements IConfigFile
 	}
 	
 	public final String toJsonString(boolean pretty)
-	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup); }
+	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup.getJson()); }
 }

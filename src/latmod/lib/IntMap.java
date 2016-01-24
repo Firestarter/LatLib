@@ -1,11 +1,11 @@
 package latmod.lib;
 
 import com.google.gson.*;
+import latmod.lib.json.IJsonObject;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
-public class IntMap
+public class IntMap implements IJsonObject
 {
 	private final int init;
 	private int defVal;
@@ -137,30 +137,27 @@ public class IntMap
 	public boolean isEmpty()
 	{ return size() <= 0; }
 	
-	public static class Serializer implements JsonDeserializer<IntMap>, JsonSerializer<IntMap>
+	public JsonElement getJson()
 	{
-		public JsonElement serialize(IntMap src, Type typeOfSrc, JsonSerializationContext context)
-		{
-			JsonObject o = new JsonObject();
-			for(int i = 0; i < src.size(); i++)
-				o.add(Integer.toString(src.keys.get(i)), new JsonPrimitive(src.values.get(i)));
-			return o;
-		}
+		JsonObject o = new JsonObject();
+		for(int i = 0; i < size(); i++)
+			o.add(Integer.toString(keys.get(i)), new JsonPrimitive(values.get(i)));
+		return o;
+	}
+	
+	public void setJson(JsonElement e)
+	{
+		clear();
 		
-		public IntMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+		if(e != null && e.isJsonObject())
 		{
-			if(json.isJsonNull()) return null;
+			JsonObject o = e.getAsJsonObject();
 			
-			IntMap map = new IntMap();
-			JsonObject o = json.getAsJsonObject();
-			
-			for(Map.Entry<String, JsonElement> e : o.entrySet())
+			for(Map.Entry<String, JsonElement> entry : o.entrySet())
 			{
-				Integer i = Integer.parseInt(e.getKey());
-				if(i != null) map.put(i.intValue(), e.getValue().getAsInt());
+				Integer i = Integer.parseInt(entry.getKey());
+				if(i != null) put(i.intValue(), entry.getValue().getAsInt());
 			}
-			
-			return map;
 		}
 	}
 }
