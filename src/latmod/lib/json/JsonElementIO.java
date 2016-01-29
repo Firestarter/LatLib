@@ -103,8 +103,6 @@ public class JsonElementIO
 	
 	public static void write(ByteIOStream io, JsonElement e)
 	{
-		System.out.println(getName(getID(e)));
-		
 		if(e == null || e.isJsonNull()) io.writeByte(ID_NULL);
 		else if(e.isJsonArray())
 		{
