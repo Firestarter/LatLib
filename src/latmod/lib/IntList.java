@@ -5,27 +5,31 @@ import latmod.lib.json.IJsonObject;
 
 import java.util.*;
 
-public class IntList implements Iterable<Integer>, Cloneable, IJsonObject // Improve this // FastList
+public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
 {
-	private final int init;
 	private int defVal = -1;
 	private int array[];
 	private int size;
 	
 	public IntList(int i)
-	{
-		init = i;
-		array = new int[init];
-	}
+	{ array = new int[i]; }
 	
 	public IntList()
-	{ this(5); }
+	{ this(0); }
 	
 	public IntList(int[] ai)
 	{
-		init = ai.length;
-		size = ai.length;
-		array = ai.clone();
+		if(ai != null && ai.length > 0)
+		{
+			size = ai.length;
+			array = new int[size];
+			System.arraycopy(ai, 0, array, 0, size);
+		}
+		else
+		{
+			size = 0;
+			array = new int[0];
+		}
 	}
 	
 	public int size()
@@ -33,8 +37,11 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject // Imp
 	
 	public void clear()
 	{
-		size = 0;
-		array = new int[init];
+		if(size > 0)
+		{
+			size = 0;
+			array = new int[0];
+		}
 	}
 	
 	public void setDefVal(int value)
@@ -119,6 +126,15 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject // Imp
 		return a;
 	}
 	
+	public List<Integer> toList()
+	{
+		ArrayList<Integer> l = new ArrayList<>();
+		if(size == 0) return l;
+		for(int i = 0; i < size; i++)
+			l.add(array[i]);
+		return l;
+	}
+	
 	public void sort()
 	{ Arrays.sort(array, 0, size); }
 	
@@ -165,8 +181,8 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject // Imp
 	
 	public IntList clone()
 	{
-		IntList l = new IntList(init);
-		l.array = array.clone();
+		IntList l = new IntList(size);
+		System.arraycopy(array, 0, l.array, 0, size);
 		l.size = size;
 		return l;
 	}

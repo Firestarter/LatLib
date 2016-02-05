@@ -136,4 +136,33 @@ public class LMMapUtils
 			}
 		}
 	}
+	
+	public static int[] toIntArray(Map<Integer, Integer> map)
+	{
+		if(map == null) return null;
+		int ai[] = new int[map.size() * 2];
+		if(ai.length == 0) return ai;
+		
+		int i = 0;
+		for(Map.Entry<Integer, Integer> e : map.entrySet())
+		{
+			ai[i * 2 + 0] = e.getKey().intValue();
+			ai[i * 2 + 1] = e.getValue().intValue();
+			i++;
+		}
+		
+		return ai;
+	}
+	
+	public static void fromIntArray(Map<Integer, Integer> map, int[] ai)
+	{
+		if(ai == null || map.isEmpty()) return;
+		map.clear();
+		if(ai.length > 0)
+		{
+			int s = ai.length / 2;
+			for(int i = 0; i < s; i++)
+				map.put(ai[i * 2 + 0], ai[i * 2 + 1]);
+		}
+	}
 }

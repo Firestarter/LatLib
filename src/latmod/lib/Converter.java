@@ -170,4 +170,10 @@ public class Converter
 		catch(Exception e) { }
 		return def;
 	}
+	
+	public static int nonNull(Integer i)
+	{ return (i == null) ? 0 : i.intValue(); }
+	
+	public static double nonNull(Double d)
+	{ return (d == null) ? 0D : d.doubleValue(); }
 }
