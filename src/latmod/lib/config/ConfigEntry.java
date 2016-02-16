@@ -9,11 +9,11 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 {
 	public String info = null;
 	public byte flags = 0;
-	public static final int FLAG_HIDDEN = 1;
-	public static final int FLAG_EXCLUDED = 2;
-	public static final int FLAG_SYNC = 3;
-	public static final int FLAG_CANT_EDIT = 4;
-	public static final int FLAG_CANT_ADD = 5;
+	public static final byte FLAG_HIDDEN = 1;
+	public static final byte FLAG_EXCLUDED = 2;
+	public static final byte FLAG_SYNC = 3;
+	public static final byte FLAG_CANT_EDIT = 4;
+	public static final byte FLAG_CANT_ADD = 5;
 	
 	public ConfigGroup parentGroup = null;
 	
@@ -66,11 +66,11 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	public boolean isValid()
 	{ return ID != null && (parentGroup == null || parentGroup.isValid()); }
 	
-	public final boolean getFlag(int f)
+	public final boolean getFlag(byte f)
 	{ return Bits.getBit(flags, f); }
 	
 	@SuppressWarnings("unchecked")
-	public final <E extends ConfigEntry> E setFlag(int f, boolean b)
+	public final <E extends ConfigEntry> E setFlag(byte f, boolean b)
 	{
 		flags = Bits.setBit(flags, f, b);
 		return (E) this;

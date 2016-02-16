@@ -60,7 +60,7 @@ public class LMJsonUtils
 		return gson.toJson(e);
 	}
 	
-	public static boolean toJsonFile(Gson gson, File f, JsonElement o)
+	public static boolean toJson(Gson gson, File f, JsonElement o)
 	{
 		if(o == null) return false;
 		
@@ -81,8 +81,8 @@ public class LMJsonUtils
 	public static String toJson(JsonElement o)
 	{ return toJson(getGson(false), o); }
 	
-	public static boolean toJsonFile(File f, JsonElement o)
-	{ return toJsonFile(getGson(true), f, o); }
+	public static boolean toJson(File f, JsonElement o)
+	{ return toJson(getGson(true), f, o); }
 	
 	public static JsonElement fromJson(String json)
 	{ return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
@@ -104,9 +104,25 @@ public class LMJsonUtils
 		return JsonNull.INSTANCE;
 	}
 	
+	public static JsonArray join(JsonArray... a)
+	{
+		JsonArray a1 = new JsonArray();
+		
+		for(int i = 0; i < a.length; i++)
+		{
+			if(a[i] != null)
+			{
+				for(int j = 0; j < a[i].size(); j++)
+					a1.add(a[i].get(j));
+			}
+		}
+		
+		return a1;
+	}
+	
 	// -- //
 	
-	public static JsonArray toArray(int[] ai)
+	public static JsonArray toIntArray(int[] ai)
 	{
 		if(ai == null) return null;
 		JsonArray a = new JsonArray();
@@ -116,14 +132,68 @@ public class LMJsonUtils
 		return a;
 	}
 	
-	public static int[] fromArray(JsonElement e)
+	public static int[] fromIntArray(JsonElement e)
+	{
+		if(e == null || e.isJsonNull()) return null;
+		
+		if(e.isJsonArray())
+		{
+			JsonArray a = e.getAsJsonArray();
+			int[] ai = new int[a.size()];
+			if(ai.length == 0) return ai;
+			for(int i = 0; i < ai.length; i++)
+				ai[i] = a.get(i).getAsInt();
+			return ai;
+		}
+		
+		return new int[] {e.getAsInt()};
+	}
+	
+	public static JsonArray toNumberArray(Number[] ai)
+	{
+		if(ai == null) return null;
+		JsonArray a = new JsonArray();
+		if(ai.length == 0) return a;
+		for(int i = 0; i < ai.length; i++)
+			a.add(new JsonPrimitive(ai[i]));
+		return a;
+	}
+	
+	public static Number[] fromNumberArray(JsonElement e)
+	{
+		if(e == null || e.isJsonNull()) return null;
+		
+		if(e.isJsonArray())
+		{
+			JsonArray a = e.getAsJsonArray();
+			Number[] ai = new Number[a.size()];
+			if(ai.length == 0) return ai;
+			for(int i = 0; i < ai.length; i++)
+				ai[i] = a.get(i).getAsNumber();
+			return ai;
+		}
+		
+		return new Number[] {e.getAsNumber()};
+	}
+	
+	public static JsonArray toStringArray(String[] ai)
+	{
+		if(ai == null) return null;
+		JsonArray a = new JsonArray();
+		if(ai.length == 0) return a;
+		for(int i = 0; i < ai.length; i++)
+			a.add(new JsonPrimitive(ai[i]));
+		return a;
+	}
+	
+	public static String[] fromStringArray(JsonElement e)
 	{
 		if(e == null || e.isJsonNull() || !e.isJsonArray()) return null;
 		JsonArray a = e.getAsJsonArray();
-		int[] ai = new int[a.size()];
+		String[] ai = new String[a.size()];
 		if(ai.length == 0) return ai;
 		for(int i = 0; i < ai.length; i++)
-			ai[i] = a.get(i).getAsInt();
+			ai[i] = a.get(i).getAsString();
 		return ai;
 	}
 	
@@ -141,21 +211,5 @@ public class LMJsonUtils
 		}
 		
 		return o1;
-	}
-	
-	public static JsonArray join(JsonArray... a)
-	{
-		JsonArray a1 = new JsonArray();
-		
-		for(int i = 0; i < a.length; i++)
-		{
-			if(a[i] != null)
-			{
-				for(int j = 0; j < a[i].size(); j++)
-					a1.add(a[i].get(j));
-			}
-		}
-		
-		return a1;
 	}
 }

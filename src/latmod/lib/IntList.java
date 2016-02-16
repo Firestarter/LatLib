@@ -197,12 +197,12 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
 	public void setJson(JsonElement e)
 	{
 		clear();
-		addAll(LMJsonUtils.fromArray(e));
+		addAll(LMJsonUtils.fromIntArray(e));
 	}
 	
 	public JsonElement getJson()
 	{
-		return LMJsonUtils.toArray(array);
+		return LMJsonUtils.toIntArray(array);
 	}
 	
 	public static class IntIterator implements Iterator<Integer>

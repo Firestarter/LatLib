@@ -2,25 +2,32 @@ package latmod.lib.config;
 
 import com.google.gson.*;
 import latmod.lib.*;
-import latmod.lib.util.EnumEnabled;
 
-import java.util.*;
+import java.util.LinkedHashMap;
 
 @SuppressWarnings("all")
 public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements IClickableConfigEntry // EnumTypeAdapterFactory
 {
-	public final Class<E> enumClass;
-	public final List<E> values;
+	private final LinkedHashMap<String, E> enumMap;
 	private E value;
 	public final E defValue;
 	
-	public ConfigEntryEnum(String id, Class<E> c, E[] val, E def, boolean addNull)
+	public ConfigEntryEnum(String id, E[] val, E def, boolean addNull)
 	{
 		super(id);
-		enumClass = c;
-		values = new ArrayList<E>();
-		if(addNull) values.add(null);
-		LMListUtils.addAll(values, val);
+		
+		enumMap = new LinkedHashMap<>();
+		
+		for(E e : val)
+		{
+			enumMap.put(getName(e), e);
+		}
+		
+		if(addNull)
+		{
+			enumMap.put("-", null);
+		}
+		
 		set(def);
 		defValue = def;
 	}
@@ -28,42 +35,17 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	public PrimitiveType getType()
 	{ return PrimitiveType.ENUM; }
 	
-	public static ConfigEntryEnum<EnumEnabled> enabledWithNull(String id, EnumEnabled def)
-	{ return new ConfigEntryEnum<EnumEnabled>(id, EnumEnabled.class, EnumEnabled.VALUES, def, true); }
-	
 	public void set(Object o)
 	{ value = (E) o; }
 	
 	public E get()
 	{ return value; }
 	
-	public static <T extends Enum<?>> String getName(T e)
+	public static String getName(Enum<?> e)
 	{ return e == null ? "-" : e.name().toLowerCase(); }
 	
-	public int getIndex()
-	{ return values.indexOf(get()); }
-	
 	private E fromString(String s)
-	{
-		try
-		{
-			Object[] o1 = enumClass.getEnumConstants();
-			if(o1 == null) return null;
-			
-			for(int i = 0; i < o1.length; i++)
-			{
-				Enum<?> e = (Enum<?>) o1[i];
-				if(e.name().equalsIgnoreCase(s))
-				{ return (E) e; }
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
+	{ return enumMap.get(s.toLowerCase()); }
 	
 	public final void setJson(JsonElement o)
 	{ set(fromString(o.getAsString())); }
@@ -79,15 +61,17 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	
 	public void writeExtended(ByteIOStream io)
 	{
-		io.writeUTF(getName(get()));
-		io.writeByte(values.size());
-		for(int i = 0; i < values.size(); i++)
-			io.writeUTF(getName(values.get(i)));
+		io.writeByte(enumMap.size());
+		for(E e : enumMap.values())
+			io.writeUTF(getName(e));
 		io.writeByte(getIndex());
+		io.writeByte(getDefaultIndex());
 	}
 	
 	public void onClicked()
-	{ set(values.get((getIndex() + 1) % values.size())); }
+	{
+		set(getFromIndex((getIndex() + 1) % enumMap.size()));
+	}
 	
 	public String getAsString()
 	{ return getName(get()); }
@@ -95,8 +79,50 @@ public class ConfigEntryEnum<E extends Enum<E>> extends ConfigEntry implements I
 	public boolean getAsBoolean()
 	{ return get() != null; }
 	
+	public E getFromIndex(int index)
+	{
+		if(index < 0 || index >= enumMap.size())
+		{
+			throw new ArrayIndexOutOfBoundsException(index);
+		}
+		
+		int idx0 = 0;
+		for(E e : enumMap.values())
+		{
+			if(index == idx0) return e;
+			idx0++;
+		}
+		
+		return null;
+	}
+	
+	public int getIndex()
+	{
+		int idx0 = 0;
+		E e0 = get();
+		for(E e : enumMap.values())
+		{
+			if(e == e0) return idx0;
+			idx0++;
+		}
+		
+		return -1;
+	}
+	
+	public int getDefaultIndex()
+	{
+		int idx0 = 0;
+		for(E e : enumMap.values())
+		{
+			if(e == defValue) return idx0;
+			idx0++;
+		}
+		
+		return -1;
+	}
+	
 	public int getAsInt()
-	{ return getIndex(); }
+	{ return enumMap.size(); }
 	
 	public String getDefValue()
 	{ return getName(defValue); }

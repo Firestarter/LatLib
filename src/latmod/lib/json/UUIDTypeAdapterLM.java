@@ -27,6 +27,8 @@ public class UUIDTypeAdapterLM
 	
 	public static UUID getUUID(String s)
 	{
+		if(s == null || !(s.length() == 32 || s.length() == 28)) return null;
+		
 		try
 		{
 			if(s.indexOf('-') != -1) return UUID.fromString(s);

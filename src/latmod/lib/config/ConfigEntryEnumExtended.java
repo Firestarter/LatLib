@@ -37,11 +37,11 @@ public class ConfigEntryEnumExtended extends ConfigEntry implements IClickableCo
 	
 	public void readExtended(ByteIOStream io)
 	{
-		value = io.readUTF();
 		values.clear();
 		int s = io.readUnsignedByte();
 		for(int i = 0; i < s; i++)
 			values.add(io.readUTF());
+		value = values.get(io.readUnsignedByte());
 		defValue = values.get(io.readUnsignedByte());
 	}
 	

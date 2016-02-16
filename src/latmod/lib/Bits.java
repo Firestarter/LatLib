@@ -25,13 +25,13 @@ public class Bits
 			b[j] = ((d >> j) & 1) == 1;
 	}
 	
-	public static boolean getBit(byte bits, int i)
+	public static boolean getBit(byte bits, byte i)
 	{ return ((bits >> i) & 1) == 1; }
 	
-	public static int toBit(boolean b, int i)
+	public static int toBit(boolean b, byte i)
 	{ return (b ? 1 : 0) << i; }
 	
-	public static byte setBit(byte bits, int i, boolean v)
+	public static byte setBit(byte bits, byte i, boolean v)
 	{
 		if(v) return (byte) ((bits & 0xFF) | (1 << i));
 		else return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF));
