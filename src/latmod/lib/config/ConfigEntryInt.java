@@ -65,4 +65,10 @@ public class ConfigEntryInt extends ConfigEntry
 	
 	public String getDefValue()
 	{ return Integer.toString(defValue); }
+	
+	public String getMinValue()
+	{ return configData.min() == Double.NEGATIVE_INFINITY ? null : Integer.toString((int) configData.min()); }
+	
+	public String getMaxValue()
+	{ return configData.max() == Double.POSITIVE_INFINITY ? null : Integer.toString((int) configData.max()); }
 }

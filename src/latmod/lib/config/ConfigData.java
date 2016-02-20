@@ -216,8 +216,8 @@ public final class ConfigData
 					}
 				}
 				
+				//System.out.println("Injected ConfigData into " + container.getClass().getName() + ", " + obj + ": " + data);
 				container.setConfigData(data);
-				System.out.println("Injected ConfigData into " + container.getClass().getName() + ", " + obj + ": " + data);
 				return new MapEntry<>(obj, data);
 			}
 		}
