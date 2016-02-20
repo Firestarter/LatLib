@@ -11,26 +11,29 @@ import java.util.*;
  */
 public final class ConfigData
 {
+	public String[] info;
+	public PrimitiveType type;
+	
 	private Boolean isHidden;
 	private Boolean isExcluded;
 	private Boolean sync;
 	private Boolean canEdit;
 	private Boolean canAdd;
-	public String[] info;
 	private Double min;
 	private Double max;
 	
 	public String toString()
 	{
 		Map<String, Object> data = new HashMap<>();
+		if(info != null && info.length > 0) data.put("info", LMStringUtils.strip(info));
 		if(isHidden != null) data.put("hidden", isHidden);
 		if(isExcluded != null) data.put("excluded", isExcluded);
 		if(sync != null) data.put("sync", sync);
 		if(canEdit != null) data.put("can_edit", canEdit);
 		if(canAdd != null) data.put("can_add", canAdd);
-		if(info != null && info.length > 0) data.put("info", LMStringUtils.strip(info));
 		if(min != null) data.put("min", min);
 		if(max != null) data.put("max", max);
+		if(type != null) data.put("type", type);
 		return LMMapUtils.toString(data);
 	}
 	
@@ -58,14 +61,22 @@ public final class ConfigData
 	public double getDouble(double v)
 	{ return MathHelperLM.clamp(v, min(), max()); }
 	
+	public Number getNumber(Number n)
+	{
+		if(min != null && n.doubleValue() < min()) return min();
+		if(max != null && n.doubleValue() > max()) return max();
+		return n;
+	}
+	
 	public void setDefaults()
 	{
+		info = null;
+		type = null;
 		isHidden = null;
 		isExcluded = null;
 		sync = null;
 		canEdit = null;
 		canAdd = null;
-		info = null;
 		min = null;
 		max = null;
 	}
@@ -93,12 +104,13 @@ public final class ConfigData
 	public void setFrom(ConfigData from)
 	{
 		if(from == null) return;
+		info = from.info;
+		type = from.type;
 		isHidden = from.isHidden;
 		isExcluded = from.isExcluded;
 		sync = from.sync;
 		canEdit = from.canEdit;
 		canAdd = from.canAdd;
-		info = from.info;
 		min = from.min;
 		max = from.max;
 	}
@@ -109,8 +121,9 @@ public final class ConfigData
 		
 		byte flags2 = 0;
 		flags2 = Bits.setBit(flags2, (byte) 0, info != null && info.length > 0);
-		flags2 = Bits.setBit(flags2, (byte) 1, min != null);
-		flags2 = Bits.setBit(flags2, (byte) 2, max != null);
+		flags2 = Bits.setBit(flags2, (byte) 1, type != null);
+		flags2 = Bits.setBit(flags2, (byte) 2, min != null);
+		flags2 = Bits.setBit(flags2, (byte) 3, max != null);
 		io.writeByte(flags2);
 		
 		if(info != null && info.length > 0)
@@ -120,6 +133,7 @@ public final class ConfigData
 				io.writeUTF(info[i]);
 		}
 		
+		if(type != null) io.writeByte(type.ordinal());
 		if(min != null) io.writeDouble(min.doubleValue());
 		if(max != null) io.writeDouble(max.doubleValue());
 	}
@@ -137,8 +151,9 @@ public final class ConfigData
 				info[i] = io.readUTF();
 		}
 		
-		if(Bits.getBit(flags2, (byte) 1)) min = io.readDouble();
-		if(Bits.getBit(flags2, (byte) 2)) max = io.readDouble();
+		if(Bits.getBit(flags2, (byte) 1)) type = PrimitiveType.VALUES[io.readUnsignedByte()];
+		if(Bits.getBit(flags2, (byte) 2)) min = io.readDouble();
+		if(Bits.getBit(flags2, (byte) 3)) max = io.readDouble();
 	}
 	
 	public interface Container
@@ -182,37 +197,43 @@ public final class ConfigData
 				
 				for(Annotation a : annotations)
 				{
-					if(a instanceof Info)
+					Class<?> c = a.annotationType();
+					
+					if(c == Info.class)
 					{
 						data.info = ((Info) a).value();
 					}
-					else if(a instanceof Hidden)
+					else if(c == Hidden.class)
 					{
 						data.isHidden = ((Hidden) a).value();
 					}
-					else if(a instanceof Excluded)
+					else if(c == Excluded.class)
 					{
 						data.isExcluded = ((Excluded) a).value();
 					}
-					else if(a instanceof Sync)
+					else if(c == Sync.class)
 					{
 						data.sync = ((Sync) a).value();
 					}
-					else if(a instanceof CanEdit)
+					else if(c == CanEdit.class)
 					{
 						data.canEdit = ((CanEdit) a).value();
 					}
-					else if(a instanceof CanAdd)
+					else if(c == CanAdd.class)
 					{
 						data.canAdd = ((CanAdd) a).value();
 					}
-					else if(a instanceof MinValue)
+					else if(c == MinValue.class)
 					{
 						data.min = ((MinValue) a).value();
 					}
-					else if(a instanceof MaxValue)
+					else if(c == MaxValue.class)
 					{
 						data.max = ((MaxValue) a).value();
+					}
+					else if(c == ConfigType.class)
+					{
+						data.type = ((ConfigType) a).value();
 					}
 				}
 				

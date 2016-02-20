@@ -62,10 +62,6 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public String getDefValue() { return getAsString(); }
 	
-	public String getMinValue() { return null; }
-	
-	public String getMaxValue() { return null; }
-	
 	public ConfigEntry clone()
 	{
 		ConfigEntry e = ConfigEntry.getEntry(getType(), ID);

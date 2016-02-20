@@ -62,18 +62,4 @@ public class ConfigEntryDouble extends ConfigEntry
 	
 	public String getDefValue()
 	{ return Double.toString(defValue); }
-	
-	public String getMinValue()
-	{
-		double val = configData.min();
-		if(val == Double.NEGATIVE_INFINITY) return null;
-		return MathHelperLM.formatDouble(val);
-	}
-	
-	public String getMaxValue()
-	{
-		double val = configData.max();
-		if(val == Double.POSITIVE_INFINITY) return null;
-		return MathHelperLM.formatDouble(val);
-	}
 }

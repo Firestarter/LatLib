@@ -1,6 +1,6 @@
 package latmod.lib.util;
 
-import latmod.lib.MathHelperLM;
+import latmod.lib.LMStringUtils;
 
 public class Pos2D implements Cloneable
 {
@@ -30,10 +30,10 @@ public class Pos2D implements Cloneable
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
-		sb.append(MathHelperLM.formatDouble(x));
+		sb.append(LMStringUtils.formatDouble(x));
 		sb.append(',');
 		sb.append(' ');
-		sb.append(MathHelperLM.formatDouble(y));
+		sb.append(LMStringUtils.formatDouble(y));
 		sb.append(']');
 		return sb.toString();
 	}

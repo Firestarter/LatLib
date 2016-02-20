@@ -236,18 +236,6 @@ public class MathHelperLM
 	public static VecLM getMidPoint(VecLM v1, VecLM v2, double p)
 	{ return getMidPoint(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, p); }
 	
-	public static String formatDouble(double d)
-	{
-		if(d == Double.POSITIVE_INFINITY) return "Inf";
-		else if(d == Double.NEGATIVE_INFINITY) return "Inf";
-		else if(d == Double.NaN) return "NaN";
-		
-		d = ((long) (d * 1000D)) / 1000D;
-		String s = String.valueOf(d);
-		if(s.endsWith(".0")) return s.substring(0, s.length() - 2);
-		return s;
-	}
-	
 	public static final int getRotations(double yaw, int max)
 	{ return floor((yaw * max / 360D) + 0.5D) & (max - 1); }
 	
