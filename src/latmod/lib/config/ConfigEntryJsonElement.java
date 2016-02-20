@@ -10,8 +10,6 @@ class ConfigEntryJsonElement extends ConfigEntry
 	ConfigEntryJsonElement(String id)
 	{
 		super(id);
-		setHidden();
-		setExcluded();
 	}
 	
 	public PrimitiveType getType()

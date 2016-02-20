@@ -27,14 +27,14 @@ public class UUIDTypeAdapterLM
 	
 	public static UUID getUUID(String s)
 	{
-		if(s == null || !(s.length() == 32 || s.length() == 28)) return null;
+		if(s == null || !(s.length() == 32 || s.length() == 36)) return null;
 		
 		try
 		{
 			if(s.indexOf('-') != -1) return UUID.fromString(s);
 			
 			int l = s.length();
-			StringBuilder sb = new StringBuilder(32);
+			StringBuilder sb = new StringBuilder(36);
 			for(int i = 0; i < l; i++)
 			{
 				sb.append(s.charAt(i));

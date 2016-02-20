@@ -2,25 +2,24 @@ package latmod.lib.config;
 
 import com.google.gson.*;
 import latmod.lib.*;
-import latmod.lib.util.DoubleBounds;
 
 public class ConfigEntryDouble extends ConfigEntry
 {
+	public double defValue;
 	private double value;
-	private DoubleBounds bounds;
 	
-	public ConfigEntryDouble(String id, DoubleBounds b)
+	public ConfigEntryDouble(String id, double d)
 	{
 		super(id);
-		bounds = (b == null) ? new DoubleBounds(0D) : b;
-		set(bounds.defValue);
+		defValue = d;
+		set(d);
 	}
 	
 	public PrimitiveType getType()
 	{ return PrimitiveType.DOUBLE; }
 	
 	public void set(double v)
-	{ value = bounds.getVal(v); }
+	{ value = configData.getDouble(v); }
 	
 	public double get()
 	{ return value; }
@@ -43,30 +42,13 @@ public class ConfigEntryDouble extends ConfigEntry
 	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
-		io.writeDouble(bounds.defValue);
-		io.writeDouble(bounds.minValue);
-		io.writeDouble(bounds.maxValue);
+		io.writeDouble(defValue);
 	}
 	
 	public void readExtended(ByteIOStream io)
 	{
 		read(io);
-		double def = io.readDouble();
-		double min = io.readDouble();
-		double max = io.readDouble();
-		bounds = new DoubleBounds(def, min, max);
-	}
-	
-	public String getMinValue()
-	{
-		if(bounds.minValue == Double.NEGATIVE_INFINITY) return null;
-		return MathHelperLM.formatDouble(bounds.minValue);
-	}
-	
-	public String getMaxValue()
-	{
-		if(bounds.minValue == Double.POSITIVE_INFINITY) return null;
-		return MathHelperLM.formatDouble(bounds.maxValue);
+		defValue = io.readDouble();
 	}
 	
 	public String getAsString()
@@ -79,5 +61,5 @@ public class ConfigEntryDouble extends ConfigEntry
 	{ return get(); }
 	
 	public String getDefValue()
-	{ return Double.toString(bounds.defValue); }
+	{ return Double.toString(defValue); }
 }

@@ -2,25 +2,24 @@ package latmod.lib.config;
 
 import com.google.gson.*;
 import latmod.lib.*;
-import latmod.lib.util.IntBounds;
 
 public class ConfigEntryInt extends ConfigEntry
 {
+	public int defValue;
 	private int value;
-	public IntBounds bounds;
 	
-	public ConfigEntryInt(String id, IntBounds b)
+	public ConfigEntryInt(String id, int def)
 	{
 		super(id);
-		bounds = (b == null) ? new IntBounds(0) : b;
-		set(bounds.defValue);
+		defValue = def;
+		set(def);
 	}
 	
 	public PrimitiveType getType()
 	{ return PrimitiveType.INT; }
 	
 	public void set(int v)
-	{ value = bounds.getVal(v); }
+	{ value = (int) configData.getDouble(v); }
 	
 	public int get()
 	{ return value; }
@@ -29,7 +28,7 @@ public class ConfigEntryInt extends ConfigEntry
 	{ set(get() + i); }
 	
 	public final void setJson(JsonElement o)
-	{ set((o == null || o.isJsonNull()) ? bounds.defValue : o.getAsInt()); }
+	{ set((o == null || o.isJsonNull()) ? defValue : o.getAsInt()); }
 	
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(get()); }
@@ -43,30 +42,13 @@ public class ConfigEntryInt extends ConfigEntry
 	public void writeExtended(ByteIOStream io)
 	{
 		write(io);
-		io.writeInt(bounds.defValue);
-		io.writeInt(bounds.minValue);
-		io.writeInt(bounds.maxValue);
+		io.writeInt(defValue);
 	}
 	
 	public void readExtended(ByteIOStream io)
 	{
 		read(io);
-		int def = io.readInt();
-		int min = io.readInt();
-		int max = io.readInt();
-		bounds = new IntBounds(def, min, max);
-	}
-	
-	public String getMinValue()
-	{
-		if(bounds.minValue == Integer.MIN_VALUE) return null;
-		else return Integer.toString(bounds.minValue);
-	}
-	
-	public String getMaxValue()
-	{
-		if(bounds.maxValue == Integer.MAX_VALUE) return null;
-		else return Integer.toString(bounds.maxValue);
+		defValue = io.readInt();
 	}
 	
 	public String getAsString()
@@ -82,5 +64,5 @@ public class ConfigEntryInt extends ConfigEntry
 	{ return get(); }
 	
 	public String getDefValue()
-	{ return Integer.toString(bounds.defValue); }
+	{ return Integer.toString(defValue); }
 }

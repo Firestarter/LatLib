@@ -2,50 +2,61 @@ package latmod.lib.config;
 
 import com.google.gson.JsonElement;
 import latmod.lib.*;
-import latmod.lib.util.IDObject;
 
 import java.io.File;
 
-public class ConfigFile extends IDObject implements IConfigFile
+public class ConfigFile extends ConfigGroup
 {
-	public final File file;
-	public final ConfigGroup configGroup;
+	private File file;
+	private String displayName;
 	
-	public ConfigFile(ConfigGroup group, File f)
+	public ConfigFile(String id)
 	{
-		super(group.ID);
-		configGroup = group;
-		configGroup.parentFile = this;
-		file = LMFileUtils.newFile(f);
+		super(id);
 	}
 	
-	public ConfigFile(String id, File f)
-	{ this(new ConfigGroup(id), f); }
+	public ConfigFile getConfigFile()
+	{ return this; }
 	
-	public final ConfigGroup getGroup()
-	{ return configGroup; }
+	public void setFile(File f)
+	{ file = LMFileUtils.newFile(f); }
 	
-	public final void add(ConfigEntry e)
-	{ if(e != null) configGroup.add(e, false); }
+	public File getFile()
+	{ return file; }
+	
+	public void setDisplayName(String s)
+	{ displayName = (s == null || s.isEmpty()) ? null : s; }
+	
+	public String getDisplayName()
+	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
 	
 	public void load()
 	{
 		JsonElement e = LMJsonUtils.fromJson(file);
+		
 		if(e.isJsonObject())
 		{
-			ConfigGroup g = new ConfigGroup("");
-			g.setJson(e);
-			configGroup.loadFromGroup(g);
-			save();
+			ConfigGroup g = new ConfigGroup(null);
+			g.setJson(e.getAsJsonObject());
+			loadFromGroup(g);
 		}
 	}
 	
 	public void save()
+	{ LMJsonUtils.toJson(file, getJson()); }
+	
+	public void writeExtended(ByteIOStream io)
 	{
-		try { LMFileUtils.save(file, toJsonString(true)); }
-		catch(Exception e) { e.printStackTrace(); }
+		super.writeExtended(io);
+		io.writeUTF(displayName);
 	}
 	
-	public final String toJsonString(boolean pretty)
-	{ return LMJsonUtils.toJson(LMJsonUtils.getGson(pretty), configGroup.getJson()); }
+	public void readExtended(ByteIOStream io)
+	{
+		super.readExtended(io);
+		displayName = io.readUTF();
+	}
+	
+	public void addGroup(String id, Class<?> c)
+	{ add(new ConfigGroup(id).addAll(c, null, false), false); }
 }

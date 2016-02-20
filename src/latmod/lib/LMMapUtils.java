@@ -165,4 +165,12 @@ public class LMMapUtils
 				map.put(ai[i * 2 + 0], ai[i * 2 + 1]);
 		}
 	}
+	
+	public static <K, V> Map<K, V> sortedMap(Map<K, V> map, Comparator<K> comparator)
+	{
+		LinkedHashMap<K, V> map1 = new LinkedHashMap<>();
+		
+		
+		return map1;
+	}
 }

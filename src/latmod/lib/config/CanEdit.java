@@ -7,7 +7,8 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface MinValue
+public @interface CanEdit
 {
-	double value();
+	boolean DEF_VALUE = true;
+	boolean value() default !DEF_VALUE;
 }

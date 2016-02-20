@@ -1,6 +1,6 @@
 package latmod.lib.config;
 
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 import latmod.lib.*;
 
 public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEntry
@@ -15,10 +15,10 @@ public class ConfigEntryBlank extends ConfigEntry implements IClickableConfigEnt
 	{ }
 	
 	public final JsonElement getJson()
-	{ return null; }
+	{ return JsonNull.INSTANCE; }
 	
 	public String getAsString()
-	{ return "edit"; }
+	{ return ". . ."; }
 	
 	public void write(ByteIOStream io)
 	{ }
