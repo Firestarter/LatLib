@@ -14,6 +14,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	{
 		super(id);
 		configData = new ConfigData();
+		configData.type = getType();
 	}
 	
 	public abstract PrimitiveType getType();
