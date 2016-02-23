@@ -22,16 +22,15 @@ public class Noise
 		
 	}
 	
-	private final Random perlinRandom;
 	private final float perlin[] = new float[4096];
 	private static final int perlin_TWOPI = 720;
 	private static final int perlin_PI = perlin_TWOPI >> 1;
 	
 	public Noise(Random r)
 	{
-		perlinRandom = (r == null ? new Random() : r);
+		if(r == null) r = new Random();
 		for(int i = 0; i < perlin.length; i++)
-			perlin[i] = perlinRandom.nextFloat();
+			perlin[i] = r.nextFloat();
 	}
 	
 	public Noise()

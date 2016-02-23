@@ -19,7 +19,7 @@ public class LMColorUtils
 			int j = (i >> 3 & 1) * 85;
 			int r = (i >> 2 & 1) * 170 + j;
 			int g = (i >> 1 & 1) * 170 + j;
-			int b = (i >> 0 & 1) * 170 + j;
+			int b = (i & 1) * 170 + j;
 			if(i == 6) r += 85;
 			chatFormattingColors[i] = getRGBA(r, g, b, 255);
 		}
@@ -35,7 +35,7 @@ public class LMColorUtils
 	}
 	
 	public static int getRGBA(int r, int g, int b, int a)
-	{ return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | ((b & 255) << 0); }
+	{ return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | ((b & 255)); }
 	
 	public static int getRGBAF(float r, float g, float b, float a)
 	{ return getRGBA((int) (r * 255F), (int) (g * 255F), (int) (b * 255F), (int) (a * 255F)); }
@@ -47,7 +47,7 @@ public class LMColorUtils
 	{ return (c >> 8) & 255; }
 	
 	public static int getBlue(int c)
-	{ return (c >> 0) & 255; }
+	{ return (c) & 255; }
 	
 	public static int getAlpha(int c)
 	{ return (c >> 24) & 255; }

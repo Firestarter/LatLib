@@ -5,7 +5,7 @@ import latmod.lib.*;
 import latmod.lib.json.IJsonObject;
 import latmod.lib.util.FinalIDObject;
 
-public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJsonObject, ConfigData.Container
+public abstract class ConfigEntry extends FinalIDObject implements IJsonObject, ConfigData.Container
 {
 	public final ConfigData configData;
 	public ConfigGroup parentGroup;
@@ -63,7 +63,7 @@ public abstract class ConfigEntry extends FinalIDObject implements Cloneable, IJ
 	
 	public String getDefValue() { return getAsString(); }
 	
-	public ConfigEntry clone()
+	public ConfigEntry copy()
 	{
 		ConfigEntry e = ConfigEntry.getEntry(getType(), ID);
 		e.setJson(getJson());

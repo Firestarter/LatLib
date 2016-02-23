@@ -5,7 +5,7 @@ import latmod.lib.json.IJsonObject;
 
 import java.util.*;
 
-public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
+public class IntList implements Iterable<Integer>, IJsonObject
 {
 	private int defVal = -1;
 	private int array[];
@@ -102,8 +102,7 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
 		if(key < 0 || key >= size) return defVal;
 		int rem = get(key);
 		size--;
-		for(int j = key; j < size; j++)
-			array[j] = array[j + 1];
+		System.arraycopy(array, key + 1, array, key, size - key);
 		return rem;
 	}
 	
@@ -179,7 +178,7 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
 	public Iterator<Integer> iterator()
 	{ return new IntIterator(array); }
 	
-	public IntList clone()
+	public IntList copy()
 	{
 		IntList l = new IntList(size);
 		System.arraycopy(array, 0, l.array, 0, size);
@@ -217,6 +216,6 @@ public class IntList implements Iterable<Integer>, Cloneable, IJsonObject
 		{ return pos < values.length; }
 		
 		public Integer next()
-		{ return Integer.valueOf(values[++pos]); }
+		{ return values[++pos]; }
 	}
 }

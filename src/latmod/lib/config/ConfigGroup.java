@@ -31,7 +31,7 @@ public class ConfigGroup extends ConfigEntry
 		{
 			if(copy)
 			{
-				ConfigEntry e1 = e.clone();
+				ConfigEntry e1 = e.copy();
 				entryMap.put(e1.ID, e1);
 				e1.parentGroup = this;
 			}
@@ -51,17 +51,17 @@ public class ConfigGroup extends ConfigEntry
 		{
 			Field f[] = c.getDeclaredFields();
 			
-			if(f != null && f.length > 0) for(int i = 0; i < f.length; i++)
+			if(f != null && f.length > 0) for(Field aF : f)
 			{
 				try
 				{
-					f[i].setAccessible(true);
-					if(ConfigEntry.class.isAssignableFrom(f[i].getType()))
+					aF.setAccessible(true);
+					if(ConfigEntry.class.isAssignableFrom(aF.getType()))
 					{
-						ConfigEntry entry = (ConfigEntry) f[i].get(parent);
+						ConfigEntry entry = (ConfigEntry) aF.get(parent);
 						if(entry != null && entry != this && !(entry instanceof ConfigFile))
 						{
-							ConfigData.inject(f[i], parent, entry);
+							ConfigData.inject(aF, parent, entry);
 							add(entry, copy);
 						}
 					}
@@ -77,7 +77,7 @@ public class ConfigGroup extends ConfigEntry
 		return this;
 	}
 	
-	public ConfigEntry clone()
+	public ConfigEntry copy()
 	{
 		ConfigGroup g = new ConfigGroup(ID);
 		for(ConfigEntry e : entryMap.values())

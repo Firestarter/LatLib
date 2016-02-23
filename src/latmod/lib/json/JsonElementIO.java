@@ -87,13 +87,13 @@ public class JsonElementIO
 		else if(id == ID_P_BOOL) return new JsonPrimitive(io.readBoolean());
 		else
 		{
-			Number n = new Integer(0);
-			if(id == ID_P_BYTE) n = Byte.valueOf(io.readByte());
-			else if(id == ID_P_SHORT) n = Short.valueOf(io.readShort());
-			else if(id == ID_P_INT) n = Integer.valueOf(io.readInt());
-			else if(id == ID_P_LONG) n = Long.valueOf(io.readLong());
-			else if(id == ID_P_FLOAT) n = Float.valueOf(io.readFloat());
-			else if(id == ID_P_DOUBLE) n = Double.valueOf(io.readDouble());
+			Number n = 0;
+			if(id == ID_P_BYTE) n = io.readByte();
+			else if(id == ID_P_SHORT) n = io.readShort();
+			else if(id == ID_P_INT) n = io.readInt();
+			else if(id == ID_P_LONG) n = io.readLong();
+			else if(id == ID_P_FLOAT) n = io.readFloat();
+			else if(id == ID_P_DOUBLE) n = io.readDouble();
 			return new JsonPrimitive(n);
 		}
 	}

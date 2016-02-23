@@ -13,7 +13,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		super(id);
 		value = new IntList();
 		set(def);
-		defValue = def == null ? new IntList() : def.clone();
+		defValue = def == null ? new IntList() : def.copy();
 	}
 	
 	public PrimitiveType getType()
@@ -37,7 +37,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		value.clear();
 		for(int i = 0; i < a.size(); i++)
 			value.add(a.get(i).getAsInt());
-		set(value.clone());
+		set(value.copy());
 	}
 	
 	public final JsonElement getJson()
@@ -63,7 +63,7 @@ public class ConfigEntryIntArray extends ConfigEntry
 		int s = io.readUnsignedShort();
 		for(int i = 0; i < s; i++)
 			value.add(io.readInt());
-		set(value.clone());
+		set(value.copy());
 	}
 	
 	public void writeExtended(ByteIOStream io)

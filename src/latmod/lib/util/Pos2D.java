@@ -2,7 +2,7 @@ package latmod.lib.util;
 
 import latmod.lib.LMStringUtils;
 
-public class Pos2D implements Cloneable
+public class Pos2D
 {
 	public double x, y;
 	
@@ -27,20 +27,11 @@ public class Pos2D implements Cloneable
 	{ return o.x == x && o.y == y; }
 	
 	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append('[');
-		sb.append(LMStringUtils.formatDouble(x));
-		sb.append(',');
-		sb.append(' ');
-		sb.append(LMStringUtils.formatDouble(y));
-		sb.append(']');
-		return sb.toString();
-	}
+	{ return "[" + LMStringUtils.formatDouble(x) + ',' + ' ' + LMStringUtils.formatDouble(y) + ']'; }
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2D) o)); }
 	
-	public Pos2D clone()
+	public Pos2D copy()
 	{ return new Pos2D(x, y); }
 }

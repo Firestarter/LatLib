@@ -108,12 +108,12 @@ public class LMJsonUtils
 	{
 		JsonArray a1 = new JsonArray();
 		
-		for(int i = 0; i < a.length; i++)
+		for(JsonArray anA : a)
 		{
-			if(a[i] != null)
+			if(anA != null)
 			{
-				for(int j = 0; j < a[i].size(); j++)
-					a1.add(a[i].get(j));
+				for(int j = 0; j < anA.size(); j++)
+					a1.add(anA.get(j));
 			}
 		}
 		
@@ -127,8 +127,7 @@ public class LMJsonUtils
 		if(ai == null) return null;
 		JsonArray a = new JsonArray();
 		if(ai.length == 0) return a;
-		for(int i = 0; i < ai.length; i++)
-			a.add(new JsonPrimitive(ai[i]));
+		for(int anAi : ai) a.add(new JsonPrimitive(anAi));
 		return a;
 	}
 	
@@ -154,8 +153,7 @@ public class LMJsonUtils
 		if(ai == null) return null;
 		JsonArray a = new JsonArray();
 		if(ai.length == 0) return a;
-		for(int i = 0; i < ai.length; i++)
-			a.add(new JsonPrimitive(ai[i]));
+		for(Number anAi : ai) a.add(new JsonPrimitive(anAi));
 		return a;
 	}
 	
@@ -181,8 +179,7 @@ public class LMJsonUtils
 		if(ai == null) return null;
 		JsonArray a = new JsonArray();
 		if(ai.length == 0) return a;
-		for(int i = 0; i < ai.length; i++)
-			a.add(new JsonPrimitive(ai[i]));
+		for(String anAi : ai) a.add(new JsonPrimitive(anAi));
 		return a;
 	}
 	
@@ -201,11 +198,11 @@ public class LMJsonUtils
 	{
 		JsonObject o1 = new JsonObject();
 		
-		for(int i = 0; i < o.length; i++)
+		for(JsonObject anO : o)
 		{
-			if(o[i] != null)
+			if(anO != null)
 			{
-				for(Map.Entry<String, JsonElement> e : o[i].entrySet())
+				for(Map.Entry<String, JsonElement> e : anO.entrySet())
 					o1.add(e.getKey(), e.getValue());
 			}
 		}

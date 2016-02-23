@@ -3,7 +3,7 @@ package latmod.lib;
 /**
  * Created by LatvianModder on 08.01.2016.
  */
-public final class LMColor implements Cloneable
+public final class LMColor
 {
 	private int color;
 	private int red, green, blue;
@@ -75,7 +75,7 @@ public final class LMColor implements Cloneable
 	public boolean equals(Object o)
 	{ return ((LMColor) o).color == color; }
 	
-	public LMColor clone()
+	public LMColor copy()
 	{
 		LMColor col = new LMColor();
 		col.set(this);

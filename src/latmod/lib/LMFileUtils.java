@@ -31,9 +31,8 @@ public class LMFileUtils
 	
 	private static File getFolder()
 	{
-		File f = new File(System.getProperty("user.home"), "/LatMod/");
 		//if(!f.exists()) f.mkdirs();
-		return f;
+		return new File(System.getProperty("user.home"), "/LatMod/");
 	}
 	
 	public static File newFile(File f)
@@ -110,8 +109,7 @@ public class LMFileUtils
 			
 			if(fl != null && fl.length > 0)
 			{
-				for(int i = 0; i < fl.length; i++)
-					addAllFiles(l, fl[i]);
+				for(File aFl : fl) addAllFiles(l, aFl);
 			}
 		}
 		else if(f.isFile()) l.add(f);
@@ -125,8 +123,7 @@ public class LMFileUtils
 		{
 			long length = 0L;
 			File[] f1 = f.listFiles();
-			if(f1 != null && f1.length > 0) for(int i = 0; i < f1.length; i++)
-				length += getSize(f1[i]);
+			if(f1 != null && f1.length > 0) for(File aF1 : f1) length += getSize(aF1);
 			return length;
 		}
 		return 0L;
@@ -200,8 +197,7 @@ public class LMFileUtils
 		if(f == null || !f.exists()) return false;
 		if(f.isFile()) return f.delete();
 		String[] files = f.list();
-		for(int i = 0; i < files.length; i++)
-			delete(new File(f, files[i]));
+		for(String file : files) delete(new File(f, file));
 		return f.delete();
 	}
 	

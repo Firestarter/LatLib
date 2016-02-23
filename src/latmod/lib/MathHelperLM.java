@@ -224,7 +224,7 @@ public class MathHelperLM
 	public static int mapInt(int val, int min1, int max1, int min2, int max2)
 	{ return min2 + (max2 - min2) * ((val - min1) / (max1 - min1)); }
 	
-	public static final VecLM getMidPoint(double x1, double y1, double z1, double x2, double y2, double z2, double p)
+	public static VecLM getMidPoint(double x1, double y1, double z1, double x2, double y2, double z2, double p)
 	{
 		double x = x2 - x1;
 		double y = y2 - y1;
@@ -236,10 +236,10 @@ public class MathHelperLM
 	public static VecLM getMidPoint(VecLM v1, VecLM v2, double p)
 	{ return getMidPoint(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z, p); }
 	
-	public static final int getRotations(double yaw, int max)
+	public static int getRotations(double yaw, int max)
 	{ return floor((yaw * max / 360D) + 0.5D) & (max - 1); }
 	
-	public static final int getRotYaw(int rot)
+	public static int getRotYaw(int rot)
 	{
 		if(rot == 2) return 180;
 		else if(rot == 3) return 0;
@@ -248,7 +248,7 @@ public class MathHelperLM
 		return 0;
 	}
 	
-	public static final int getRotPitch(int rot)
+	public static int getRotPitch(int rot)
 	{
 		if(rot == 0) return 90;
 		else if(rot == 1) return -90;
@@ -261,29 +261,7 @@ public class MathHelperLM
 	public static int percent(double d, double max)
 	{ return (int) (d / max * 100D); }
 	
-	public static Number min(Number... v)
-	{
-		if(v == null || v.length == 0) return 0;
-		Number m = v[0];
-		
-		for(int i = 0; i < v.length; i++)
-			if(v[i].doubleValue() < m.doubleValue()) m = v[i];
-		
-		return m;
-	}
-	
-	public static Number max(Number... v)
-	{
-		if(v == null || v.length == 0) return 0;
-		Number m = v[0];
-		
-		for(int i = 0; i < v.length; i++)
-			if(v[i].doubleValue() > m.doubleValue()) m = v[i];
-		
-		return m;
-	}
-	
-	public static final int[] flip(int[] i)
+	public static int[] flip(int[] i)
 	{
 		if(i == null) return null;
 		int ai[] = new int[i.length];
@@ -292,7 +270,7 @@ public class MathHelperLM
 		return ai;
 	}
 	
-	public static final int[] getAllInts(int min, int size)
+	public static int[] getAllInts(int min, int size)
 	{
 		int[] ai = new int[size];
 		for(int i = 0; i < size; i++)

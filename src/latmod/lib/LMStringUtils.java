@@ -19,7 +19,7 @@ public class LMStringUtils
 	{
 		if(s == null || s.length == 0) return new String[0];
 		String[] s1 = new String[s.length - 1];
-		for(int i = 0; i < s1.length; i++) s1[i] = s[i + 1];
+		System.arraycopy(s, 1, s1, 0, s1.length);
 		return s1;
 	}
 	
@@ -35,8 +35,7 @@ public class LMStringUtils
 	{
 		ArrayList<String> al = new ArrayList<>();
 		String[] s1 = s.split(regex);
-		if(s1 != null && s1.length > 0) for(int i = 0; i < s1.length; i++)
-			al.add(s1[i].trim());
+		if(s1.length > 0) for(String aS1 : s1) al.add(aS1.trim());
 		return al;
 	}
 	
@@ -69,8 +68,7 @@ public class LMStringUtils
 		if(!isASCIIChar(c)) return false;
 		if(c >= '0' && c <= '9') return true;
 		if(c >= 'a' && c <= 'z') return true;
-		if(c >= 'A' && c <= 'Z') return true;
-		return !onlyAZ09 && (ALLOWED_TEXT_CHARS.indexOf(c) != -1);
+		return c >= 'A' && c <= 'Z' || !onlyAZ09 && (ALLOWED_TEXT_CHARS.indexOf(c) != -1);
 	}
 	
 	public static void replace(List<String> txt, String s, String s1)
@@ -244,10 +242,7 @@ public class LMStringUtils
 		if(s == null || s.length() == 0) return s;
 		char c = Character.toUpperCase(s.charAt(0));
 		if(s.length() == 1) return Character.toString(c);
-		StringBuilder sb = new StringBuilder();
-		sb.append(c);
-		sb.append(s.substring(1));
-		return sb.toString();
+		return String.valueOf(c) + s.substring(1);
 	}
 	
 	public static boolean areStringsEqual(String s0, String s1)
@@ -255,8 +250,7 @@ public class LMStringUtils
 		if(s0 == null && s1 == null) return true;
 		if(s0 == null || s1 == null) return false;
 		if(s0.length() != s1.length()) return false;
-		if(s0.isEmpty() && s1.isEmpty()) return true;
-		return s0.equals(s1);
+		return s0.isEmpty() && s1.isEmpty() || s0.equals(s1);
 	}
 	
 	public static String fillString(String s, char fill, int length)
@@ -277,8 +271,7 @@ public class LMStringUtils
 	public static boolean contains(String[] s, String s1)
 	{
 		if(s == null || s1 == null || s.length == 0) return false;
-		for(int i = 0; i < s.length; i++)
-			if(s[i] != null && (s[i] == s1 || s[i].equals(s1))) return true;
+		for(String value : s) if(value != null && (value == s1 || value.equals(s1))) return true;
 		return false;
 	}
 	

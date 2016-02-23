@@ -39,7 +39,7 @@ public class Converter
 		if(i == null) return null;
 		Integer ai[] = new Integer[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = Integer.valueOf(i[j]);
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -48,7 +48,7 @@ public class Converter
 		if(i == null) return null;
 		int ai[] = new int[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = i[j].intValue();
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -57,7 +57,7 @@ public class Converter
 		if(i == null) return null;
 		Float ai[] = new Float[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = Float.valueOf(i[j]);
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -66,7 +66,7 @@ public class Converter
 		if(i == null) return null;
 		float ai[] = new float[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = i[j].floatValue();
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -75,7 +75,7 @@ public class Converter
 		if(i == null) return null;
 		Double ai[] = new Double[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = Double.valueOf(i[j]);
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -84,7 +84,7 @@ public class Converter
 		if(i == null) return null;
 		double ai[] = new double[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = i[j].doubleValue();
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -93,7 +93,7 @@ public class Converter
 		if(i == null) return null;
 		Byte ai[] = new Byte[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = Byte.valueOf(i[j]);
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -102,7 +102,7 @@ public class Converter
 		if(i == null) return null;
 		byte ai[] = new byte[i.length];
 		for(int j = 0; j < ai.length; j++)
-			ai[j] = i[j].byteValue();
+			ai[j] = i[j];
 		return ai;
 	}
 	
@@ -164,16 +164,15 @@ public class Converter
 	{
 		try
 		{
-			int i = Integer.parseInt(text);
-			return i;
+			return Integer.parseInt(text);
 		}
 		catch(Exception e) { }
 		return def;
 	}
 	
 	public static int nonNull(Integer i)
-	{ return (i == null) ? 0 : i.intValue(); }
+	{ return (i == null) ? 0 : i; }
 	
 	public static double nonNull(Double d)
-	{ return (d == null) ? 0D : d.doubleValue(); }
+	{ return (d == null) ? 0D : d; }
 }

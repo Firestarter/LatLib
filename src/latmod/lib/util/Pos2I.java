@@ -1,6 +1,6 @@
 package latmod.lib.util;
 
-public class Pos2I implements Cloneable
+public class Pos2I
 {
 	public int x, y;
 	
@@ -25,20 +25,11 @@ public class Pos2I implements Cloneable
 	{ return o.x == x && o.y == y; }
 	
 	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append('[');
-		sb.append(x);
-		sb.append(',');
-		sb.append(' ');
-		sb.append(y);
-		sb.append(']');
-		return sb.toString();
-	}
+	{ return "[" + x + ',' + ' ' + y + ']'; }
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2I) o)); }
 	
-	public Pos2I clone()
+	public Pos2I copy()
 	{ return new Pos2I(x, y); }
 }

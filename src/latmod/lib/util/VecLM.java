@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Made by LatvianModder
  */
-public final class VecLM implements Cloneable
+public final class VecLM
 {
 	public double x;
 	public double y;
@@ -73,7 +73,7 @@ public final class VecLM implements Cloneable
 	public boolean equalsPos(VecLM v)
 	{ return v.x == x && v.y == y && v.z == z; }
 	
-	public VecLM clone()
+	public VecLM copy()
 	{ return new VecLM(x, y, z); }
 	
 	public double distSq(double x1, double y1, double z1)

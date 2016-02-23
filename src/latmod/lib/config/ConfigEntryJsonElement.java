@@ -52,7 +52,7 @@ class ConfigEntryJsonElement extends ConfigEntry
 	}
 	
 	public boolean getAsBoolean()
-	{ return isNull() ? false : value.getAsBoolean(); }
+	{ return !isNull() && value.getAsBoolean(); }
 	
 	public int getAsInt()
 	{ return isNull() ? 0 : value.getAsInt(); }

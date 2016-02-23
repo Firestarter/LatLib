@@ -122,12 +122,12 @@ public class LMListUtils
 		return list1;
 	}
 	
+	//TODO: Remove me
 	public static <E> void addAll(Collection<E> c, E[] e)
 	{
 		if(c != null && e != null && e.length > 0)
 		{
-			for(int i = 0; i < e.length; i++)
-				c.add(e[i]);
+			Collections.addAll(c, e);
 		}
 	}
 	

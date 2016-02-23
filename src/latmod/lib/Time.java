@@ -114,13 +114,7 @@ public final class Time implements Comparable<Time>, IJsonGet
 	}
 	
 	public String getDateAndTime()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(getDate());
-		sb.append(' ');
-		sb.append(getTime());
-		return sb.toString();
-	}
+	{ return getDate() + ' ' + getTime(); }
 	
 	public long getDelta()
 	{ return Math.abs(now().millis - millis); }

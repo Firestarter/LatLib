@@ -38,19 +38,19 @@ public final class ConfigData
 	}
 	
 	public boolean isHidden()
-	{ return isHidden == null ? Hidden.DEF_VALUE : isHidden.booleanValue(); }
+	{ return isHidden == null ? Hidden.DEF_VALUE : isHidden; }
 	
 	public boolean isExcluded()
-	{ return isExcluded == null ? Excluded.DEF_VALUE : isExcluded.booleanValue(); }
+	{ return isExcluded == null ? Excluded.DEF_VALUE : isExcluded; }
 	
 	public boolean sync()
-	{ return sync == null ? Sync.DEF_VALUE : sync.booleanValue(); }
+	{ return sync == null ? Sync.DEF_VALUE : sync; }
 	
 	public boolean canEdit()
-	{ return canEdit == null ? CanEdit.DEF_VALUE : canEdit.booleanValue(); }
+	{ return canEdit == null ? CanEdit.DEF_VALUE : canEdit; }
 	
 	public boolean canAdd()
-	{ return canAdd == null ? CanAdd.DEF_VALUE : canAdd.booleanValue(); }
+	{ return canAdd == null ? CanAdd.DEF_VALUE : canAdd; }
 	
 	public double min()
 	{ return min == null ? Double.NEGATIVE_INFINITY : min; }
@@ -129,13 +129,12 @@ public final class ConfigData
 		if(info != null && info.length > 0)
 		{
 			io.writeByte(info.length);
-			for(int i = 0; i < info.length; i++)
-				io.writeUTF(info[i]);
+			for(String anInfo : info) io.writeUTF(anInfo);
 		}
 		
 		if(type != null) io.writeByte(type.ordinal());
-		if(min != null) io.writeDouble(min.doubleValue());
-		if(max != null) io.writeDouble(max.doubleValue());
+		if(min != null) io.writeDouble(min);
+		if(max != null) io.writeDouble(max);
 	}
 	
 	public void read(ByteIOStream io)

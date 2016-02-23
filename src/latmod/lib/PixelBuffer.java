@@ -90,7 +90,7 @@ public class PixelBuffer
 	public int hashCode()
 	{ return LMUtils.hashCode(width, height, pixels); }
 	
-	public PixelBuffer clone()
+	public PixelBuffer copy()
 	{
 		PixelBuffer b = new PixelBuffer(width, height);
 		System.arraycopy(pixels, 0, b.pixels, 0, pixels.length);

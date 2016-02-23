@@ -146,8 +146,8 @@ public class LMMapUtils
 		int i = 0;
 		for(Map.Entry<Integer, Integer> e : map.entrySet())
 		{
-			ai[i * 2 + 0] = e.getKey().intValue();
-			ai[i * 2 + 1] = e.getValue().intValue();
+			ai[i * 2] = e.getKey();
+			ai[i * 2 + 1] = e.getValue();
 			i++;
 		}
 		
@@ -162,15 +162,14 @@ public class LMMapUtils
 		{
 			int s = ai.length / 2;
 			for(int i = 0; i < s; i++)
-				map.put(ai[i * 2 + 0], ai[i * 2 + 1]);
+				map.put(ai[i * 2], ai[i * 2 + 1]);
 		}
 	}
 	
 	public static <K, V> Map<K, V> sortedMap(Map<K, V> map, Comparator<K> comparator)
 	{
 		LinkedHashMap<K, V> map1 = new LinkedHashMap<>();
-		
-		
+		//FIXME: Sorted map
 		return map1;
 	}
 }

@@ -17,9 +17,9 @@ public class EnumSerializerLM
 			String id = e.getAsString();
 			Object[] o = type.getEnumConstants();
 			
-			for(int i = 0; i < o.length; i++)
+			for(Object anO : o)
 			{
-				if(lowerCaseName(o[i]).equals(id)) return (E) o[i];
+				if(lowerCaseName(anO).equals(id)) return (E) anO;
 			}
 		}
 		return null;

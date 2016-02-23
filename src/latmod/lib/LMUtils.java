@@ -54,8 +54,7 @@ public class LMUtils
 		if(al == null) al = new ArrayList<>();
 		ArrayList<Class<?>> al1 = new ArrayList<>();
 		LMListUtils.addAll(al1, c.getDeclaredClasses());
-		if(all && !al1.isEmpty()) for(int i = 0; i < al1.size(); i++)
-			al.addAll(addSubclasses(al1.get(i), null, true));
+		if(all && !al1.isEmpty()) for(Class<?> anAl1 : al1) al.addAll(addSubclasses(anAl1, null, true));
 		al.addAll(al1);
 		return al;
 	}
@@ -63,8 +62,7 @@ public class LMUtils
 	public static boolean areObjectsEqual(Object o1, Object o2, boolean allowNulls)
 	{
 		if(o1 == null && o2 == null) return allowNulls;
-		if(o1 == null || o2 == null) return false;
-		return o1 == o2 || o1.equals(o2);
+		return !(o1 == null || o2 == null) && (o1 == o2 || o1.equals(o2));
 	}
 	
 	public static int hashCodeOf(Object o)
@@ -75,8 +73,7 @@ public class LMUtils
 		if(o == null || o.length == 0) return 0;
 		if(o.length == 1) return hashCodeOf(o[0]);
 		int h = 0;
-		for(int i = 0; i < o.length; i++)
-			h = h * 31 + hashCodeOf(o[i]);
+		for(Object anO : o) h = h * 31 + hashCodeOf(anO);
 		return h;
 	}
 	
@@ -85,8 +82,7 @@ public class LMUtils
 		if(o == null || o.length == 0) return 0;
 		if(o.length == 1) return hashCodeOf(o[0]);
 		long h = 0L;
-		for(int i = 0; i < o.length; i++)
-			h = h * 31L + hashCodeOf(o[i]);
+		for(Object anO : o) h = h * 31L + hashCodeOf(anO);
 		return h;
 	}
 	
@@ -114,8 +110,8 @@ public class LMUtils
 	public static boolean openURI(URI uri) throws Exception
 	{
 		Class<?> oclass = Class.forName("java.awt.Desktop");
-		Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
-		oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
+		Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
+		oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, uri);
 		return true;
 	}
 	
@@ -149,7 +145,7 @@ public class LMUtils
 		return t;
 	}
 	
-	public static final String getID(Object o)
+	public static String getID(Object o)
 	{
 		if(o == null) return null;
 		else if(o instanceof FinalIDObject) return ((FinalIDObject) o).ID;

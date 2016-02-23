@@ -79,18 +79,12 @@ public final class ByteIOStream implements DataInput, DataOutput
 	public String toString(boolean compressed)
 	{
 		byte[] b = compressed ? toCompressedByteArray() : toByteArray();
-		StringBuilder sb = new StringBuilder();
-		sb.append("[ (");
-		sb.append(b.length);
-		sb.append(") ");
-		sb.append(LMStringUtils.stripB(b));
-		sb.append(" ]");
-		return sb.toString();
+		return "[ (" + b.length + ") " + LMStringUtils.stripB(b) + " ]";
 	}
 	
 	public OutputStream createOutputStream()
 	{
-		OutputStream os = new OutputStream()
+		return new OutputStream()
 		{
 			public void write(int b) throws IOException
 			{ ByteIOStream.this.write(b); }
@@ -98,13 +92,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 			public void write(byte b[], int off, int len) throws IOException
 			{ ByteIOStream.this.write(b, off, len); }
 		};
-		
-		return os;
 	}
 	
 	public InputStream createInputStream()
 	{
-		InputStream is = new InputStream()
+		return new InputStream()
 		{
 			public int read() throws IOException
 			{ return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte(); }
@@ -118,8 +110,6 @@ public final class ByteIOStream implements DataInput, DataOutput
 			public int available()
 			{ return ByteIOStream.this.available(); }
 		};
-		
-		return is;
 	}
 	
 	// Read functions //
@@ -211,7 +201,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 					c3 = (int) bytes[c1 + pos0 - 1];
 					if(((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
 						throwUTFException("malformed input around byte " + (c1 - 1));
-					utf_chars[cac++] = (char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F) << 0));
+					utf_chars[cac++] = (char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F)));
 					break;
 				default:
 					throwUTFException("malformed input around byte " + c1);
@@ -359,12 +349,12 @@ public final class ByteIOStream implements DataInput, DataOutput
 			{
 				writeByte(0xE0 | ((c >> 12) & 0x0F));
 				writeByte(0x80 | ((c >> 6) & 0x3F));
-				writeByte(0x80 | ((c >> 0) & 0x3F));
+				writeByte(0x80 | ((c) & 0x3F));
 			}
 			else
 			{
 				writeByte(0xC0 | ((c >> 6) & 0x1F));
-				writeByte(0x80 | ((c >> 0) & 0x3F));
+				writeByte(0x80 | ((c) & 0x3F));
 			}
 		}
 	}

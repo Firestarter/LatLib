@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ConfigEntryStringArray extends ConfigEntry
 {
-	public final ArrayList<String> defValue;
+	public final List<String> defValue;
 	private List<String> value;
 	
 	public ConfigEntryStringArray(String id, List<String> def)
@@ -20,7 +20,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	}
 	
 	public ConfigEntryStringArray(String id, String... def)
-	{ this(id, (def == null || def.length == 0) ? Collections.EMPTY_LIST : Arrays.asList(def)); }
+	{ this(id, (def == null || def.length == 0) ? new ArrayList<String>() : Arrays.asList(def)); }
 	
 	public PrimitiveType getType()
 	{ return PrimitiveType.STRING_ARRAY; }
@@ -47,8 +47,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	{
 		JsonArray a = new JsonArray();
 		value = get();
-		for(int i = 0; i < value.size(); i++)
-			a.add(new JsonPrimitive(value.get(i)));
+		for(String aValue : value) a.add(new JsonPrimitive(aValue));
 		return a;
 	}
 	
@@ -56,8 +55,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	{
 		value = get();
 		io.writeShort(value.size());
-		for(int i = 0; i < value.size(); i++)
-			io.writeUTF(value.get(i));
+		for(String aValue : value) io.writeUTF(aValue);
 	}
 	
 	public void read(ByteIOStream io)
@@ -73,8 +71,7 @@ public class ConfigEntryStringArray extends ConfigEntry
 	{
 		write(io);
 		io.writeShort(defValue.size());
-		for(int i = 0; i < defValue.size(); i++)
-			io.writeUTF(defValue.get(i));
+		for(String aDefValue : defValue) io.writeUTF(aDefValue);
 	}
 	
 	public void readExtended(ByteIOStream io)

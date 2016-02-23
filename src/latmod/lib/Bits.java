@@ -94,23 +94,23 @@ public class Bits
 	
 	public static int toUShort(byte[] b, int off)
 	{
-		int ch1 = b[off + 0] & FF;
+		int ch1 = b[off] & FF;
 		int ch2 = b[off + 1] & FF;
-		return (ch1 << 8) + (ch2 << 0);
+		return (ch1 << 8) + (ch2);
 	}
 	
 	public static int toInt(byte[] b, int off)
 	{
-		int ch1 = b[off + 0] & FF;
+		int ch1 = b[off] & FF;
 		int ch2 = b[off + 1] & FF;
 		int ch3 = b[off + 2] & FF;
 		int ch4 = b[off + 3] & FF;
-		return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0);
+		return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4);
 	}
 	
 	public static long toLong(byte[] b, int off)
 	{
-		return (((long) b[off + 0] << 56) + ((long) (b[off + 1] & FF) << 48) + ((long) (b[off + 2] & FF) << 40) + ((long) (b[off + 3] & FF) << 32) + ((long) (b[off + 4] & FF) << 24) + ((b[off + 5] & FF) << 16) + ((b[off + 6] & FF) << 8) + ((b[off + 7] & FF) << 0));
+		return (((long) b[off] << 56) + ((long) (b[off + 1] & FF) << 48) + ((long) (b[off + 2] & FF) << 40) + ((long) (b[off + 3] & FF) << 32) + ((long) (b[off + 4] & FF) << 24) + ((b[off + 5] & FF) << 16) + ((b[off + 6] & FF) << 8) + ((b[off + 7] & FF)));
 	}
 	
 	public static UUID toUUID(byte[] b, int off)
@@ -124,28 +124,28 @@ public class Bits
 	
 	public static void fromUShort(byte[] b, int off, int v)
 	{
-		b[off + 0] = (byte) (v >>> 8);
-		b[off + 1] = (byte) (v >>> 0);
+		b[off] = (byte) (v >>> 8);
+		b[off + 1] = (byte) (v);
 	}
 	
 	public static void fromInt(byte[] b, int off, int v)
 	{
-		b[off + 0] = (byte) (v >>> 24);
+		b[off] = (byte) (v >>> 24);
 		b[off + 1] = (byte) (v >>> 16);
 		b[off + 2] = (byte) (v >>> 8);
-		b[off + 3] = (byte) (v >>> 0);
+		b[off + 3] = (byte) (v);
 	}
 	
 	public static void fromLong(byte[] b, int off, long v)
 	{
-		b[off + 0] = (byte) (v >>> 56);
+		b[off] = (byte) (v >>> 56);
 		b[off + 1] = (byte) (v >>> 48);
 		b[off + 2] = (byte) (v >>> 40);
 		b[off + 3] = (byte) (v >>> 32);
 		b[off + 4] = (byte) (v >>> 24);
 		b[off + 5] = (byte) (v >>> 16);
 		b[off + 6] = (byte) (v >>> 8);
-		b[off + 7] = (byte) (v >>> 0);
+		b[off + 7] = (byte) (v);
 	}
 	
 	public static void fromUUID(byte[] b, int off, UUID uuid)
