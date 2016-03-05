@@ -32,12 +32,12 @@ public class ConfigGroup extends ConfigEntry
 			if(copy)
 			{
 				ConfigEntry e1 = e.copy();
-				entryMap.put(e1.ID, e1);
+				entryMap.put(e1.getID(), e1);
 				e1.parentGroup = this;
 			}
 			else
 			{
-				entryMap.put(e.ID, e);
+				entryMap.put(e.getID(), e);
 				e.parentGroup = this;
 			}
 		}
@@ -79,7 +79,7 @@ public class ConfigGroup extends ConfigEntry
 	
 	public ConfigEntry copy()
 	{
-		ConfigGroup g = new ConfigGroup(ID);
+		ConfigGroup g = new ConfigGroup(getID());
 		for(ConfigEntry e : entryMap.values())
 			g.add(e, true);
 		return g;
@@ -116,7 +116,7 @@ public class ConfigGroup extends ConfigEntry
 			if(!e.configData.isExcluded())
 			{
 				e.onPreLoaded();
-				o.add(e.ID, e.getJson());
+				o.add(e.getID(), e.getJson());
 			}
 		}
 		
@@ -142,7 +142,7 @@ public class ConfigGroup extends ConfigEntry
 		{
 			e.onPreLoaded();
 			io.writeByte(e.getType().ordinal());
-			io.writeUTF(e.ID);
+			io.writeUTF(e.getID());
 			e.write(io);
 		}
 	}
@@ -168,7 +168,7 @@ public class ConfigGroup extends ConfigEntry
 		{
 			e.onPreLoaded();
 			io.writeByte(e.getType().ordinal());
-			io.writeUTF(e.ID);
+			io.writeUTF(e.getID());
 			e.configData.write(io);
 			e.writeExtended(io);
 		}
@@ -197,13 +197,13 @@ public class ConfigGroup extends ConfigEntry
 		
 		for(ConfigEntry e1 : l.entryMap.values())
 		{
-			ConfigEntry e0 = entryMap.get(e1.ID);
+			ConfigEntry e0 = entryMap.get(e1.getID());
 			
 			if(e0 != null)
 			{
 				if(e0.getAsGroup() != null)
 				{
-					ConfigGroup g1 = new ConfigGroup(e1.ID);
+					ConfigGroup g1 = new ConfigGroup(e1.getID());
 					g1.setJson(e1.getJson());
 					result += e0.getAsGroup().loadFromGroup(g1);
 				}
@@ -218,7 +218,7 @@ public class ConfigGroup extends ConfigEntry
 					}
 					catch(Exception ex)
 					{
-						System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.ID + "." + e0.ID + "' (type:" + e0.getType() + ")");
+						System.err.println("Can't set value " + e1.getJson() + " for '" + e0.parentGroup.getID() + "." + e0.getID() + "' (type:" + e0.getType() + ")");
 						System.err.println(ex.toString());
 					}
 				}
@@ -277,7 +277,7 @@ public class ConfigGroup extends ConfigEntry
 	
 	public ConfigGroup generateSynced(boolean copy)
 	{
-		ConfigGroup out = new ConfigGroup(ID);
+		ConfigGroup out = new ConfigGroup(getID());
 		
 		for(ConfigEntry e : entryMap.values())
 		{

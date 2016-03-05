@@ -41,18 +41,6 @@ public class LMMapUtils
 		return sb.toString();
 	}
 	
-	public static String[] toKeyStringArray(Map<?, ?> map)
-	{
-		if(map == null) return null;
-		return LMListUtils.toStringArray(map.keySet());
-	}
-	
-	public static String[] toValueStringArray(Map<?, ?> map)
-	{
-		if(map == null) return null;
-		return LMListUtils.toStringArray(map.values());
-	}
-	
 	public static Map<String, String> toStringMap(Map<?, ?> map)
 	{
 		if(map == null) return null;

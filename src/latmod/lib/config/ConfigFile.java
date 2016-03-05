@@ -28,7 +28,7 @@ public class ConfigFile extends ConfigGroup
 	{ displayName = (s == null || s.isEmpty()) ? null : s; }
 	
 	public String getDisplayName()
-	{ return displayName == null ? LMStringUtils.firstUppercase(ID) : displayName; }
+	{ return displayName == null ? LMStringUtils.firstUppercase(getID()) : displayName; }
 	
 	public void load()
 	{
@@ -36,7 +36,7 @@ public class ConfigFile extends ConfigGroup
 		
 		if(e.isJsonObject())
 		{
-			ConfigGroup g = new ConfigGroup(null);
+			ConfigGroup g = new ConfigGroup(getID());
 			g.setJson(e.getAsJsonObject());
 			loadFromGroup(g);
 		}

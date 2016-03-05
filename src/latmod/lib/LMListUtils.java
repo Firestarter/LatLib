@@ -43,6 +43,15 @@ public class LMListUtils
 		return s;
 	}
 	
+	public static List<String> toStringList(Collection<?> c)
+	{
+		if(c == null) return null;
+		List<String> list = new ArrayList<>(c.size());
+		if(c.isEmpty()) return list;
+		for(Object o : c) list.add(String.valueOf(o));
+		return list;
+	}
+	
 	public static int[] toHashCodeArray(Collection<?> c)
 	{
 		if(c == null) return null;

@@ -238,7 +238,7 @@ public final class ConfigData
 				
 				//System.out.println("Injected ConfigData into " + container.getClass().getName() + ", " + obj + ": " + data);
 				container.setConfigData(data);
-				return new MapEntry<>(obj, data);
+				return new AbstractMap.SimpleEntry<>(obj, data);
 			}
 		}
 		catch(Exception ex)

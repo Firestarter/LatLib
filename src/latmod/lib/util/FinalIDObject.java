@@ -1,13 +1,16 @@
 package latmod.lib.util;
 
-import latmod.lib.LMUtils;
+import latmod.lib.*;
 
-public class FinalIDObject implements Comparable<Object> // IDObject
+public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
 {
-	public final String ID;
+	private final String ID;
 	
 	public FinalIDObject(String id)
 	{ ID = id; }
+	
+	public final String getID()
+	{ return ID; }
 	
 	public String toString()
 	{ return ID; }

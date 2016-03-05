@@ -1,7 +1,5 @@
 package latmod.lib;
 
-import latmod.lib.util.*;
-
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.*;
@@ -14,10 +12,16 @@ public class LMUtils
 {
 	// Class / Object //
 	
-	private static final Comparator<Package> packageComparator = new Comparator<Package>()
+	public static final Comparator<Package> packageComparator = new Comparator<Package>()
 	{
 		public int compare(Package o1, Package o2)
-		{ return o1.getName().compareTo(o2.getName()); }
+		{ return o1.getName().compareToIgnoreCase(o2.getName()); }
+	};
+	
+	public static final Comparator<IIDObject> IDObjectComparator = new Comparator<IIDObject>()
+	{
+		public int compare(IIDObject o1, IIDObject o2)
+		{ return o1.getID().compareToIgnoreCase(o2.getID()); }
 	};
 	
 	@SuppressWarnings("all")
@@ -148,8 +152,13 @@ public class LMUtils
 	public static String getID(Object o)
 	{
 		if(o == null) return null;
-		else if(o instanceof FinalIDObject) return ((FinalIDObject) o).ID;
-		else if(o instanceof IDObject) return ((IDObject) o).ID;
+		else if(o instanceof IIDObject) return ((IIDObject) o).getID();
 		else return o.toString();
+	}
+	
+	public static <T> T nonNull(T t)
+	{
+		if(t == null) throw new NullPointerException();
+		return t;
 	}
 }

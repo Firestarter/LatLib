@@ -12,6 +12,12 @@ public class LMStringUtils
 	public static final String STRIP_SEP = ", ";
 	public static final String ALLOWED_TEXT_CHARS = "!@#$%^&*()_+ -=\\/,.<>?\'\"[]{}|;:`~";
 	
+	public static final Comparator<String> ignoreCaseComparator = new Comparator<String>()
+	{
+		public int compare(String o1, String o2)
+		{ return o1.compareToIgnoreCase(o2); }
+	};
+	
 	public static boolean isValid(String s)
 	{ return s != null && s.length() > 0; }
 	
@@ -117,6 +123,24 @@ public class LMStringUtils
 		{
 			sb.append(o[i]);
 			if(i != o.length - 1) sb.append(STRIP_SEP);
+		}
+		
+		return sb.toString();
+	}
+	
+	public static String strip(Collection<?> c)
+	{
+		if(c == null) return null;
+		if(c.isEmpty()) return "";
+		StringBuilder sb = new StringBuilder();
+		
+		int idx = -1;
+		int eidx = c.size() - 1;
+		for(Object o : c)
+		{
+			sb.append(o);
+			if(idx != eidx) sb.append(STRIP_SEP);
+			idx++;
 		}
 		
 		return sb.toString();

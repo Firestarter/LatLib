@@ -13,6 +13,8 @@ public abstract class ConfigEntry extends FinalIDObject implements IJsonObject, 
 	ConfigEntry(String id)
 	{
 		super(id);
+		if(id == null || id.isEmpty()) throw new NullPointerException("Config ID can't be null!");
+		
 		configData = new ConfigData();
 		configData.type = getType();
 	}
@@ -57,15 +59,15 @@ public abstract class ConfigEntry extends FinalIDObject implements IJsonObject, 
 	
 	public String getFullID()
 	{
-		if(parentGroup == null) return ID;
-		return parentGroup.getFullID() + '.' + ID;
+		if(parentGroup == null) return getID();
+		return parentGroup.getFullID() + '.' + getID();
 	}
 	
 	public String getDefValue() { return getAsString(); }
 	
 	public ConfigEntry copy()
 	{
-		ConfigEntry e = ConfigEntry.getEntry(getType(), ID);
+		ConfigEntry e = ConfigEntry.getEntry(getType(), getID());
 		e.setJson(getJson());
 		e.configData.setFrom(configData);
 		return e;
