@@ -7,7 +7,10 @@ public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
 	private final String ID;
 	
 	public FinalIDObject(String id)
-	{ ID = id; }
+	{
+		if(id == null || id.isEmpty()) throw new NullPointerException("ID can't be null!");
+		ID = id;
+	}
 	
 	public final String getID()
 	{ return ID; }
