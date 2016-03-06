@@ -44,8 +44,11 @@ public class IntList implements Iterable<Integer>, IJsonObject
 		}
 	}
 	
-	public void setDefVal(int value)
-	{ defVal = value; }
+	public IntList setDefVal(int value)
+	{
+		defVal = value;
+		return this;
+	}
 	
 	public void expand(int s)
 	{
@@ -89,6 +92,7 @@ public class IntList implements Iterable<Integer>, IJsonObject
 	
 	public int indexOf(int value)
 	{
+		if(size == 0) return -1;
 		for(int i = 0; i < size; i++)
 			if(array[i] == value) return i;
 		return -1;
@@ -135,10 +139,14 @@ public class IntList implements Iterable<Integer>, IJsonObject
 	}
 	
 	public void sort()
-	{ Arrays.sort(array, 0, size); }
+	{
+		if(size < 2) return;
+		Arrays.sort(array, 0, size);
+	}
 	
 	public int[] toSortedArray()
 	{
+		if(size == 0) return new int[0];
 		int[] a = toArray();
 		Arrays.sort(a);
 		return a;
@@ -150,6 +158,39 @@ public class IntList implements Iterable<Integer>, IJsonObject
 		for(int i = 0; i < size; i++)
 			h = h * 31 + array[i];
 		return h;
+	}
+	
+	public boolean equals(Object o)
+	{
+		if(o == null) return false;
+		else if(o == this) return true;
+		else
+		{
+			IntList l = (IntList) o;
+			if(size != l.size) return false;
+			for(int i = 0; i < size; i++)
+			{
+				if(array[i] != l.array[i]) return false;
+			}
+			return true;
+		}
+	}
+	
+	public boolean equalsIgnoreOrder(IntList l)
+	{
+		if(l == null) return false;
+		else if(l == this) return true;
+		else
+		{
+			if(size != l.size) return false;
+			
+			IntList l1 = l.copy();
+			
+			for(int i = 0; i < size; i++)
+				l1.removeValue(array[i]);
+			
+			return l1.isEmpty();
+		}
 	}
 	
 	public String toString()
@@ -183,7 +224,28 @@ public class IntList implements Iterable<Integer>, IJsonObject
 		IntList l = new IntList(size);
 		System.arraycopy(array, 0, l.array, 0, size);
 		l.size = size;
+		l.defVal = defVal;
 		return l;
+	}
+	
+	//Value, IsInNewList
+	public Map<Integer, Boolean> getDifferenceMap(IntList newList)
+	{
+		HashMap<Integer, Boolean> map = new HashMap<>();
+		
+		if(isEmpty() && newList.isEmpty()) return map;
+		
+		for(int i = 0; i < size; i++)
+		{
+			if(!newList.contains(array[i])) map.put(array[i], false);
+		}
+		
+		for(int i = 0; i < newList.size; i++)
+		{
+			if(!contains(newList.array[i])) map.put(array[i], true);
+		}
+		
+		return map;
 	}
 	
 	public static IntList asList(int... values)

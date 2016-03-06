@@ -106,4 +106,33 @@ public class IntMap
 	
 	public boolean containsKey(int key)
 	{ return keyIndex(key) != -1; }
+	
+	public void clear()
+	{ list.clear(); }
+	
+	public IntList getKeys()
+	{
+		IntList list1 = new IntList(list.size() / 2);
+		if(list.isEmpty()) return list1;
+		
+		for(int i = 0; i < list.size(); i += 2)
+		{
+			list1.add(list.get(i));
+		}
+		
+		return list1;
+	}
+	
+	public IntList getValues()
+	{
+		IntList list1 = new IntList(list.size() / 2);
+		if(list.isEmpty()) return list1;
+		
+		for(int i = 0; i < list.size(); i += 2)
+		{
+			list1.add(list.get(i + 1));
+		}
+		
+		return list1;
+	}
 }
