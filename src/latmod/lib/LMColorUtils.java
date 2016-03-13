@@ -78,15 +78,18 @@ public class LMColorUtils
 		return getRGBA(red, green, blue, getAlpha(c));
 	}
 	
-	public static void addHue(int pixels[], float hue)
+	public static void addHSB(int pixels[], float h, float s, float b)
 	{
 		if(pixels == null || pixels.length == 0) return;
-		LMColor c;
+		float[] hsb = new float[3];
+		
 		for(int i = 0; i < pixels.length; i++)
 		{
-			c = new LMColor(pixels[i]);
-			c.addHue(hue);
-			pixels[i] = c.color();
+			java.awt.Color.RGBtoHSB(getRed(pixels[i]), getGreen(pixels[i]), getBlue(pixels[i]), hsb);
+			hsb[0] += h;
+			hsb[1] = MathHelperLM.clampFloat(hsb[1] + s, 0F, 1F);
+			hsb[2] = MathHelperLM.clampFloat(hsb[2] + b, 0F, 1F);
+			pixels[i] = getRGBA(java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]), 255);
 		}
 	}
 	

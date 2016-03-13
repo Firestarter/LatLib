@@ -104,6 +104,6 @@ public class PixelBuffer
 		return b;
 	}
 	
-	public void addHue(float f)
-	{ LMColorUtils.addHue(pixels, f); }
+	public void addHSB(float h, float s, float b)
+	{ LMColorUtils.addHSB(pixels, h, s, b); }
 }

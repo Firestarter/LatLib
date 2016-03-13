@@ -49,7 +49,7 @@ public abstract class ConfigEntry extends FinalIDObject implements IJsonObject, 
 		else if(t == PrimitiveType.STRING) return new ConfigEntryString(id, null);
 		else if(t == PrimitiveType.STRING_ARRAY) return new ConfigEntryStringArray(id);
 		else if(t == PrimitiveType.ENUM) return new ConfigEntryEnumExtended(id);
-		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, 0);
+		else if(t == PrimitiveType.COLOR) return new ConfigEntryColor(id, new LMColor.RGB());
 		return null;
 	}
 	

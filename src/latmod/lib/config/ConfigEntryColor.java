@@ -5,21 +5,24 @@ import latmod.lib.*;
 
 public class ConfigEntryColor extends ConfigEntry
 {
-	public final LMColor value;
-	public final LMColor defValue;
+	public final LMColor.RGB value;
+	public final LMColor.RGB defValue;
 	
-	public ConfigEntryColor(String id, int def)
+	public ConfigEntryColor(String id, LMColor def)
 	{
 		super(id);
-		value = new LMColor(def);
-		defValue = new LMColor(def);
+		value = new LMColor.RGB();
+		value.set(def);
+		
+		defValue = new LMColor.RGB();
+		defValue.set(def);
 	}
 	
 	public PrimitiveType getType()
 	{ return PrimitiveType.COLOR; }
 	
 	public final void setJson(JsonElement o)
-	{ value.setRGB(o.getAsInt()); }
+	{ value.setRGBA(o.getAsInt()); }
 	
 	public final JsonElement getJson()
 	{ return new JsonPrimitive(value.color()); }
@@ -28,7 +31,7 @@ public class ConfigEntryColor extends ConfigEntry
 	{ io.writeInt(value.color()); }
 	
 	public void read(ByteIOStream io)
-	{ value.setRGB(io.readInt()); }
+	{ value.setRGBA(io.readInt()); }
 	
 	public void writeExtended(ByteIOStream io)
 	{
@@ -39,7 +42,7 @@ public class ConfigEntryColor extends ConfigEntry
 	public void readExtended(ByteIOStream io)
 	{
 		read(io);
-		defValue.setRGB(io.readInt());
+		defValue.setRGBA(io.readInt());
 	}
 	
 	public String getAsString()
