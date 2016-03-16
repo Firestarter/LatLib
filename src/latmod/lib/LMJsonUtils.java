@@ -209,4 +209,7 @@ public class LMJsonUtils
 		
 		return o1;
 	}
+	
+	public static void printPretty(JsonElement e)
+	{ System.out.println(toJson(getGson(true), e)); }
 }
