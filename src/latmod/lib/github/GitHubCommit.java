@@ -14,7 +14,7 @@ public class GitHubCommit extends FinalIDObject
 	public final GitHubBranch branch;
 	public final String info;
 	public final String treeURL;
-	private Map<String, GitHubFile> files;
+	private Map<String, GitHubFile.Blob> files;
 	
 	public GitHubCommit(GitHubBranch b, JsonObject o)
 	{
@@ -30,11 +30,11 @@ public class GitHubCommit extends FinalIDObject
 	public String toString()
 	{ return info.isEmpty() ? getID() : info; }
 	
-	public Map<String, GitHubFile> getFiles() throws Exception
+	public Map<String, GitHubFile.Blob> getFiles() throws Exception
 	{
 		if(files == null)
 		{
-			Map<String, GitHubFile> map = new LinkedHashMap<>();
+			Map<String, GitHubFile.Blob> map = new LinkedHashMap<>();
 			
 			for(JsonElement e : new LMURLConnection(RequestMethod.SIMPLE_GET, treeURL).connect().asJson().getAsJsonObject().get("tree").getAsJsonArray())
 			{
@@ -47,7 +47,7 @@ public class GitHubCommit extends FinalIDObject
 		return files;
 	}
 	
-	private void addToTree(Map<String, GitHubFile> map, GitHubFile file) throws Exception
+	private void addToTree(Map<String, GitHubFile.Blob> map, GitHubFile file) throws Exception
 	{
 		if(file instanceof GitHubFile.Tree)
 		{
@@ -60,7 +60,7 @@ public class GitHubCommit extends FinalIDObject
 		}
 		else
 		{
-			map.put(file.getID(), file);
+			map.put(file.getID(), (GitHubFile.Blob) file);
 		}
 	}
 	

@@ -42,12 +42,14 @@ public abstract class GitHubFile extends FinalIDObject
 		}
 		else
 		{
-			return new GitHubFile.Blob(commit, parent, o);
+			return new Blob(commit, parent, o);
 		}
 	}
 	
 	public static class Blob extends GitHubFile
 	{
+		public final String pathURL;
+		
 		public final int size;
 		public final String encoding;
 		
@@ -55,13 +57,10 @@ public abstract class GitHubFile extends FinalIDObject
 		{
 			super(p, pt, o);
 			
+			pathURL = commit.getFilePath(getPath()).replace(" ", "%20");
+			
 			size = o.get("size").getAsInt();
 			encoding = o.has("encoding") ? o.get("encoding").getAsString() : "";
-		}
-		
-		public String getURLPath()
-		{
-			return commit.getFilePath(getPath());
 		}
 	}
 	
