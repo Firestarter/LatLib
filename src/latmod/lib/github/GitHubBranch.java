@@ -51,4 +51,7 @@ public class GitHubBranch extends FinalIDObject
 	
 	public String getFilePath(String s)
 	{ return GitHubAPI.RAW_CONTENT + repo.getID() + "/" + getID() + "/" + s; }
+	
+	public String getZipDownloadURL()
+	{ return "https://github.com/" + repo.getID() + "/archive/" + getID() + ".zip"; }
 }
