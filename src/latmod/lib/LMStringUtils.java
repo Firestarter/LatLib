@@ -10,7 +10,7 @@ public class LMStringUtils
 	public static final Charset UTF_8 = Charset.forName("UTF-8");
 	
 	public static final String STRIP_SEP = ", ";
-	public static final String ALLOWED_TEXT_CHARS = "!@#$%^&*()_+ -=\\/,.<>?\'\"[]{}|;:`~";
+	public static final String ALLOWED_TEXT_CHARS = " -_!@#$%^&*()+=\\/,.<>?\'\"[]{}|;:`~";
 	
 	public static final Comparator<String> ignoreCaseComparator = new Comparator<String>()
 	{
@@ -31,10 +31,22 @@ public class LMStringUtils
 	
 	public static String readString(InputStream is) throws Exception
 	{
-		try(@SuppressWarnings("resource") Scanner s = new Scanner(is).useDelimiter("\\A"))
+		final char[] buffer = new char[0x10000];
+		final StringBuilder out = new StringBuilder();
+		try(Reader in = new InputStreamReader(is, "UTF-8"))
 		{
-			return s.hasNext() ? s.next() : "";
+			int read;
+			do
+			{
+				read = in.read(buffer, 0, buffer.length);
+				if(read > 0)
+				{
+					out.append(buffer, 0, read);
+				}
+			}
+			while(read >= 0);
 		}
+		return out.toString();
 	}
 	
 	public static List<String> toStringList(String s, String regex)
@@ -59,7 +71,7 @@ public class LMStringUtils
 	public static List<String> readStringList(InputStream is) throws Exception
 	{
 		ArrayList<String> l = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 		String s;
 		while((s = reader.readLine()) != null) l.add(s);
 		reader.close();

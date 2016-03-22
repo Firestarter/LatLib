@@ -25,5 +25,5 @@ public final class Response
 	{ return LMStringUtils.readString(stream); }
 	
 	public JsonElement asJson() throws Exception
-	{ return LMJsonUtils.fromJson(new InputStreamReader(stream)); }
+	{ return LMJsonUtils.fromJson(new BufferedReader(new InputStreamReader(stream))); }
 }
