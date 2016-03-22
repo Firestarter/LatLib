@@ -13,6 +13,11 @@ public abstract class LMColor
 		{
 		}
 		
+		public RGB(int r, int g, int b)
+		{
+			setRGBA(r, g, b, 255);
+		}
+		
 		public void set(LMColor col)
 		{
 			red = col.red();
@@ -86,6 +91,15 @@ public abstract class LMColor
 	public static class RGBA extends RGB
 	{
 		private int alpha = 255;
+		
+		public RGBA()
+		{
+		}
+		
+		public RGBA(int r, int g, int b, int a)
+		{
+			setRGBA(r, g, b, a);
+		}
 		
 		public void setRGBA(int col)
 		{

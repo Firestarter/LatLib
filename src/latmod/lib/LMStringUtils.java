@@ -49,6 +49,16 @@ public class LMStringUtils
 		return out.toString();
 	}
 	
+	public static List<String> readStringList(InputStream is) throws Exception
+	{
+		ArrayList<String> l = new ArrayList<>();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		String s;
+		while((s = reader.readLine()) != null) l.add(s);
+		reader.close();
+		return l;
+	}
+	
 	public static List<String> toStringList(String s, String regex)
 	{
 		ArrayList<String> al = new ArrayList<>();
@@ -66,16 +76,6 @@ public class LMStringUtils
 			if(i != l.size() - 1) sb.append('\n');
 		}
 		return sb.toString();
-	}
-	
-	public static List<String> readStringList(InputStream is) throws Exception
-	{
-		ArrayList<String> l = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-		String s;
-		while((s = reader.readLine()) != null) l.add(s);
-		reader.close();
-		return l;
 	}
 	
 	public static boolean isASCIIChar(char c)

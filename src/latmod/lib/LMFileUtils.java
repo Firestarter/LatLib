@@ -67,14 +67,7 @@ public class LMFileUtils
 	}
 	
 	public static List<String> load(File f) throws Exception
-	{
-		ArrayList<String> l = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new FileReader(f));
-		String s;
-		while((s = reader.readLine()) != null) l.add(s.trim());
-		reader.close();
-		return l;
-	}
+	{ return LMStringUtils.readStringList(new FileInputStream(f)); }
 	
 	public static String loadAsText(File f) throws Exception
 	{ return LMStringUtils.readString(new FileInputStream(f)); }
