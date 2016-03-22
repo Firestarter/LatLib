@@ -32,6 +32,9 @@ public abstract class LMColor
 			blue = b;
 		}
 		
+		public void setHSB(float h, float s, float b)
+		{ setRGBA(0xFF000000 | java.awt.Color.HSBtoRGB(h, s, b)); }
+		
 		public void setRGBA(int col)
 		{
 			red = LMColorUtils.getRed(col);
@@ -122,10 +125,15 @@ public abstract class LMColor
 		private int color;
 		private final float[] hsb;
 		
-		public HSB()
+		public HSB(float h, float s, float b)
 		{
 			hsb = new float[3];
-			setHSB(0F, 1F, 1F);
+			setHSB(h, s, b);
+		}
+		
+		public HSB()
+		{
+			this(0F, 1F, 1F);
 		}
 		
 		public void set(LMColor col)
@@ -145,7 +153,6 @@ public abstract class LMColor
 		public void setHSB(float h, float s, float b)
 		{
 			hsb[0] = h % 1F;
-			if(hsb[0] < 0F) hsb[0] = 1F - hsb[0];
 			hsb[1] = MathHelperLM.clampFloat(s, 0F, 1F);
 			hsb[2] = MathHelperLM.clampFloat(b, 0F, 1F);
 			color = 0xFF000000 | java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
@@ -188,6 +195,7 @@ public abstract class LMColor
 	
 	public abstract void set(LMColor col);
 	public abstract void setRGBA(int r, int g, int b, int a);
+	public abstract void setHSB(float h, float s, float b);
 	public abstract int color();
 	public abstract int red();
 	public abstract int green();

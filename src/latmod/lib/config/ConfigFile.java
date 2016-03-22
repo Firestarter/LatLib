@@ -43,7 +43,7 @@ public class ConfigFile extends ConfigGroup
 	}
 	
 	public void save()
-	{ LMJsonUtils.toJson(file, getJson()); }
+	{ if(file != null) LMJsonUtils.toJson(file, getJson()); }
 	
 	public void writeExtended(ByteIOStream io)
 	{
