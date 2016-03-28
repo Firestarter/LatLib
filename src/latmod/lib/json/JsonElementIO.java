@@ -10,103 +10,114 @@ import java.util.*;
  */
 public class JsonElementIO
 {
-	public static final byte ID_NULL = 0;
-	public static final byte ID_ARRAY = 1;
-	public static final byte ID_OBJECT = 2;
-	public static final byte ID_P_STRING = 3;
-	public static final byte ID_P_BOOL = 4;
-	public static final byte ID_P_BYTE = 5;
-	public static final byte ID_P_SHORT = 6;
-	public static final byte ID_P_INT = 7;
-	public static final byte ID_P_LONG = 8;
-	public static final byte ID_P_FLOAT = 9;
-	public static final byte ID_P_DOUBLE = 10;
-	
-	private static final String[] names = {"null", "array", "object", "string", "bool", "byte", "short", "int", "long", "float", "double"};
-	
-	public static String getName(byte id)
-	{ return names[id]; }
-	
-	public static byte getID(JsonElement e)
+	public enum JsonID
 	{
-		if(e == null || e.isJsonNull()) return ID_NULL;
-		else if(e.isJsonArray()) return ID_ARRAY;
-		else if(e.isJsonObject()) return ID_OBJECT;
+		NULL,
+		ARRAY,
+		OBJECT,
+		STRING,
+		BOOL,
+		BYTE,
+		SHORT,
+		INT,
+		LONG,
+		FLOAT,
+		DOUBLE;
+		
+		public final byte ID;
+		public final String name;
+		
+		JsonID()
+		{
+			ID = (byte) ordinal();
+			name = name().toLowerCase();
+		}
+	}
+	
+	public static JsonID getID(JsonElement e)
+	{
+		if(e == null || e.isJsonNull()) return JsonID.NULL;
+		else if(e.isJsonArray()) return JsonID.ARRAY;
+		else if(e.isJsonObject()) return JsonID.OBJECT;
 		else
 		{
 			JsonPrimitive p = e.getAsJsonPrimitive();
 			
-			if(p.isString()) return ID_P_STRING;
-			else if(p.isBoolean()) return ID_P_BOOL;
+			if(p.isString()) return JsonID.STRING;
+			else if(p.isBoolean()) return JsonID.BOOL;
 			else
 			{
 				Number n = p.getAsNumber();
 				
 				System.out.println(n.getClass());
 				
-				if(n instanceof Integer) return ID_P_INT;
-				else if(n instanceof Byte) return ID_P_BYTE;
-				else if(n instanceof Short) return ID_P_SHORT;
-				else if(n instanceof Long) return ID_P_LONG;
-				else if(n instanceof Float) return ID_P_FLOAT;
-				else if(n instanceof Double) return ID_P_DOUBLE;
-				else return ID_NULL;
+				if(n instanceof Integer) return JsonID.INT;
+				else if(n instanceof Byte) return JsonID.BYTE;
+				else if(n instanceof Short) return JsonID.SHORT;
+				else if(n instanceof Long) return JsonID.LONG;
+				else if(n instanceof Float) return JsonID.FLOAT;
+				else if(n instanceof Double) return JsonID.DOUBLE;
+				else return JsonID.NULL;
 			}
 		}
 	}
 	
 	public static JsonElement read(ByteIOStream io)
 	{
-		byte id = io.readByte();
-		
-		if(id == ID_NULL) return JsonNull.INSTANCE;
-		else if(id == ID_ARRAY)
+		switch(JsonID.values()[io.readByte()])
 		{
-			JsonArray a = new JsonArray();
-			int s = io.readInt();
-			
-			for(int i = 0; i < s; i++)
-				a.add(read(io));
-			
-			return a;
-		}
-		else if(id == ID_OBJECT)
-		{
-			JsonObject o = new JsonObject();
-			int s = io.readInt();
-			
-			for(int i = 0; i < s; i++)
+			case NULL:
+				return JsonNull.INSTANCE;
+			case ARRAY:
 			{
-				String key = io.readUTF();
-				o.add(key, read(io));
+				JsonArray a = new JsonArray();
+				int s = io.readInt();
+				
+				for(int i = 0; i < s; i++)
+					a.add(read(io));
+				
+				return a;
 			}
-			
-			return o;
+			case OBJECT:
+			{
+				JsonObject o = new JsonObject();
+				int s = io.readInt();
+				
+				for(int i = 0; i < s; i++)
+				{
+					String key = io.readUTF();
+					o.add(key, read(io));
+				}
+				
+				return o;
+			}
+			case STRING:
+				return new JsonPrimitive(io.readUTF());
+			case BOOL:
+				return new JsonPrimitive(io.readBoolean());
+			case BYTE:
+				return new JsonPrimitive(io.readByte());
+			case SHORT:
+				return new JsonPrimitive(io.readShort());
+			case INT:
+				return new JsonPrimitive(io.readInt());
+			case LONG:
+				return new JsonPrimitive(io.readLong());
+			case FLOAT:
+				return new JsonPrimitive(io.readFloat());
+			case DOUBLE:
+				return new JsonPrimitive(io.readDouble());
 		}
-		else if(id == ID_P_STRING) return new JsonPrimitive(io.readUTF());
-		else if(id == ID_P_BOOL) return new JsonPrimitive(io.readBoolean());
-		else
-		{
-			Number n = 0;
-			if(id == ID_P_BYTE) n = io.readByte();
-			else if(id == ID_P_SHORT) n = io.readShort();
-			else if(id == ID_P_INT) n = io.readInt();
-			else if(id == ID_P_LONG) n = io.readLong();
-			else if(id == ID_P_FLOAT) n = io.readFloat();
-			else if(id == ID_P_DOUBLE) n = io.readDouble();
-			return new JsonPrimitive(n);
-		}
+		
+		return JsonNull.INSTANCE;
 	}
-	
-	public static void read(ByteIOStream io, IJsonSet i)
-	{ i.setJson(read(io)); }
 	
 	public static void write(ByteIOStream io, JsonElement e)
 	{
-		if(e == null || e.isJsonNull()) io.writeByte(ID_NULL);
+		if(e == null || e.isJsonNull()) io.writeByte(JsonID.NULL.ID);
 		else if(e.isJsonArray())
 		{
-			io.writeByte(ID_ARRAY);
+			io.writeByte(JsonID.ARRAY.ID);
 			
 			JsonArray a = e.getAsJsonArray();
 			int s = a.size();
@@ -117,7 +128,7 @@ public class JsonElementIO
 		}
 		else if(e.isJsonObject())
 		{
-			io.writeByte(ID_OBJECT);
+			io.writeByte(JsonID.OBJECT.ID);
 			
 			Set<Map.Entry<String, JsonElement>> set = e.getAsJsonObject().entrySet();
 			io.writeInt(set.size());
@@ -134,12 +145,12 @@ public class JsonElementIO
 			
 			if(p.isString())
 			{
-				io.writeByte(ID_P_STRING);
+				io.writeByte(JsonID.STRING.ID);
 				io.writeUTF(p.getAsString());
 			}
 			else if(p.isBoolean())
 			{
-				io.writeByte(ID_P_BOOL);
+				io.writeByte(JsonID.BOOL.ID);
 				io.writeBoolean(p.getAsBoolean());
 			}
 			else
@@ -150,39 +161,36 @@ public class JsonElementIO
 				
 				if(n instanceof Integer)
 				{
-					io.writeByte(ID_P_INT);
+					io.writeByte(JsonID.INT.ID);
 					io.writeInt(n.intValue());
 				}
 				else if(n instanceof Byte)
 				{
-					io.writeByte(ID_P_BYTE);
+					io.writeByte(JsonID.BYTE.ID);
 					io.writeByte(n.byteValue());
 				}
 				else if(n instanceof Short)
 				{
-					io.writeByte(ID_P_SHORT);
+					io.writeByte(JsonID.SHORT.ID);
 					io.writeShort(n.shortValue());
 				}
 				else if(n instanceof Long)
 				{
-					io.writeByte(ID_P_LONG);
+					io.writeByte(JsonID.LONG.ID);
 					io.writeLong(n.longValue());
 				}
 				else if(n instanceof Float)
 				{
-					io.writeByte(ID_P_FLOAT);
+					io.writeByte(JsonID.FLOAT.ID);
 					io.writeFloat(n.floatValue());
 				}
 				else if(n instanceof Double)
 				{
-					io.writeByte(ID_P_DOUBLE);
+					io.writeByte(JsonID.DOUBLE.ID);
 					io.writeDouble(n.doubleValue());
 				}
-				else io.writeByte(ID_NULL);
+				else io.writeByte(JsonID.NULL.ID);
 			}
 		}
 	}
-	
-	public static void write(ByteIOStream io, IJsonGet i)
-	{ write(io, i.getJson()); }
 }

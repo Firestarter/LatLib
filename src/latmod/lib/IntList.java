@@ -1,11 +1,10 @@
 package latmod.lib;
 
 import com.google.gson.JsonElement;
-import latmod.lib.json.IJsonObject;
 
 import java.util.*;
 
-public class IntList implements Iterable<Integer>, IJsonObject
+public class IntList implements Iterable<Integer>
 {
 	private int defVal = -1;
 	private int array[];
@@ -279,5 +278,10 @@ public class IntList implements Iterable<Integer>, IJsonObject
 		
 		public Integer next()
 		{ return values[++pos]; }
+		
+		public void remove()
+		{
+			throw new UnsupportedOperationException();
+		}
 	}
 }

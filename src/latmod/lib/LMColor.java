@@ -144,6 +144,11 @@ public abstract class LMColor
 			hsb[2] = col.brightness();
 		}
 		
+		public void setRGBA(int rgba)
+		{
+			setRGBA(LMColorUtils.getRed(rgba), LMColorUtils.getGreen(rgba), LMColorUtils.getBlue(rgba), 255);
+		}
+		
 		public void setRGBA(int r, int g, int b, int a)
 		{
 			color = LMColorUtils.getRGBA(r, g, b, 255);
@@ -194,6 +199,7 @@ public abstract class LMColor
 	}
 	
 	public abstract void set(LMColor col);
+	public abstract void setRGBA(int rgba);
 	public abstract void setRGBA(int r, int g, int b, int a);
 	public abstract void setHSB(float h, float s, float b);
 	public abstract int color();

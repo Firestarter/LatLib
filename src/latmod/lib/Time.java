@@ -1,11 +1,10 @@
 package latmod.lib;
 
 import com.google.gson.*;
-import latmod.lib.json.IJsonGet;
 
 import java.util.Calendar;
 
-public final class Time implements Comparable<Time>, IJsonGet
+public final class Time implements Comparable<Time>
 {
 	public final long millis;
 	public final int seconds;
@@ -30,7 +29,7 @@ public final class Time implements Comparable<Time>, IJsonGet
 	{ return millis == t; }
 	
 	public int hashCode()
-	{ return Long.hashCode(millis); }
+	{ return Long.valueOf(millis).hashCode(); }
 	
 	public boolean equals(Object o)
 	{ return o != null && (o == this || (o instanceof Time && equalsTime(((Time) o).millis)) || (o instanceof Number && equalsTime(((Number) o).longValue()))); }

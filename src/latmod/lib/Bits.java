@@ -7,9 +7,9 @@ import java.util.UUID;
  */
 public class Bits
 {
-	private static final int FF = 0xFF;
-	private static final int FFFF = 0xFFFF;
-	private static final long FFFFFFFF = 0xFFFFFFFFL;
+	private static final int MAX_BYTE = 0xFF;
+	private static final int MAX_SHORT = 0xFFFF;
+	private static final long MAX_INT = 0xFFFFFFFFL;
 	
 	public static int toInt(boolean[] b)
 	{
@@ -37,32 +37,14 @@ public class Bits
 		else return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF));
 	}
 	
-	/*
-	public static void fromBits(boolean b[], byte bits)
-	{ for(int i = 0; i < b.length; i++) b[i] = getBit(bits, i); }
-	
-	public static byte toBits(boolean[] b)
-	{
-		byte i = 0;
-		for(int j = 0; j < b.length; j++) i |= toBit(b[j], j);
-		return i;
-	}
-	
-	public static void not(boolean[] from, boolean[] to)
-	{
-		for(int i = 0; i < from.length; i++)
-			to[i] = !from[i];
-	}
-	*/
-	
 	public static int not(int bits)
-	{ return 255 - (bits & 0xFF); }
+	{ return (~bits) & 0xFF; }
 	
 	//
 	
 	//Int
 	public static long intsToLong(int a, int b)
-	{ return (((long) a) << 32) | (b & FFFFFFFF); }
+	{ return (((long) a) << 32) | (b & MAX_INT); }
 	
 	public static int intFromLongA(long l)
 	{ return (int) (l >> 32); }
@@ -72,45 +54,45 @@ public class Bits
 	
 	//Short
 	public static int shortsToInt(int a, int b)
-	{ return ((short) a << 16) | ((short) b & FFFF); }
+	{ return ((short) a << 16) | ((short) b & MAX_SHORT); }
 	
 	public static short shortFromIntA(int i)
 	{ return (short) (i >> 16); }
 	
 	public static short shortFromIntB(int i)
-	{ return (short) (i & FFFF); }
+	{ return (short) (i & MAX_SHORT); }
 	
 	//Byte
 	public static short bytesToShort(int a, int b)
-	{ return (short) (((a & FF) << 8) | (b & FF)); }
+	{ return (short) (((a & MAX_BYTE) << 8) | (b & MAX_BYTE)); }
 	
 	public static byte byteFromShortA(short s)
-	{ return (byte) ((s >> 8) & FF); }
+	{ return (byte) ((s >> 8) & MAX_BYTE); }
 	
 	public static byte byteFromShortB(short s)
-	{ return (byte) (s & FF); }
+	{ return (byte) (s & MAX_BYTE); }
 	
 	// - //
 	
 	public static int toUShort(byte[] b, int off)
 	{
-		int ch1 = b[off] & FF;
-		int ch2 = b[off + 1] & FF;
-		return (ch1 << 8) + (ch2);
+		int ch1 = b[off] & MAX_BYTE;
+		int ch2 = b[off + 1] & MAX_BYTE;
+		return (ch1 << 8) + ch2;
 	}
 	
 	public static int toInt(byte[] b, int off)
 	{
-		int ch1 = b[off] & FF;
-		int ch2 = b[off + 1] & FF;
-		int ch3 = b[off + 2] & FF;
-		int ch4 = b[off + 3] & FF;
-		return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4);
+		int ch1 = b[off] & MAX_BYTE;
+		int ch2 = b[off + 1] & MAX_BYTE;
+		int ch3 = b[off + 2] & MAX_BYTE;
+		int ch4 = b[off + 3] & MAX_BYTE;
+		return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + ch4;
 	}
 	
 	public static long toLong(byte[] b, int off)
 	{
-		return (((long) b[off] << 56) + ((long) (b[off + 1] & FF) << 48) + ((long) (b[off + 2] & FF) << 40) + ((long) (b[off + 3] & FF) << 32) + ((long) (b[off + 4] & FF) << 24) + ((b[off + 5] & FF) << 16) + ((b[off + 6] & FF) << 8) + ((b[off + 7] & FF)));
+		return (((long) b[off] << 56) + ((long) (b[off + 1] & MAX_BYTE) << 48) + ((long) (b[off + 2] & MAX_BYTE) << 40) + ((long) (b[off + 3] & MAX_BYTE) << 32) + ((long) (b[off + 4] & MAX_BYTE) << 24) + ((b[off + 5] & MAX_BYTE) << 16) + ((b[off + 6] & MAX_BYTE) << 8) + ((b[off + 7] & MAX_BYTE)));
 	}
 	
 	public static UUID toUUID(byte[] b, int off)
@@ -125,7 +107,7 @@ public class Bits
 	public static void fromUShort(byte[] b, int off, int v)
 	{
 		b[off] = (byte) (v >>> 8);
-		b[off + 1] = (byte) (v);
+		b[off + 1] = (byte) v;
 	}
 	
 	public static void fromInt(byte[] b, int off, int v)
@@ -133,7 +115,7 @@ public class Bits
 		b[off] = (byte) (v >>> 24);
 		b[off + 1] = (byte) (v >>> 16);
 		b[off + 2] = (byte) (v >>> 8);
-		b[off + 3] = (byte) (v);
+		b[off + 3] = (byte) v;
 	}
 	
 	public static void fromLong(byte[] b, int off, long v)
@@ -145,7 +127,7 @@ public class Bits
 		b[off + 4] = (byte) (v >>> 24);
 		b[off + 5] = (byte) (v >>> 16);
 		b[off + 6] = (byte) (v >>> 8);
-		b[off + 7] = (byte) (v);
+		b[off + 7] = (byte) v;
 	}
 	
 	public static void fromUUID(byte[] b, int off, UUID uuid)

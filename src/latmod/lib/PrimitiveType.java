@@ -1,12 +1,9 @@
 package latmod.lib;
 
-import com.google.gson.*;
-import latmod.lib.json.IJsonGet;
-
 import java.awt.*;
 import java.util.Map;
 
-public enum PrimitiveType implements IJsonGet
+public enum PrimitiveType
 {
 	NULL("nil", Object.class),
 	BOOLEAN("bool", Boolean.class),
@@ -48,9 +45,6 @@ public enum PrimitiveType implements IJsonGet
 		isArray = s.endsWith("_a");
 		isEnum = c == Enum.class;
 	}
-	
-	public JsonElement getJson()
-	{ return new JsonPrimitive(ID); }
 	
 	public static PrimitiveType get(String s)
 	{
