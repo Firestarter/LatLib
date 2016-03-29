@@ -20,7 +20,14 @@ public class AnnotationHelper
 			{
 				if(obj instanceof IInfoContainer)
 				{
-					((IInfoContainer) obj).setInfo(((Info) a).value());
+					String[] info = ((Info) a).value();
+					if(info != null && info.length == 0) info = null;
+					((IInfoContainer) obj).setInfo(info);
+					
+					if(obj instanceof IFlagContainer)
+					{
+						((IFlagContainer) obj).setFlag(Flag.HAS_INFO, info != null);
+					}
 				}
 			}
 			else if(c == NumberBounds.class)
@@ -39,7 +46,7 @@ public class AnnotationHelper
 					
 					for(Flag f : ((Flags) a).value())
 					{
-						fc.setFlag(f.ID, true);
+						fc.setFlag(f, true);
 					}
 				}
 			}

@@ -3,7 +3,7 @@ package latmod.lib.annotations;
 /**
  * Created by LatvianModder on 26.03.2016.
  */
-public enum Flag
+public enum Flag implements IFlag
 {
 	/**
 	 * Will be synced with client
@@ -11,14 +11,29 @@ public enum Flag
 	SYNC(0),
 	
 	/**
-	 * Will be invisible in config gui
+	 * Will be hidden from config gui
 	 */
-	INVISIBLE(1),
+	HIDDEN(1),
 	
 	/**
 	 * Will be visible in config gui, but uneditable
 	 */
-	UNEDITABLE(2);
+	CANT_EDIT(2),
+	
+	/**
+	 * Can add new config entries
+	 */
+	CAN_ADD(3),
+	
+	/**
+	 * Will be excluded from writing / reading from files
+	 */
+	EXCLUDED(4),
+	
+	/**
+	 * Used when info is present
+	 */
+	HAS_INFO(5);
 	
 	public final byte ID;
 	public final String name;
@@ -28,4 +43,7 @@ public enum Flag
 		ID = (byte) b;
 		name = name().toLowerCase();
 	}
+	
+	public byte getFlagID()
+	{ return ID; }
 }
