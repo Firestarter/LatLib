@@ -5,6 +5,10 @@ package latmod.lib;
  */
 public abstract class LMColor
 {
+	public static final LMColor WHITE = new ImmutableColor(0xFFFFFFFF);
+	public static final LMColor BLACK = new ImmutableColor(0xFF000000);
+	public static final LMColor TRANSPARENT = new ImmutableColor(0x00000000);
+	
 	public static class RGB extends LMColor
 	{
 		private int red = 255, green = 255, blue = 255;
@@ -220,4 +224,39 @@ public abstract class LMColor
 	
 	public final boolean equals(Object o)
 	{ return hashCode() == o.hashCode(); }
+	
+	public final LMColor immutable()
+	{ return new ImmutableColor(this); }
+	
+	public static class ImmutableColor extends RGBA
+	{
+		public ImmutableColor(LMColor col)
+		{
+			super.set(col);
+		}
+		
+		public ImmutableColor(int col)
+		{
+			super.setRGBA(col);
+		}
+		
+		public void set(LMColor col)
+		{
+		}
+		
+		public void setRGBA(int rgba)
+		{
+		}
+		
+		public void setRGBA(int r, int g, int b, int a)
+		{
+		}
+		
+		public void setHSB(float h, float s, float b)
+		{
+		}
+		
+		public ImmutableColor copy()
+		{ return new ImmutableColor(this); }
+	}
 }

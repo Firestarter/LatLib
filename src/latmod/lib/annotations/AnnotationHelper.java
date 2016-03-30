@@ -2,53 +2,94 @@ package latmod.lib.annotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Created by LatvianModder on 26.03.2016.
  */
 public class AnnotationHelper
 {
-	public static void inject(Field field, Object parent, Object obj) throws Exception
+	private static final Map<Class<? extends Annotation>, Handler> map = new HashMap<>();
+	
+	public static void register(Class<? extends Annotation> c, Handler h)
+	{ map.put(c, h); }
+	
+	public interface Handler
 	{
-		if(field == null || !(obj instanceof IAnnotationContainer)) return;
-		
-		for(Annotation a : field.getDeclaredAnnotations())
+		boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container);
+	}
+	
+	static
+	{
+		register(Info.class, new Handler()
 		{
-			Class<?> c = a.annotationType();
-			
-			if(c == Info.class)
+			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
-				if(obj instanceof IInfoContainer)
+				if(container instanceof IInfoContainer)
 				{
 					String[] info = ((Info) a).value();
 					if(info != null && info.length == 0) info = null;
-					((IInfoContainer) obj).setInfo(info);
+					((IInfoContainer) container).setInfo(info);
 					
-					if(obj instanceof IFlagContainer)
+					if(container instanceof IFlagContainer)
 					{
-						((IFlagContainer) obj).setFlag(Flag.HAS_INFO, info != null);
+						((IFlagContainer) container).setFlag(Flags.HAS_INFO, info != null);
 					}
+					
+					return true;
 				}
+				
+				return false;
 			}
-			else if(c == NumberBounds.class)
+		});
+		
+		register(NumberBounds.class, new Handler()
+		{
+			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
-				if(obj instanceof INumberBoundsContainer)
+				if(container instanceof INumberBoundsContainer)
 				{
 					NumberBounds b = (NumberBounds) a;
-					((INumberBoundsContainer) obj).setBounds(b.min(), b.max());
+					((INumberBoundsContainer) container).setBounds(b.min(), b.max());
+					return true;
 				}
+				
+				return false;
 			}
-			else if(c == Flags.class)
+		});
+		
+		register(Flags.class, new Handler()
+		{
+			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
-				if(obj instanceof IFlagContainer)
+				if(container instanceof IFlagContainer)
 				{
-					IFlagContainer fc = (IFlagContainer) obj;
+					IFlagContainer fc = (IFlagContainer) container;
 					
-					for(Flag f : ((Flags) a).value())
+					for(byte flag : ((Flags) a).value())
 					{
-						fc.setFlag(f, true);
+						fc.setFlag(flag, true);
 					}
+					
+					return true;
 				}
+				
+				return false;
+			}
+		});
+	}
+	
+	public static void inject(Field field, Object parent, Object obj) throws Exception
+	{
+		if(field == null || !(obj instanceof IAnnotationContainer)) return;
+		IAnnotationContainer container = (IAnnotationContainer) obj;
+		
+		for(Annotation a : field.getDeclaredAnnotations())
+		{
+			Handler h = map.get(a.annotationType());
+			if(h != null)
+			{
+				h.onAnnotationDeclared(a, container);
 			}
 		}
 	}
