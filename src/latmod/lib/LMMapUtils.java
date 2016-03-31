@@ -59,7 +59,7 @@ public class LMMapUtils
 		return map1;
 	}
 	
-	public static <K, V> List<Map.Entry<K, V>> sortedEntryList(Map<K, V> map, Comparator<? super Map.Entry<K, V>> c)
+	public static <K, V> List<Map.Entry<K, V>> sortedEntryList(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
 		if(map == null) return null;
 		ArrayList<Map.Entry<K, V>> list = new ArrayList<>();
@@ -125,10 +125,17 @@ public class LMMapUtils
 		}
 	}
 	
-	public static <K, V> Map<K, V> sortedMap(Map<K, V> map, Comparator<K> comparator)
+	public static <K, V> void sortMap(LinkedHashMap<K, V> map, Comparator<Map.Entry<K, V>> comparator)
 	{
-		LinkedHashMap<K, V> map1 = new LinkedHashMap<>();
-		//FIXME: Sorted map
-		return map1;
+		if(map == null || map.isEmpty()) return;
+		List<Map.Entry<K, V>> list = new ArrayList<>();
+		list.addAll(map.entrySet());
+		Collections.sort(list, comparator);
+		map.clear();
+		
+		for(Map.Entry<K, V> e : list)
+		{
+			map.put(e.getKey(), e.getValue());
+		}
 	}
 }
