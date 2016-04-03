@@ -20,14 +20,17 @@ public class LMURLConnection
 	
 	public Response connect() throws Exception
 	{
-		if(type == null) return null;
-		
 		long startTime = LMUtils.millis();
 		
-		if(type == RequestMethod.SIMPLE_GET)
+		if(type == null || type == RequestMethod.SIMPLE_GET)
 		{
 			URL con = new URL(url);
 			InputStream is = con.openStream();
+			return new Response(LMUtils.millis() - startTime, 200, is);
+		}
+		else if(type == RequestMethod.FILE)
+		{
+			FileInputStream is = new FileInputStream(url);
 			return new Response(LMUtils.millis() - startTime, 200, is);
 		}
 		

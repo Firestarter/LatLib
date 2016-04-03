@@ -9,5 +9,6 @@ public enum RequestMethod
 	PUT,
 	DELETE,
 	TRACE,
-	SIMPLE_GET
+	SIMPLE_GET,
+	FILE
 }
