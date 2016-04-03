@@ -12,10 +12,10 @@ public class LMStringUtils
 	public static final String STRIP_SEP = ", ";
 	public static final String ALLOWED_TEXT_CHARS = " -_!@#$%^&*()+=\\/,.<>?\'\"[]{}|;:`~";
 	
-	public static final Comparator<String> ignoreCaseComparator = new Comparator<String>()
+	public static final Comparator<Object> ignoreCaseComparator = new Comparator<Object>()
 	{
-		public int compare(String o1, String o2)
-		{ return o1.compareToIgnoreCase(o2); }
+		public int compare(Object o1, Object o2)
+		{ return String.valueOf(o1).compareToIgnoreCase(String.valueOf(o2)); }
 	};
 	
 	public static boolean isValid(String s)
@@ -146,7 +146,7 @@ public class LMStringUtils
 		if(c.isEmpty()) return "";
 		StringBuilder sb = new StringBuilder();
 		
-		int idx = -1;
+		int idx = 0;
 		int eidx = c.size() - 1;
 		for(Object o : c)
 		{
