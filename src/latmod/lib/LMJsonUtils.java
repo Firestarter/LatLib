@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Type for Lists: new TypeToken<List<E>>() {}.getType()
@@ -212,4 +212,50 @@ public class LMJsonUtils
 	
 	public static void printPretty(JsonElement e)
 	{ System.out.println(toJson(getGson(true), e)); }
+	
+	public static List<JsonElement> deserializeText(List<String> text)
+	{
+		List<JsonElement> elements = new ArrayList<>();
+		
+		StringBuilder sb = new StringBuilder();
+		int inc = 0;
+		
+		for(String s : text)
+		{
+			s = LMStringUtils.trimAllWhitespace(s);
+			
+			System.out.println(s);
+			
+			if(s.isEmpty())
+			{
+				elements.add(JsonNull.INSTANCE);
+			}
+			else
+			{
+				if(inc > 0 || s.startsWith("{"))
+				{
+					for(int i = 0; i < s.length(); i++)
+					{
+						char c = s.charAt(i);
+						if(c == '{') inc++;
+						else if(c == '}') inc--;
+						sb.append(c);
+						
+						if(inc == 0)
+						{
+							System.out.println(":: " + sb.toString());
+							elements.add(fromJson(sb.toString()));
+							sb.setLength(0);
+						}
+					}
+				}
+				else
+				{
+					elements.add(new JsonPrimitive(s));
+				}
+			}
+		}
+		
+		return elements;
+	}
 }

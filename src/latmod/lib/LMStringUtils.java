@@ -327,17 +327,14 @@ public class LMStringUtils
 	
 	public static String removeAllWhitespace(String s)
 	{
-		if(s == null) return null;
-		s = s.trim();
-		if(s.length() == 0) return "";
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < s.length(); i++)
-		{
-			char c = s.charAt(i);
-			if(!Character.isWhitespace(c)) sb.append(c);
-		}
-		
-		return sb.toString();
+		if(s == null || s.isEmpty()) return s;
+		else return s.replaceAll("\\s+", "");
+	}
+	
+	public static String trimAllWhitespace(String s)
+	{
+		if(s == null || s.isEmpty()) return s;
+		else return s.replace("^\\s*(.*?)\\s*$", "$1");
 	}
 	
 	public static String formatInt(int i)
