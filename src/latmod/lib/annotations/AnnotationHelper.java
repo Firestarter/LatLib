@@ -30,12 +30,6 @@ public class AnnotationHelper
 					String[] info = ((Info) a).value();
 					if(info != null && info.length == 0) info = null;
 					((IInfoContainer) container).setInfo(info);
-					
-					if(container instanceof IFlagContainer)
-					{
-						((IFlagContainer) container).setFlag(Flags.HAS_INFO, info != null);
-					}
-					
 					return true;
 				}
 				

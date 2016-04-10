@@ -37,7 +37,7 @@ public @interface Flags
 	byte EXCLUDED = 4;
 	
 	/**
-	 * Used when info is present
+	 * Use slider whenever that is available
 	 */
-	byte HAS_INFO = 5;
+	byte USE_SLIDER = 5;
 }
