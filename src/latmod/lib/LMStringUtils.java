@@ -33,7 +33,7 @@ public class LMStringUtils
 	{
 		final char[] buffer = new char[0x10000];
 		final StringBuilder out = new StringBuilder();
-		try(Reader in = new InputStreamReader(is, "UTF-8"))
+		try(Reader in = new InputStreamReader(is, UTF_8))
 		{
 			int read;
 			do
@@ -45,6 +45,7 @@ public class LMStringUtils
 				}
 			}
 			while(read >= 0);
+			in.close();
 		}
 		return out.toString();
 	}
@@ -52,7 +53,7 @@ public class LMStringUtils
 	public static List<String> readStringList(InputStream is) throws Exception
 	{
 		ArrayList<String> l = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8));
 		String s;
 		while((s = reader.readLine()) != null) l.add(s);
 		reader.close();

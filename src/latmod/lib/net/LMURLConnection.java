@@ -26,12 +26,12 @@ public class LMURLConnection
 		{
 			URL con = new URL(url);
 			InputStream is = con.openStream();
-			return new Response(LMUtils.millis() - startTime, 200, is);
+			return new Response(RequestMethod.SIMPLE_GET, LMUtils.millis() - startTime, 200, is);
 		}
 		else if(type == RequestMethod.FILE)
 		{
 			FileInputStream is = new FileInputStream(url);
-			return new Response(LMUtils.millis() - startTime, 200, is);
+			return new Response(RequestMethod.FILE, LMUtils.millis() - startTime, 200, is);
 		}
 		
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
@@ -50,6 +50,6 @@ public class LMURLConnection
 		}
 		
 		int responseCode = con.getResponseCode();
-		return new Response(LMUtils.millis() - startTime, responseCode, con.getInputStream());
+		return new Response(type, LMUtils.millis() - startTime, responseCode, con.getInputStream());
 	}
 }
