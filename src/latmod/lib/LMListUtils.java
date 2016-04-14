@@ -131,15 +131,6 @@ public class LMListUtils
 		return list1;
 	}
 	
-	//TODO: Remove me
-	public static <E> void addAll(Collection<E> c, E[] e)
-	{
-		if(c != null && e != null && e.length > 0)
-		{
-			Collections.addAll(c, e);
-		}
-	}
-	
 	public static boolean containsAny(Collection<?> c, Collection<?> c1)
 	{
 		for(Object o : c1)

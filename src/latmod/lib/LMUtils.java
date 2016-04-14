@@ -56,9 +56,15 @@ public class LMUtils
 	{
 		if(c == null) return null;
 		if(al == null) al = new ArrayList<>();
-		ArrayList<Class<?>> al1 = new ArrayList<>();
-		LMListUtils.addAll(al1, c.getDeclaredClasses());
-		if(all && !al1.isEmpty()) for(Class<?> anAl1 : al1) al.addAll(addSubclasses(anAl1, null, true));
+		List<Class<?>> al1 = new ArrayList<>();
+		Collections.addAll(al1, c.getDeclaredClasses());
+		if(all && !al1.isEmpty())
+		{
+			for(Class<?> anAl1 : al1)
+			{
+				al.addAll(addSubclasses(anAl1, null, true));
+			}
+		}
 		al.addAll(al1);
 		return al;
 	}
