@@ -1,6 +1,6 @@
 package latmod.lib.util;
 
-import latmod.lib.LMStringUtils;
+import latmod.lib.*;
 
 public class Pos2D
 {
@@ -21,7 +21,7 @@ public class Pos2D
 	{ return new Pos2I((int) x, (int) y); }
 	
 	public int hashCode()
-	{ return Double.hashCode(x) * 31 + Double.hashCode(y); }
+	{ return LMUtils.hashCode(x, y); }
 	
 	public boolean equalsPos(Pos2D o)
 	{ return o.x == x && o.y == y; }
