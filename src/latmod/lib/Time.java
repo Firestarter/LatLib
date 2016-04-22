@@ -53,6 +53,7 @@ public final class Time implements Comparable<Time>
 		return sb.toString();
 	}
 	
+	@Override
 	public int compareTo(Time o)
 	{ return Long.compare(millis, o.millis); }
 	

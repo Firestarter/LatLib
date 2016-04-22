@@ -27,6 +27,7 @@ public class GitHubCommit extends FinalIDObject
 		branch = b;
 	}
 	
+	@Override
 	public String toString()
 	{ return info.isEmpty() ? getID() : info; }
 	

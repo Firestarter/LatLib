@@ -24,8 +24,9 @@ public final class Response
 	public Response(InputStream is)
 	{ this(RequestMethod.SIMPLE_GET, 0L, 200, is); }
 	
+	@Override
 	public String toString()
-	{ return Integer.toString(code); }
+	{ return method + "-" + Integer.toString(code); }
 	
 	public String asString() throws Exception
 	{ return LMStringUtils.readString(stream); }

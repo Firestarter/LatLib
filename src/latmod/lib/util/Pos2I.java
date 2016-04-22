@@ -18,15 +18,18 @@ public class Pos2I
 	public Pos2D toPos2D()
 	{ return new Pos2D(x, y); }
 	
+	@Override
 	public int hashCode()
 	{ return x * 31 + y; }
 	
 	public boolean equalsPos(Pos2I o)
 	{ return o.x == x && o.y == y; }
 	
+	@Override
 	public String toString()
 	{ return "[" + x + ',' + ' ' + y + ']'; }
 	
+	@Override
 	public boolean equals(Object o)
 	{ return o != null && (o == this || equalsPos((Pos2I) o)); }
 	

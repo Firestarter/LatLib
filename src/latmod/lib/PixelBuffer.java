@@ -70,6 +70,7 @@ public class PixelBuffer
 				setRGB(x, y, col);
 	}
 	
+	@Override
 	public boolean equals(Object o)
 	{
 		if(o == null) return false;
@@ -87,6 +88,7 @@ public class PixelBuffer
 		return false;
 	}
 	
+	@Override
 	public int hashCode()
 	{ return LMUtils.hashCode(width, height, pixels); }
 	

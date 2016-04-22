@@ -31,6 +31,7 @@ public abstract class GitHubFile extends FinalIDObject
 		return parent == null ? path : (parent.getPath() + "/" + path);
 	}
 	
+	@Override
 	public String toString()
 	{ return getPath(); }
 	

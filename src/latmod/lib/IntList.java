@@ -151,6 +151,7 @@ public class IntList implements Iterable<Integer>
 		return a;
 	}
 	
+	@Override
 	public int hashCode()
 	{
 		int h = 0;
@@ -159,6 +160,7 @@ public class IntList implements Iterable<Integer>
 		return h;
 	}
 	
+	@Override
 	public boolean equals(Object o)
 	{
 		if(o == null) return false;
@@ -192,6 +194,7 @@ public class IntList implements Iterable<Integer>
 		}
 	}
 	
+	@Override
 	public String toString()
 	{
 		if(size == 0) return "[ ]";
@@ -215,6 +218,7 @@ public class IntList implements Iterable<Integer>
 		return sb.toString();
 	}
 	
+	@Override
 	public Iterator<Integer> iterator()
 	{ return new IntIterator(array); }
 	
@@ -273,15 +277,18 @@ public class IntList implements Iterable<Integer>
 		public IntIterator(int[] v)
 		{ values = v; }
 		
+		@Override
 		public boolean hasNext()
 		{ return pos < values.length; }
 		
+		@Override
 		public Integer next()
 		{ return values[++pos]; }
 		
+		@Override
 		public void remove()
 		{
-			throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException("remove");
 		}
 	}
 }

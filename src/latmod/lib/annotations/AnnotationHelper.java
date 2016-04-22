@@ -23,6 +23,7 @@ public class AnnotationHelper
 	{
 		register(Info.class, new Handler()
 		{
+			@Override
 			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
 				if(container instanceof IInfoContainer)
@@ -39,6 +40,7 @@ public class AnnotationHelper
 		
 		register(NumberBounds.class, new Handler()
 		{
+			@Override
 			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
 				if(container instanceof INumberBoundsContainer)
@@ -54,6 +56,7 @@ public class AnnotationHelper
 		
 		register(Flags.class, new Handler()
 		{
+			@Override
 			public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
 			{
 				if(container instanceof IFlagContainer)

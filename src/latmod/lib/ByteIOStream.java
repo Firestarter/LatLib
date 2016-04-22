@@ -86,9 +86,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{
 		return new OutputStream()
 		{
+			@Override
 			public void write(int b) throws IOException
 			{ ByteIOStream.this.write(b); }
 			
+			@Override
 			public void write(byte b[], int off, int len) throws IOException
 			{ ByteIOStream.this.write(b, off, len); }
 		};
@@ -98,15 +100,18 @@ public final class ByteIOStream implements DataInput, DataOutput
 	{
 		return new InputStream()
 		{
+			@Override
 			public int read() throws IOException
 			{ return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte(); }
 			
+			@Override
 			public int read(byte b[], int off, int len) throws IOException
 			{
 				ByteIOStream.this.readFully(b, off, len);
 				return len;
 			}
 			
+			@Override
 			public int available()
 			{ return ByteIOStream.this.available(); }
 		};
@@ -114,6 +119,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	// Read functions //
 	
+	@Override
 	public byte readByte()
 	{
 		byte b = bytes[pos];
@@ -121,6 +127,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		return b;
 	}
 	
+	@Override
 	public void readFully(byte[] b, int off, int len)
 	{
 		if(b == null || len == 0) return;
@@ -128,9 +135,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos += len;
 	}
 	
+	@Override
 	public int readUnsignedByte()
 	{ return readByte() & 0xFF; }
 	
+	@Override
 	public void readFully(byte[] b)
 	{ readFully(b, 0, b.length); }
 	
@@ -143,12 +152,15 @@ public final class ByteIOStream implements DataInput, DataOutput
 		return b;
 	}
 	
+	@Override
 	public boolean readBoolean()
 	{ return readUnsignedByte() == 1; }
 	
+	@Override
 	public char readChar()
 	{ return (char) readUnsignedShort(); }
 	
+	@Override
 	public String readUTF()
 	{
 		int l = readUnsignedShort();
@@ -214,9 +226,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 	}
 	
 	@Deprecated
+	@Override
 	public String readLine()
 	{ return null; }
 	
+	@Override
 	public int readUnsignedShort()
 	{
 		int v = Bits.toUShort(bytes, pos);
@@ -224,9 +238,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 		return v;
 	}
 	
+	@Override
 	public short readShort()
 	{ return (short) readUnsignedShort(); }
 	
+	@Override
 	public int readInt()
 	{
 		int v = Bits.toInt(bytes, pos);
@@ -234,6 +250,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		return v;
 	}
 	
+	@Override
 	public long readLong()
 	{
 		long v = Bits.toLong(bytes, pos);
@@ -241,9 +258,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 		return v;
 	}
 	
+	@Override
 	public float readFloat()
 	{ return Float.intBitsToFloat(readInt()); }
 	
+	@Override
 	public double readDouble()
 	{ return Double.longBitsToDouble(readLong()); }
 	
@@ -266,6 +285,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	// Write functions //
 	
+	@Override
 	public void writeByte(int i)
 	{
 		expand(1);
@@ -273,9 +293,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos++;
 	}
 	
+	@Override
 	public void write(int b)
 	{ writeByte(b); }
 	
+	@Override
 	public void write(byte[] b, int off, int len)
 	{
 		if(b == null || len == 0) return;
@@ -284,6 +306,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos += len;
 	}
 	
+	@Override
 	public void write(byte[] b)
 	{ write(b, 0, b.length); }
 	
@@ -298,12 +321,15 @@ public final class ByteIOStream implements DataInput, DataOutput
 		write(b);
 	}
 	
+	@Override
 	public void writeBoolean(boolean b)
 	{ writeByte(b ? 1 : 0); }
 	
+	@Override
 	public void writeChar(int c)
 	{ writeShort(c); }
 	
+	@Override
 	public void writeUTF(String s)
 	{
 		if(s == null)
@@ -359,6 +385,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		}
 	}
 	
+	@Override
 	public void writeBytes(String s)
 	{
 		if(s == null || s.isEmpty()) return;
@@ -366,6 +393,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 			writeByte((byte) s.charAt(i));
 	}
 	
+	@Override
 	public void writeChars(String s)
 	{
 		if(s == null || s.isEmpty()) return;
@@ -373,6 +401,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 			writeChar(s.charAt(i));
 	}
 	
+	@Override
 	public void writeShort(int s)
 	{
 		expand(2);
@@ -380,6 +409,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos += 2;
 	}
 	
+	@Override
 	public void writeInt(int i)
 	{
 		expand(4);
@@ -387,6 +417,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos += 4;
 	}
 	
+	@Override
 	public void writeLong(long l)
 	{
 		expand(8);
@@ -394,9 +425,11 @@ public final class ByteIOStream implements DataInput, DataOutput
 		pos += 8;
 	}
 	
+	@Override
 	public void writeFloat(float f)
 	{ writeInt(Float.floatToIntBits(f)); }
 	
+	@Override
 	public void writeDouble(double d)
 	{ writeLong(Double.doubleToLongBits(d)); }
 	
@@ -415,6 +448,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 			writeInt(ai[i]);
 	}
 	
+	@Override
 	public int skipBytes(int n)
 	{ return 0; }
 	

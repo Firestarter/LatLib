@@ -23,6 +23,7 @@ public class LinkBuilder
 		return this;
 	}
 	
+	@Override
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder(base);

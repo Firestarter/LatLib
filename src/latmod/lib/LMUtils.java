@@ -14,12 +14,14 @@ public class LMUtils
 	
 	public static final Comparator<Package> packageComparator = new Comparator<Package>()
 	{
+		@Override
 		public int compare(Package o1, Package o2)
 		{ return o1.getName().compareToIgnoreCase(o2.getName()); }
 	};
 	
 	public static final Comparator<IIDObject> IDObjectComparator = new Comparator<IIDObject>()
 	{
+		@Override
 		public int compare(IIDObject o1, IIDObject o2)
 		{ return o1.getID().compareToIgnoreCase(o2.getID()); }
 	};

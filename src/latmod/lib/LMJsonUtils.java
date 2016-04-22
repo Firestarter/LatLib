@@ -28,24 +28,29 @@ public class LMJsonUtils
 			deserializationContext = new JsonDeserializationContext()
 			{
 				@SuppressWarnings("unchecked")
+				@Override
 				public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException
 				{ return (T) gson.fromJson(json, typeOfT); }
 			};
 			
 			serializationContext = new JsonSerializationContext()
 			{
+				@Override
 				public JsonElement serialize(Object src)
 				{ return gson.toJsonTree(src); }
 				
+				@Override
 				public JsonElement serialize(Object src, Type typeOfSrc)
 				{ return gson.toJsonTree(src, typeOfSrc); }
 			};
 			
 			prettySerializationContext = new JsonSerializationContext()
 			{
+				@Override
 				public JsonElement serialize(Object src)
 				{ return gson_pretty.toJsonTree(src); }
 				
+				@Override
 				public JsonElement serialize(Object src, Type typeOfSrc)
 				{ return gson_pretty.toJsonTree(src, typeOfSrc); }
 			};

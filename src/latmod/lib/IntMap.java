@@ -18,6 +18,7 @@ public class IntMap
 	public int size()
 	{ return list.size() / 2; }
 	
+	@Override
 	public String toString()
 	{
 		if(list.isEmpty()) return "{ }";
@@ -42,6 +43,14 @@ public class IntMap
 		sb.append('}');
 		return sb.toString();
 	}
+	
+	@Override
+	public int hashCode()
+	{ return list.hashCode(); }
+	
+	@Override
+	public boolean equals(Object o)
+	{ return list.equals(o); }
 	
 	public int[] toArray()
 	{ return list.toArray(); }

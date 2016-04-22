@@ -88,6 +88,7 @@ public class LMMapUtils
 	{
 		return new Comparator<Map.Entry<K, V>>()
 		{
+			@Override
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{
 				if(ignoreCase) return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey()));

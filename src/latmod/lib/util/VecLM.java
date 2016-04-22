@@ -67,6 +67,7 @@ public final class VecLM
 	public boolean containsNaN()
 	{ return Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(y); }
 	
+	@Override
 	public boolean equals(Object o)
 	{ return (o instanceof VecLM && equalsPos((VecLM) o)); }
 	
