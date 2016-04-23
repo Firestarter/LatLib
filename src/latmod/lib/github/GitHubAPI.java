@@ -1,7 +1,8 @@
 package latmod.lib.github;
 
 import com.google.gson.JsonElement;
-import latmod.lib.net.*;
+import latmod.lib.net.LMURLConnection;
+import latmod.lib.net.RequestMethod;
 
 /**
  * Created by LatvianModder on 16.03.2016.

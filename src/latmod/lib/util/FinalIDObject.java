@@ -1,6 +1,7 @@
 package latmod.lib.util;
 
-import latmod.lib.*;
+import latmod.lib.IIDObject;
+import latmod.lib.LMUtils;
 
 public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
 {

@@ -2,7 +2,8 @@ package latmod.lib.annotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by LatvianModder on 26.03.2016.

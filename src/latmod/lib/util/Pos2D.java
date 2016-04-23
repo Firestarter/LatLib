@@ -1,6 +1,7 @@
 package latmod.lib.util;
 
-import latmod.lib.*;
+import latmod.lib.LMStringUtils;
+import latmod.lib.LMUtils;
 
 public class Pos2D
 {

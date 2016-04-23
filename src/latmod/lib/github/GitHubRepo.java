@@ -3,7 +3,9 @@ package latmod.lib.github;
 import com.google.gson.JsonElement;
 import latmod.lib.util.FinalIDObject;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by LatvianModder on 16.03.2016.

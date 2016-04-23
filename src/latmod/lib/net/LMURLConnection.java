@@ -1,9 +1,13 @@
 package latmod.lib.net;
 
-import latmod.lib.*;
+import latmod.lib.ByteIOStream;
+import latmod.lib.LMUtils;
 
-import java.io.*;
-import java.net.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class LMURLConnection
 {

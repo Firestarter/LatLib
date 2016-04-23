@@ -1,6 +1,11 @@
 package latmod.lib;
 
-import java.io.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UTFDataFormatException;
 import java.util.UUID;
 
 /**

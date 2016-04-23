@@ -1,9 +1,17 @@
 package latmod.lib;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
-import java.net.*;
-import java.util.*;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Made by LatvianModder

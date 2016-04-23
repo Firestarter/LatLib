@@ -1,6 +1,7 @@
 package latmod.lib.net;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LinkBuilder
 {

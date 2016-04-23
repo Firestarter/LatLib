@@ -1,9 +1,13 @@
 package latmod.lib.github;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import latmod.lib.util.FinalIDObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by LatvianModder on 16.03.2016.

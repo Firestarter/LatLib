@@ -1,6 +1,7 @@
 package latmod.lib;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by LatvianModder on 06.03.2016.
