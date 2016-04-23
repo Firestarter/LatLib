@@ -66,6 +66,7 @@ public class LMMapUtils
 		
 		if(c == null) c = new Comparator<Map.Entry<K, V>>()
 		{
+			@Override
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
 		};
@@ -101,6 +102,7 @@ public class LMMapUtils
 	{
 		return new Comparator<Map.Entry<K, V>>()
 		{
+			@Override
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{
 				Number n1 = ((Number) o1.getKey());

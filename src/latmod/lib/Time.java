@@ -28,12 +28,15 @@ public final class Time implements Comparable<Time>
 	public boolean equalsTime(long t)
 	{ return millis == t; }
 	
+	@Override
 	public int hashCode()
 	{ return Long.valueOf(millis).hashCode(); }
 	
+	@Override
 	public boolean equals(Object o)
 	{ return o != null && (o == this || (o instanceof Time && equalsTime(((Time) o).millis)) || (o instanceof Number && equalsTime(((Number) o).longValue()))); }
 	
+	@Override
 	public String toString()
 	{
 		StringBuilder sb = new StringBuilder();

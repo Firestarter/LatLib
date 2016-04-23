@@ -73,6 +73,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		}
 	}
 	
+	@Override
 	public String toString()
 	{ return toString(false); }
 	

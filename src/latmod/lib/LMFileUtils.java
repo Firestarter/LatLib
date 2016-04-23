@@ -19,12 +19,14 @@ public class LMFileUtils
 	
 	public static final Comparator<File> fileComparator = new Comparator<File>()
 	{
+		@Override
 		public int compare(File o1, File o2)
 		{ return o1.getName().compareToIgnoreCase(o2.getName()); }
 	};
 	
 	public static final Comparator<File> deepFileComparator = new Comparator<File>()
 	{
+		@Override
 		public int compare(File o1, File o2)
 		{ return o1.getAbsolutePath().compareToIgnoreCase(o2.getAbsolutePath()); }
 	};
