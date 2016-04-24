@@ -1,5 +1,8 @@
 package latmod.lib;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -102,6 +105,19 @@ public class Bits
 		return new UUID(msb, lsb);
 	}
 	
+	public static List<UUID> toUUIDList(byte[] b)
+	{
+		if(b == null || b.length == 0) return new ArrayList<>();
+		List<UUID> list = new ArrayList<>(b.length / 16);
+		
+		for(int i = 0; i < b.length; i += 16)
+		{
+			list.add(toUUID(b, i));
+		}
+		
+		return list;
+	}
+	
 	// - //
 	
 	public static void fromUShort(byte[] b, int off, int v)
@@ -134,5 +150,19 @@ public class Bits
 	{
 		fromLong(b, off, uuid.getMostSignificantBits());
 		fromLong(b, off + 8, uuid.getLeastSignificantBits());
+	}
+	
+	public static byte[] fromUUIDList(Collection<UUID> c)
+	{
+		byte[] b = new byte[c.size() * 16];
+		int idx = 0;
+		
+		for(UUID id : c)
+		{
+			fromUUID(b, idx, id);
+			idx += 16;
+		}
+		
+		return b;
 	}
 }
