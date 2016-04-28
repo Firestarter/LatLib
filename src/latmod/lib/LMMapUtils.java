@@ -47,6 +47,12 @@ public class LMMapUtils
 		return sb.toString();
 	}
 	
+	//FIXME: Tree map string
+	public static String toTreeString(Map<?, ?> map, int inc)
+	{
+		return toString(map);
+	}
+	
 	public static Map<String, String> toStringMap(Map<?, ?> map)
 	{
 		if(map == null) return null;

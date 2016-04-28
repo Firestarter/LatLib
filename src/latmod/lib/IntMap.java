@@ -86,6 +86,14 @@ public class IntMap
 		}
 	}
 	
+	public void putIfNot0(int key, int value)
+	{
+		if(value != 0)
+		{
+			put(key, value);
+		}
+	}
+	
 	public int get(int key)
 	{ return list.get(keyIndex(key) + 1); }
 	
