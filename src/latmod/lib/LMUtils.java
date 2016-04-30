@@ -34,6 +34,12 @@ public class LMUtils
 		{ return o1.getID().compareToIgnoreCase(o2.getID()); }
 	};
 	
+	public static <T> T convert(Object t)
+	{
+		if(t == null) return null;
+		return (T) t;
+	}
+	
 	@SuppressWarnings("all")
 	public static <E> E newObject(Class<?> c, Object... o) throws Exception
 	{
@@ -150,19 +156,6 @@ public class LMUtils
 			is.close();
 			os.close();
 		}
-	}
-	
-	@SuppressWarnings("all")
-	public static <T> T[] newArray(int length, Class<? extends T> typeClass)
-	{ return (T[]) new Object[length]; }
-	
-	@SuppressWarnings("all")
-	public static <T> T[] convertArray(Object[] array, Class<? extends T> typeClass)
-	{
-		if(array == null) return null;
-		T[] t = newArray(array.length, typeClass);
-		System.arraycopy(array, 0, t, 0, t.length);
-		return t;
 	}
 	
 	public static String getID(Object o)
