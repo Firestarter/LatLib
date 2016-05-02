@@ -58,9 +58,9 @@ public class MathHelperLM
 	
 	public static double sqrt(double d)
 	{
-		if(d == 0D) return 0D;
-		else if(d == 1D) return 1D;
-		else return Math.sqrt(d);
+		if(d == 0D) { return 0D; }
+		else if(d == 1D) { return 1D; }
+		else { return Math.sqrt(d); }
 	}
 	
 	public static double sqrt2sq(double x, double y)
@@ -74,7 +74,7 @@ public class MathHelperLM
 	
 	public static double power(double i, int n)
 	{
-		if(n == 2) return i * i;
+		if(n == 2) { return i * i; }
 		double i1 = 1D;
 		for(int j = 0; j < n; j++)
 			i1 *= i;
@@ -83,7 +83,7 @@ public class MathHelperLM
 	
 	public static int power(int i, int n)
 	{
-		if(n == 2) return i * i;
+		if(n == 2) { return i * i; }
 		int i1 = 1;
 		for(int j = 0; j < n; j++)
 			i1 *= i;
@@ -92,7 +92,7 @@ public class MathHelperLM
 	
 	public static long power(long i, int n)
 	{
-		if(n == 2) return i * i;
+		if(n == 2) { return i * i; }
 		long i1 = 1L;
 		for(int j = 0; j < n; j++)
 			i1 *= i;
@@ -101,7 +101,7 @@ public class MathHelperLM
 	
 	public static double distSq(double x1, double y1, double z1, double x2, double y2, double z2)
 	{
-		if(x1 == x2 && y1 == y2 && z1 == z2) return 0D;
+		if(x1 == x2 && y1 == y2 && z1 == z2) { return 0D; }
 		return (sq(x2 - x1) + sq(y2 - y1) + sq(z2 - z1));
 	}
 	
@@ -110,7 +110,7 @@ public class MathHelperLM
 	
 	public static double distSq(double x1, double y1, double x2, double y2)
 	{
-		if(x1 == x2 && y1 == y2) return 0D;
+		if(x1 == x2 && y1 == y2) { return 0D; }
 		return (sq(x2 - x1) + sq(y2 - y1));
 	}
 	
@@ -119,7 +119,7 @@ public class MathHelperLM
 	
 	public static VecLM getLook(VecLM v, double yaw, double pitch, double dist)
 	{
-		if(v == null) v = new VecLM();
+		if(v == null) { v = new VecLM(); }
 		double f = cos(pitch * RAD);
 		double x1 = cos(-yaw * RAD + HALF_PI);
 		double z1 = sin(-yaw * RAD + HALF_PI);
@@ -151,7 +151,7 @@ public class MathHelperLM
 	
 	public static int randomInt(Random r, int min, int max)
 	{
-		if(min == max) return min;
+		if(min == max) { return min; }
 		if(min > max)
 		{
 			int min0 = min;
@@ -163,7 +163,7 @@ public class MathHelperLM
 	
 	public static double randomDouble(Random r, double min, double max)
 	{
-		if(min == max) return min;
+		if(min == max) { return min; }
 		if(min > max)
 		{
 			double min0 = min;
@@ -184,22 +184,22 @@ public class MathHelperLM
 	
 	public static double clamp(double n, double min, double max)
 	{
-		if(n < min) return min;
-		if(n > max) return max;
+		if(n < min) { return min; }
+		if(n > max) { return max; }
 		return n;
 	}
 	
 	public static int clampInt(int n, int min, int max)
 	{
-		if(n < min) return min;
-		if(n > max) return max;
+		if(n < min) { return min; }
+		if(n > max) { return max; }
 		return n;
 	}
 	
 	public static float clampFloat(float n, float min, float max)
 	{
-		if(n < min) return min;
-		if(n > max) return max;
+		if(n < min) { return min; }
+		if(n > max) { return max; }
 		return n;
 	}
 	
@@ -241,17 +241,17 @@ public class MathHelperLM
 	
 	public static int getRotYaw(int rot)
 	{
-		if(rot == 2) return 180;
-		else if(rot == 3) return 0;
-		else if(rot == 4) return 90;
-		else if(rot == 5) return -90;
+		if(rot == 2) { return 180; }
+		else if(rot == 3) { return 0; }
+		else if(rot == 4) { return 90; }
+		else if(rot == 5) { return -90; }
 		return 0;
 	}
 	
 	public static int getRotPitch(int rot)
 	{
-		if(rot == 0) return 90;
-		else if(rot == 1) return -90;
+		if(rot == 0) { return 90; }
+		else if(rot == 1) { return -90; }
 		return 0;
 	}
 	
@@ -263,7 +263,7 @@ public class MathHelperLM
 	
 	public static int[] flip(int[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		int ai[] = new int[i.length];
 		for(int j = 0; j < i.length; j++)
 			ai[j] = i[(i.length - 1) - j];
@@ -281,14 +281,14 @@ public class MathHelperLM
 	public static double wrap(double i, double n)
 	{
 		i = i % n;
-		if(i < 0) i += n;
+		if(i < 0) { i += n; }
 		return i;
 	}
 	
 	public static int wrap(int i, int n)
 	{
 		i = i % n;
-		if(i < 0) i += n;
+		if(i < 0) { i += n; }
 		return i;
 	}
 	

@@ -36,7 +36,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public byte[] toByteArray()
 	{
-		if(pos == bytes.length) return bytes;
+		if(pos == bytes.length) { return bytes; }
 		byte[] b = new byte[pos];
 		System.arraycopy(bytes, 0, b, 0, pos);
 		return b;
@@ -136,7 +136,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	@Override
 	public void readFully(byte[] b, int off, int len)
 	{
-		if(b == null || len == 0) return;
+		if(b == null || len == 0) { return; }
 		System.arraycopy(bytes, pos, b, off, len);
 		pos += len;
 	}
@@ -152,7 +152,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	public byte[] readByteArray(ByteCount c)
 	{
 		int s = c.read(this);
-		if(s == -1) return null;
+		if(s == -1) { return null; }
 		byte[] b = new byte[s];
 		readFully(b);
 		return b;
@@ -170,8 +170,8 @@ public final class ByteIOStream implements DataInput, DataOutput
 	public String readUTF()
 	{
 		int l = readUnsignedShort();
-		if(l == 65535) return null;
-		else if(l == 0) return "";
+		if(l == 65535) { return null; }
+		else if(l == 0) { return ""; }
 		
 		char[] utf_chars = new char[l];
 		
@@ -182,7 +182,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 		while(c1 < l)
 		{
 			c = (int) bytes[c1 + pos0] & 0xFF;
-			if(c > 127) break;
+			if(c > 127) { break; }
 			c1++;
 			utf_chars[cac++] = (char) c;
 		}
@@ -207,18 +207,18 @@ public final class ByteIOStream implements DataInput, DataOutput
 				case 12:
 				case 13:
 					c1 += 2;
-					if(c1 > l) throwUTFException("malformed input: partial character at end");
+					if(c1 > l) { throwUTFException("malformed input: partial character at end"); }
 					c2 = (int) bytes[c1 + pos0 - 1];
-					if((c2 & 0xC0) != 0x80) throwUTFException("malformed input around byte " + c1);
+					if((c2 & 0xC0) != 0x80) { throwUTFException("malformed input around byte " + c1); }
 					utf_chars[cac++] = (char) (((c & 0x1F) << 6) | (c2 & 0x3F));
 					break;
 				case 14:
 					c1 += 3;
-					if(c1 > l) throwUTFException("malformed input: partial character at end");
+					if(c1 > l) { throwUTFException("malformed input: partial character at end"); }
 					c2 = (int) bytes[c1 + pos0 - 2];
 					c3 = (int) bytes[c1 + pos0 - 1];
 					if(((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
-						throwUTFException("malformed input around byte " + (c1 - 1));
+					{ throwUTFException("malformed input around byte " + (c1 - 1)); }
 					utf_chars[cac++] = (char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F)));
 					break;
 				default:
@@ -282,7 +282,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	public int[] readIntArray(ByteCount c)
 	{
 		int len = c.read(this);
-		if(len == -1) return null;
+		if(len == -1) { return null; }
 		int[] ai = new int[len];
 		for(int i = 0; i < len; i++)
 			ai[i] = readInt();
@@ -306,7 +306,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	@Override
 	public void write(byte[] b, int off, int len)
 	{
-		if(b == null || len == 0) return;
+		if(b == null || len == 0) { return; }
 		expand(len);
 		System.arraycopy(b, off, bytes, pos, len);
 		pos += len;
@@ -355,12 +355,12 @@ public final class ByteIOStream implements DataInput, DataOutput
 		for(int i = 0; i < sl; i++)
 		{
 			c = s.charAt(i);
-			if((c >= 0x0001) && (c <= 0x007F)) l++;
-			else if(c > 0x07FF) l += 3;
-			else l += 2;
+			if((c >= 0x0001) && (c <= 0x007F)) { l++; }
+			else if(c > 0x07FF) { l += 3; }
+			else { l += 2; }
 		}
 		
-		if(l >= 65535) throwUTFException("encoded string too long: " + l + " bytes");
+		if(l >= 65535) { throwUTFException("encoded string too long: " + l + " bytes"); }
 		
 		writeShort(l);
 		expand(l);
@@ -369,14 +369,14 @@ public final class ByteIOStream implements DataInput, DataOutput
 		for(i = 0; i < sl; i++)
 		{
 			c = s.charAt(i);
-			if(!(c >= 0x0001 && c <= 0x007F)) break;
+			if(!(c >= 0x0001 && c <= 0x007F)) { break; }
 			writeByte(c);
 		}
 		
 		for(; i < sl; i++)
 		{
 			c = s.charAt(i);
-			if(c >= 0x0001 && c <= 0x007F) writeByte(c);
+			if(c >= 0x0001 && c <= 0x007F) { writeByte(c); }
 			else if(c > 0x07FF)
 			{
 				writeByte(0xE0 | ((c >> 12) & 0x0F));
@@ -394,7 +394,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	@Override
 	public void writeBytes(String s)
 	{
-		if(s == null || s.isEmpty()) return;
+		if(s == null || s.isEmpty()) { return; }
 		for(int i = 0; i < s.length(); i++)
 			writeByte((byte) s.charAt(i));
 	}
@@ -402,7 +402,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 	@Override
 	public void writeChars(String s)
 	{
-		if(s == null || s.isEmpty()) return;
+		if(s == null || s.isEmpty()) { return; }
 		for(int i = 0; i < s.length(); i++)
 			writeChar(s.charAt(i));
 	}
@@ -460,8 +460,8 @@ public final class ByteIOStream implements DataInput, DataOutput
 	
 	public static int getUTFLength(String data)
 	{
-		if(data == null) return -1;
-		else if(data.isEmpty()) return 0;
+		if(data == null) { return -1; }
+		else if(data.isEmpty()) { return 0; }
 		else
 		{
 			int len = 0;
@@ -470,9 +470,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 			for(int i = 0; i < data.length(); i++)
 			{
 				c = data.charAt(i);
-				if((c >= 0x0001) && (c <= 0x007F)) len++;
-				else if(c > 0x07FF) len += 3;
-				else len += 2;
+				if((c >= 0x0001) && (c <= 0x007F)) { len++; }
+				else if(c > 0x07FF) { len += 3; }
+				else { len += 2; }
 			}
 			
 			return len;

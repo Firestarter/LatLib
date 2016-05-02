@@ -96,9 +96,9 @@ public class IntList implements Iterable<Integer>
 	
 	public int indexOf(int value)
 	{
-		if(size == 0) return -1;
+		if(size == 0) { return -1; }
 		for(int i = 0; i < size; i++)
-			if(array[i] == value) return i;
+			if(array[i] == value) { return i; }
 		return -1;
 	}
 	
@@ -107,7 +107,7 @@ public class IntList implements Iterable<Integer>
 	
 	public int removeKey(int key)
 	{
-		if(key < 0 || key >= size) return defVal;
+		if(key < 0 || key >= size) { return defVal; }
 		int rem = get(key);
 		size--;
 		System.arraycopy(array, key + 1, array, key, size - key);
@@ -128,15 +128,15 @@ public class IntList implements Iterable<Integer>
 	
 	public int[] toArray(int[] a)
 	{
-		if(a == null || a.length != size) a = new int[size];
-		if(size > 0) System.arraycopy(array, 0, a, 0, size);
+		if(a == null || a.length != size) { a = new int[size]; }
+		if(size > 0) { System.arraycopy(array, 0, a, 0, size); }
 		return a;
 	}
 	
 	public List<Integer> toList()
 	{
 		ArrayList<Integer> l = new ArrayList<>();
-		if(size == 0) return l;
+		if(size == 0) { return l; }
 		for(int i = 0; i < size; i++)
 			l.add(array[i]);
 		return l;
@@ -144,13 +144,13 @@ public class IntList implements Iterable<Integer>
 	
 	public void sort()
 	{
-		if(size < 2) return;
+		if(size < 2) { return; }
 		Arrays.sort(array, 0, size);
 	}
 	
 	public int[] toSortedArray()
 	{
-		if(size == 0) return new int[0];
+		if(size == 0) { return new int[0]; }
 		int[] a = toArray();
 		Arrays.sort(a);
 		return a;
@@ -168,15 +168,15 @@ public class IntList implements Iterable<Integer>
 	@Override
 	public boolean equals(Object o)
 	{
-		if(o == null) return false;
-		else if(o == this) return true;
+		if(o == null) { return false; }
+		else if(o == this) { return true; }
 		else
 		{
 			IntList l = (IntList) o;
-			if(size != l.size) return false;
+			if(size != l.size) { return false; }
 			for(int i = 0; i < size; i++)
 			{
-				if(array[i] != l.array[i]) return false;
+				if(array[i] != l.array[i]) { return false; }
 			}
 			return true;
 		}
@@ -184,11 +184,11 @@ public class IntList implements Iterable<Integer>
 	
 	public boolean equalsIgnoreOrder(IntList l)
 	{
-		if(l == null) return false;
-		else if(l == this) return true;
+		if(l == null) { return false; }
+		else if(l == this) { return true; }
 		else
 		{
-			if(size != l.size) return false;
+			if(size != l.size) { return false; }
 			
 			IntList l1 = l.copy();
 			
@@ -202,7 +202,7 @@ public class IntList implements Iterable<Integer>
 	@Override
 	public String toString()
 	{
-		if(size == 0) return "[ ]";
+		if(size == 0) { return "[ ]"; }
 		StringBuilder sb = new StringBuilder();
 		sb.append('[');
 		sb.append(' ');
@@ -241,16 +241,16 @@ public class IntList implements Iterable<Integer>
 	{
 		HashMap<Integer, Boolean> map = new HashMap<>();
 		
-		if(isEmpty() && newList.isEmpty()) return map;
+		if(isEmpty() && newList.isEmpty()) { return map; }
 		
 		for(int i = 0; i < size; i++)
 		{
-			if(!newList.contains(array[i])) map.put(array[i], false);
+			if(!newList.contains(array[i])) { map.put(array[i], false); }
 		}
 		
 		for(int i = 0; i < newList.size; i++)
 		{
-			if(!contains(newList.array[i])) map.put(array[i], true);
+			if(!contains(newList.array[i])) { map.put(array[i], true); }
 		}
 		
 		return map;

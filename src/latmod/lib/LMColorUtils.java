@@ -21,7 +21,7 @@ public class LMColorUtils
 			int r = (i >> 2 & 1) * 170 + j;
 			int g = (i >> 1 & 1) * 170 + j;
 			int b = (i & 1) * 170 + j;
-			if(i == 6) r += 85;
+			if(i == 6) { r += 85; }
 			chatFormattingColors[i] = getRGBA(r, g, b, 255);
 		}
 	}
@@ -31,7 +31,7 @@ public class LMColorUtils
 	
 	public static int deserialize(JsonElement e)
 	{
-		if(e == null || !e.isJsonPrimitive()) return 0xFF000000;
+		if(e == null || !e.isJsonPrimitive()) { return 0xFF000000; }
 		return (int) Long.parseLong(e.getAsString().substring(1), 16);
 	}
 	
@@ -81,7 +81,7 @@ public class LMColorUtils
 	
 	public static void addHSB(int pixels[], float h, float s, float b)
 	{
-		if(pixels == null || pixels.length == 0) return;
+		if(pixels == null || pixels.length == 0) { return; }
 		float[] hsb = new float[3];
 		
 		for(int i = 0; i < pixels.length; i++)

@@ -36,14 +36,14 @@ public class LMUtils
 	
 	public static <T> T convert(Object t)
 	{
-		if(t == null) return null;
+		if(t == null) { return null; }
 		return (T) t;
 	}
 	
 	@SuppressWarnings("all")
 	public static <E> E newObject(Class<?> c, Object... o) throws Exception
 	{
-		if(c == null) return null;
+		if(c == null) { return null; }
 		
 		if(o != null && o.length > 0)
 		{
@@ -70,8 +70,8 @@ public class LMUtils
 	
 	public static List<Class<?>> addSubclasses(Class<?> c, List<Class<?>> al, boolean all)
 	{
-		if(c == null) return null;
-		if(al == null) al = new ArrayList<>();
+		if(c == null) { return null; }
+		if(al == null) { al = new ArrayList<>(); }
 		List<Class<?>> al1 = new ArrayList<>();
 		Collections.addAll(al1, c.getDeclaredClasses());
 		if(all && !al1.isEmpty())
@@ -87,7 +87,7 @@ public class LMUtils
 	
 	public static boolean areObjectsEqual(Object o1, Object o2, boolean allowNulls)
 	{
-		if(o1 == null && o2 == null) return allowNulls;
+		if(o1 == null && o2 == null) { return allowNulls; }
 		return !(o1 == null || o2 == null) && (o1 == o2 || o1.equals(o2));
 	}
 	
@@ -96,8 +96,8 @@ public class LMUtils
 	
 	public static int hashCode(Object... o)
 	{
-		if(o == null || o.length == 0) return 0;
-		if(o.length == 1) return hashCodeOf(o[0]);
+		if(o == null || o.length == 0) { return 0; }
+		if(o.length == 1) { return hashCodeOf(o[0]); }
 		int h = 0;
 		for(Object anO : o) h = h * 31 + hashCodeOf(anO);
 		return h;
@@ -105,15 +105,15 @@ public class LMUtils
 	
 	public static long longHashCode(Object... o)
 	{
-		if(o == null || o.length == 0) return 0;
-		if(o.length == 1) return hashCodeOf(o[0]);
+		if(o == null || o.length == 0) { return 0; }
+		if(o.length == 1) { return hashCodeOf(o[0]); }
 		long h = 0L;
 		for(Object anO : o) h = h * 31L + hashCodeOf(anO);
 		return h;
 	}
 	
 	public static void throwException(Exception e) throws Exception
-	{ if(e != null) throw e; }
+	{ if(e != null) { throw e; } }
 	
 	// Net //
 	
@@ -160,20 +160,20 @@ public class LMUtils
 	
 	public static String getID(Object o)
 	{
-		if(o == null) return null;
-		else if(o instanceof IIDObject) return ((IIDObject) o).getID();
-		else return o.toString();
+		if(o == null) { return null; }
+		else if(o instanceof IIDObject) { return ((IIDObject) o).getID(); }
+		else { return o.toString(); }
 	}
 	
 	public static <T> T nonNull(T t)
 	{
-		if(t == null) throw new NullPointerException();
+		if(t == null) { throw new NullPointerException(); }
 		return t;
 	}
 	
 	public static String fromUUID(UUID id)
 	{
-		if(id == null) return null;
+		if(id == null) { return null; }
 		long msb = id.getMostSignificantBits();
 		long lsb = id.getLeastSignificantBits();
 		StringBuilder sb = new StringBuilder(32);
@@ -194,18 +194,18 @@ public class LMUtils
 	
 	public static UUID fromString(String s)
 	{
-		if(s == null || !(s.length() == 32 || s.length() == 36)) return null;
+		if(s == null || !(s.length() == 32 || s.length() == 36)) { return null; }
 		
 		try
 		{
-			if(s.indexOf('-') != -1) return UUID.fromString(s);
+			if(s.indexOf('-') != -1) { return UUID.fromString(s); }
 			
 			int l = s.length();
 			StringBuilder sb = new StringBuilder(36);
 			for(int i = 0; i < l; i++)
 			{
 				sb.append(s.charAt(i));
-				if(i == 7 || i == 11 || i == 15 || i == 19) sb.append('-');
+				if(i == 7 || i == 11 || i == 15 || i == 19) { sb.append('-'); }
 			}
 			
 			return UUID.fromString(sb.toString());

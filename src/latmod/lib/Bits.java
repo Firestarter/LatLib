@@ -36,8 +36,8 @@ public class Bits
 	
 	public static byte setBit(byte bits, byte i, boolean v)
 	{
-		if(v) return (byte) ((bits & 0xFF) | (1 << i));
-		else return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF));
+		if(v) { return (byte) ((bits & 0xFF) | (1 << i)); }
+		else { return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF)); }
 	}
 	
 	public static int not(int bits)
@@ -107,7 +107,7 @@ public class Bits
 	
 	public static List<UUID> toUUIDList(byte[] b)
 	{
-		if(b == null || b.length == 0) return new ArrayList<>();
+		if(b == null || b.length == 0) { return new ArrayList<>(); }
 		List<UUID> list = new ArrayList<>(b.length / 16);
 		
 		for(int i = 0; i < b.length; i += 16)

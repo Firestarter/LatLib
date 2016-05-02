@@ -28,7 +28,7 @@ public class Noise
 	
 	public Noise(Random r)
 	{
-		if(r == null) r = new Random();
+		if(r == null) { r = new Random(); }
 		for(int i = 0; i < perlin.length; i++)
 			perlin[i] = r.nextFloat();
 	}

@@ -47,12 +47,12 @@ public class LMFileUtils
 	
 	public static File newFile(File f)
 	{
-		if(f == null || f.exists()) return f;
+		if(f == null || f.exists()) { return f; }
 		
 		try
 		{
 			File pf = f.getParentFile();
-			if(!pf.exists()) pf.mkdirs();
+			if(!pf.exists()) { pf.mkdirs(); }
 			f.createNewFile();
 			return f;
 		}
@@ -115,18 +115,18 @@ public class LMFileUtils
 				for(File aFl : fl) addAllFiles(l, aFl);
 			}
 		}
-		else if(f.isFile()) l.add(f);
+		else if(f.isFile()) { l.add(f); }
 	}
 	
 	public static long getSize(File f)
 	{
-		if(f == null || !f.exists()) return 0L;
-		else if(f.isFile()) return f.length();
+		if(f == null || !f.exists()) { return 0L; }
+		else if(f.isFile()) { return f.length(); }
 		else if(f.isDirectory())
 		{
 			long length = 0L;
 			File[] f1 = f.listFiles();
-			if(f1 != null && f1.length > 0) for(File aF1 : f1) length += getSize(aF1);
+			if(f1 != null && f1.length > 0) { for(File aF1 : f1) length += getSize(aF1); }
 			return length;
 		}
 		return 0L;
@@ -170,7 +170,7 @@ public class LMFileUtils
 				{
 					File dst1 = new File(dst.getAbsolutePath() + File.separatorChar + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
 					Exception e = copyFile(f, dst1);
-					if(e != null) return e;
+					if(e != null) { return e; }
 				}
 				
 				return null;
@@ -197,8 +197,8 @@ public class LMFileUtils
 	
 	public static boolean delete(File f)
 	{
-		if(f == null || !f.exists()) return false;
-		if(f.isFile()) return f.delete();
+		if(f == null || !f.exists()) { return false; }
+		if(f.isFile()) { return f.delete(); }
 		String[] files = f.list();
 		for(String file : files) delete(new File(f, file));
 		return f.delete();
@@ -209,8 +209,8 @@ public class LMFileUtils
 	
 	public static String getRawFileName(File f)
 	{
-		if(f == null || !f.exists()) return null;
-		else if(f.isDirectory()) return f.getName();
+		if(f == null || !f.exists()) { return null; }
+		else if(f.isDirectory()) { return f.getName(); }
 		else if(f.isFile())
 		{
 			String s = f.getName();

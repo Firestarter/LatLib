@@ -91,13 +91,13 @@ public final class VecLM
 	
 	public double atanXZ(VecLM v)
 	{
-		if(v == null) return -1D;
+		if(v == null) { return -1D; }
 		return Math.atan2(v.z - z, v.x - x);
 	}
 	
 	public double atanY(VecLM v)
 	{
-		if(v == null) return -1D;
+		if(v == null) { return -1D; }
 		return Math.atan(y - v.y);
 	}
 	
@@ -112,14 +112,14 @@ public final class VecLM
 	
 	public double length()
 	{
-		if(isNull()) return 0D;
+		if(isNull()) { return 0D; }
 		return MathHelperLM.dist(0D, 0D, 0D, x, y, z);
 	}
 	
 	public VecLM normalize()
 	{
 		double d = length();
-		if(d == 0D) return new VecLM(0D, 0D, 0D);
+		if(d == 0D) { return new VecLM(0D, 0D, 0D); }
 		return new VecLM(x / d, y / d, z / d);
 	}
 }

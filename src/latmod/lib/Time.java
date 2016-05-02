@@ -63,14 +63,14 @@ public final class Time implements Comparable<Time>
 	
 	private static void append00(StringBuilder sb, int i)
 	{
-		if(i < 10) sb.append('0');
+		if(i < 10) { sb.append('0'); }
 		sb.append(i);
 	}
 	
 	private static void append000(StringBuilder sb, int i)
 	{
-		if(i < 100) sb.append('0');
-		if(i < 10) sb.append('0');
+		if(i < 100) { sb.append('0'); }
+		if(i < 10) { sb.append('0'); }
 		sb.append(i);
 	}
 	
@@ -151,7 +151,7 @@ public final class Time implements Comparable<Time>
 	
 	public static Time deserialize(JsonElement e)
 	{
-		if(e == null || !e.isJsonPrimitive()) return null;
+		if(e == null || !e.isJsonPrimitive()) { return null; }
 		return get(e.getAsLong());
 	}
 }

@@ -9,7 +9,7 @@ public class Converter
 {
 	public static int[] toInts(byte[] b)
 	{
-		if(b == null) return null;
+		if(b == null) { return null; }
 		int ai[] = new int[b.length];
 		for(int i = 0; i < ai.length; i++)
 			ai[i] = b[i] & 0xFF;
@@ -18,7 +18,7 @@ public class Converter
 	
 	public static int[] toInts(short[] b)
 	{
-		if(b == null) return null;
+		if(b == null) { return null; }
 		int ai[] = new int[b.length];
 		for(int i = 0; i < ai.length; i++)
 			ai[i] = b[i];
@@ -27,7 +27,7 @@ public class Converter
 	
 	public static byte[] toBytes(int[] b)
 	{
-		if(b == null) return null;
+		if(b == null) { return null; }
 		byte ai[] = new byte[b.length];
 		for(int i = 0; i < ai.length; i++)
 			ai[i] = (byte) b[i];
@@ -36,7 +36,7 @@ public class Converter
 	
 	public static Integer[] fromInts(int[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		Integer ai[] = new Integer[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -45,7 +45,7 @@ public class Converter
 	
 	public static int[] toInts(Integer[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		int ai[] = new int[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -54,7 +54,7 @@ public class Converter
 	
 	public static Float[] fromFloats(float[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		Float ai[] = new Float[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -63,7 +63,7 @@ public class Converter
 	
 	public static float[] toFloats(Float[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		float ai[] = new float[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -72,7 +72,7 @@ public class Converter
 	
 	public static Double[] fromDoubles(double[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		Double ai[] = new Double[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -81,7 +81,7 @@ public class Converter
 	
 	public static double[] toDoubles(Double[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		double ai[] = new double[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -90,7 +90,7 @@ public class Converter
 	
 	public static Byte[] fromBytes(byte[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		Byte ai[] = new Byte[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -99,7 +99,7 @@ public class Converter
 	
 	public static byte[] toBytes(Byte[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		byte ai[] = new byte[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -108,7 +108,7 @@ public class Converter
 	
 	public static float[] toFloats(double[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		float ai[] = new float[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = (float) i[j];
@@ -117,7 +117,7 @@ public class Converter
 	
 	public static double[] toDoubles(float[] i)
 	{
-		if(i == null) return null;
+		if(i == null) { return null; }
 		double ai[] = new double[i.length];
 		for(int j = 0; j < ai.length; j++)
 			ai[j] = i[j];
@@ -135,7 +135,7 @@ public class Converter
 	{
 		il.clear();
 		for(int i = 0; i < bools.length; i++)
-			if(bools[i] == isTrue) il.add(i);
+			if(bools[i] == isTrue) { il.add(i); }
 	}
 	
 	public static boolean canParseInt(String s)

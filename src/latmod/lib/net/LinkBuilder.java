@@ -19,7 +19,7 @@ public class LinkBuilder
 	
 	public LinkBuilder put(String s, Object o)
 	{
-		if(args == null) args = new HashMap<>();
+		if(args == null) { args = new HashMap<>(); }
 		args.put(s, o);
 		return this;
 	}

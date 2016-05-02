@@ -22,7 +22,7 @@ public class IntMap
 	@Override
 	public String toString()
 	{
-		if(list.isEmpty()) return "{ }";
+		if(list.isEmpty()) { return "{ }"; }
 		StringBuilder sb = new StringBuilder();
 		sb.append('{');
 		sb.append(' ');
@@ -66,7 +66,7 @@ public class IntMap
 	{
 		for(int i = 0; i < list.size(); i += 2)
 		{
-			if(list.get(i) == key) return i;
+			if(list.get(i) == key) { return i; }
 		}
 		
 		return -1;
@@ -109,8 +109,8 @@ public class IntMap
 	
 	public static IntMap fromMap(Map<Integer, Integer> map)
 	{
-		if(map == null) return null;
-		else if(map.isEmpty()) return new IntMap();
+		if(map == null) { return null; }
+		else if(map.isEmpty()) { return new IntMap(); }
 		else
 		{
 			IntMap m = new IntMap(map.size());
@@ -131,7 +131,7 @@ public class IntMap
 	public IntList getKeys()
 	{
 		IntList list1 = new IntList(list.size() / 2);
-		if(list.isEmpty()) return list1;
+		if(list.isEmpty()) { return list1; }
 		
 		for(int i = 0; i < list.size(); i += 2)
 		{
@@ -144,7 +144,7 @@ public class IntMap
 	public IntList getValues()
 	{
 		IntList list1 = new IntList(list.size() / 2);
-		if(list.isEmpty()) return list1;
+		if(list.isEmpty()) { return list1; }
 		
 		for(int i = 0; i < list.size(); i += 2)
 		{

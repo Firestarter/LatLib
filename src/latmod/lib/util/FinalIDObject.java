@@ -9,7 +9,7 @@ public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
 	
 	public FinalIDObject(String id)
 	{
-		if(id == null || id.isEmpty()) throw new NullPointerException("ID can't be null!");
+		if(id == null || id.isEmpty()) { throw new NullPointerException("ID can't be null!"); }
 		ID = id;
 	}
 	

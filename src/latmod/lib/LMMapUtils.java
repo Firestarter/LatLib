@@ -15,7 +15,7 @@ public class LMMapUtils
 {
 	public static String toString(Map<?, ?> map)
 	{
-		if(map == null) return null;
+		if(map == null) { return null; }
 		StringBuilder sb = new StringBuilder();
 		sb.append('{');
 		sb.append(' ');
@@ -55,7 +55,7 @@ public class LMMapUtils
 	
 	public static Map<String, String> toStringMap(Map<?, ?> map)
 	{
-		if(map == null) return null;
+		if(map == null) { return null; }
 		HashMap<String, String> map1 = new HashMap<>();
 		for(Map.Entry<?, ?> e : map.entrySet())
 			map1.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
@@ -64,7 +64,7 @@ public class LMMapUtils
 	
 	public static <K, V> Map<V, K> inverse(Map<K, V> map)
 	{
-		if(map == null) return null;
+		if(map == null) { return null; }
 		HashMap<V, K> map1 = new HashMap<>();
 		for(Map.Entry<K, V> e : map.entrySet())
 			map1.put(e.getValue(), e.getKey());
@@ -73,15 +73,18 @@ public class LMMapUtils
 	
 	public static <K, V> List<Map.Entry<K, V>> sortedEntryList(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
-		if(map == null) return null;
+		if(map == null) { return null; }
 		ArrayList<Map.Entry<K, V>> list = new ArrayList<>();
 		
-		if(c == null) c = new Comparator<Map.Entry<K, V>>()
+		if(c == null)
 		{
-			@Override
-			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-			{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
-		};
+			c = new Comparator<Map.Entry<K, V>>()
+			{
+				@Override
+				public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
+				{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
+			};
+		}
 		
 		list.addAll(map.entrySet());
 		Collections.sort(list, c);
@@ -90,7 +93,7 @@ public class LMMapUtils
 	
 	public static <K, V> List<V> values(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
-		if(map == null) return null;
+		if(map == null) { return null; }
 		ArrayList<V> list = new ArrayList<>();
 		for(Map.Entry<?, V> entry : sortedEntryList(map, c))
 			list.add(entry.getValue());
@@ -104,8 +107,8 @@ public class LMMapUtils
 			@Override
 			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
 			{
-				if(ignoreCase) return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey()));
-				else return String.valueOf(o1.getKey()).compareTo(String.valueOf(o2.getKey()));
+				if(ignoreCase) { return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey())); }
+				else { return String.valueOf(o1.getKey()).compareTo(String.valueOf(o2.getKey())); }
 			}
 		};
 	}
@@ -126,8 +129,8 @@ public class LMMapUtils
 	
 	public static <K, V> void removeAll(Map<K, V> map, RemoveFilter<Map.Entry<K, V>> f)
 	{
-		if(map == null) return;
-		if(f == null) map.clear();
+		if(map == null) { return; }
+		if(f == null) { map.clear(); }
 		else
 		{
 			List<Map.Entry<K, V>> set = new ArrayList<>(map.entrySet());
@@ -135,14 +138,14 @@ public class LMMapUtils
 			
 			for(Map.Entry<K, V> e : set)
 			{
-				if(!f.remove(e)) map.put(e.getKey(), e.getValue());
+				if(!f.remove(e)) { map.put(e.getKey(), e.getValue()); }
 			}
 		}
 	}
 	
 	public static <K, V> void sortMap(LinkedHashMap<K, V> map, Comparator<Map.Entry<K, V>> comparator)
 	{
-		if(map == null || map.isEmpty()) return;
+		if(map == null || map.isEmpty()) { return; }
 		List<Map.Entry<K, V>> list = new ArrayList<>();
 		list.addAll(map.entrySet());
 		Collections.sort(list, comparator);
