@@ -3,6 +3,7 @@ package latmod.lib;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
@@ -215,5 +216,23 @@ public class LMUtils
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static <E> List<E> getObjects(Class<E> type, Class<?> fields, Object obj) throws Exception
+	{
+		List<E> l = new ArrayList<>();
+		
+		for(Field f : fields.getDeclaredFields())
+		{
+			f.setAccessible(true);
+			Object o = f.get(obj);
+			
+			if(type == null || type.isAssignableFrom(o.getClass()))
+			{
+				l.add((E) o);
+			}
+		}
+		
+		return l;
 	}
 }
