@@ -51,7 +51,11 @@ public class IntMap
 	
 	@Override
 	public boolean equals(Object o)
-	{ return list.equals(o); }
+	{
+		if(o == null) { return false; }
+		else if(o == this) { return true; }
+		else { return o instanceof IntMap && list.equals(((IntMap) o).list); }
+	}
 	
 	public int[] toArray()
 	{ return list.toArray(); }

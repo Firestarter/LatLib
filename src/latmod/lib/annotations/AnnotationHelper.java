@@ -30,7 +30,7 @@ public class AnnotationHelper
 				if(container instanceof IInfoContainer)
 				{
 					String[] info = ((Info) a).value();
-					if(info != null && info.length == 0) { info = null; }
+					if(info.length == 0) { info = null; }
 					((IInfoContainer) container).setInfo(info);
 					return true;
 				}

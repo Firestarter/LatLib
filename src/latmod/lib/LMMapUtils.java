@@ -113,20 +113,6 @@ public class LMMapUtils
 		};
 	}
 	
-	public static <K, V> Comparator<Map.Entry<K, V>> byKeyNumbers()
-	{
-		return new Comparator<Map.Entry<K, V>>()
-		{
-			@Override
-			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-			{
-				Number n1 = ((Number) o1.getKey());
-				Number n2 = ((Number) o1.getKey());
-				return Long.compare((n1 == null) ? 0L : n1.longValue(), (n2 == null) ? 0L : n2.longValue());
-			}
-		};
-	}
-	
 	public static <K, V> void removeAll(Map<K, V> map, RemoveFilter<Map.Entry<K, V>> f)
 	{
 		if(map == null) { return; }

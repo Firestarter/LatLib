@@ -451,7 +451,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 		int asize = (ai == null) ? -1 : ai.length;
 		c.write(this, asize);
 		for(int i = 0; i < asize; i++)
+		{
 			writeInt(ai[i]);
+		}
 	}
 	
 	@Override

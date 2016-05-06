@@ -218,7 +218,7 @@ public class LMUtils
 		return null;
 	}
 	
-	public static <E> List<E> getObjects(Class<E> type, Class<?> fields, Object obj) throws Exception
+	public static <E> List<E> getObjects(Class<E> type, Class<?> fields, Object obj) throws IllegalAccessException
 	{
 		List<E> l = new ArrayList<>();
 		
