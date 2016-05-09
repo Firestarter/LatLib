@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import latmod.lib.LMJsonUtils;
 import latmod.lib.LMStringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,4 +41,7 @@ public final class Response
 	
 	public JsonElement asJson() throws Exception
 	{ return LMJsonUtils.fromJson(new BufferedReader(new InputStreamReader(stream))); }
+	
+	public BufferedImage asImage() throws Exception
+	{ return ImageIO.read(stream); }
 }

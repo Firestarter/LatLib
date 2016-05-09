@@ -142,9 +142,6 @@ public class LMUtils
 		return true;
 	}
 	
-	public static long millis()
-	{ return System.currentTimeMillis(); }
-	
 	public static void moveBytes(InputStream is, OutputStream os, boolean close) throws Exception
 	{
 		byte[] buffer = new byte[1024];
