@@ -56,34 +56,33 @@ public class LMMapUtils
 	public static Map<String, String> toStringMap(Map<?, ?> map)
 	{
 		if(map == null) { return null; }
-		HashMap<String, String> map1 = new HashMap<>();
+		Map<String, String> map1 = new HashMap<>();
 		for(Map.Entry<?, ?> e : map.entrySet())
+		{
 			map1.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+		}
 		return map1;
 	}
 	
 	public static <K, V> Map<V, K> inverse(Map<K, V> map)
 	{
 		if(map == null) { return null; }
-		HashMap<V, K> map1 = new HashMap<>();
+		Map<V, K> map1 = new HashMap<>();
 		for(Map.Entry<K, V> e : map.entrySet())
+		{
 			map1.put(e.getValue(), e.getKey());
+		}
 		return map1;
 	}
 	
 	public static <K, V> List<Map.Entry<K, V>> sortedEntryList(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
 		if(map == null) { return null; }
-		ArrayList<Map.Entry<K, V>> list = new ArrayList<>();
+		List<Map.Entry<K, V>> list = new ArrayList<>();
 		
 		if(c == null)
 		{
-			c = new Comparator<Map.Entry<K, V>>()
-			{
-				@Override
-				public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-				{ return ((Comparable) o1.getKey()).compareTo(o2.getKey()); }
-			};
+			c = (o1, o2) -> ((Comparable) o1.getKey()).compareTo(o2.getKey());
 		}
 		
 		list.addAll(map.entrySet());
@@ -94,7 +93,7 @@ public class LMMapUtils
 	public static <K, V> List<V> values(Map<K, V> map, Comparator<Map.Entry<K, V>> c)
 	{
 		if(map == null) { return null; }
-		ArrayList<V> list = new ArrayList<>();
+		List<V> list = new ArrayList<>();
 		for(Map.Entry<?, V> entry : sortedEntryList(map, c))
 			list.add(entry.getValue());
 		return list;
@@ -102,14 +101,9 @@ public class LMMapUtils
 	
 	public static <K, V> Comparator<Map.Entry<K, V>> byKeyNames(final boolean ignoreCase)
 	{
-		return new Comparator<Map.Entry<K, V>>()
-		{
-			@Override
-			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2)
-			{
-				if(ignoreCase) { return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey())); }
-				else { return String.valueOf(o1.getKey()).compareTo(String.valueOf(o2.getKey())); }
-			}
+		return (o1, o2) -> {
+			if(ignoreCase) { return String.valueOf(o1.getKey()).compareToIgnoreCase(String.valueOf(o2.getKey())); }
+			else { return String.valueOf(o1.getKey()).compareTo(String.valueOf(o2.getKey())); }
 		};
 	}
 	

@@ -105,7 +105,7 @@ public class LMListUtils
 	{
 		if(c == null) { return null; }
 		else if(c.isEmpty()) { return new ArrayList<>(); }
-		ArrayList<E> list = new ArrayList<>(c.size());
+		List<E> list = new ArrayList<>(c.size());
 		list.addAll(c);
 		Collections.sort(list, comparator);
 		return list;

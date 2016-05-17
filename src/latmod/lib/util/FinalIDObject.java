@@ -3,7 +3,7 @@ package latmod.lib.util;
 import latmod.lib.IIDObject;
 import latmod.lib.LMUtils;
 
-public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
+public class FinalIDObject implements IIDObject
 {
 	private final String ID;
 	
@@ -28,8 +28,4 @@ public class FinalIDObject implements IIDObject, Comparable<Object> // IDObject
 	@Override
 	public final boolean equals(Object o)
 	{ return o != null && (o == this || o == ID || ID.equals(LMUtils.getID(o))); }
-	
-	@Override
-	public int compareTo(Object o)
-	{ return ID.compareToIgnoreCase(LMUtils.getID(o)); }
 }

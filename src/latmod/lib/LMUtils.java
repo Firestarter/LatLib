@@ -21,19 +21,8 @@ public class LMUtils
 {
 	// Class / Object //
 	
-	public static final Comparator<Package> packageComparator = new Comparator<Package>()
-	{
-		@Override
-		public int compare(Package o1, Package o2)
-		{ return o1.getName().compareToIgnoreCase(o2.getName()); }
-	};
-	
-	public static final Comparator<IIDObject> IDObjectComparator = new Comparator<IIDObject>()
-	{
-		@Override
-		public int compare(IIDObject o1, IIDObject o2)
-		{ return o1.getID().compareToIgnoreCase(o2.getID()); }
-	};
+	public static final Comparator<Package> PACKAGE_COMPARATOR = (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName());
+	public static final Comparator<Object> ID_COMPARATOR = (o1, o2) -> LMUtils.getID(o1).compareToIgnoreCase(LMUtils.getID(o2));
 	
 	public static <T> T convert(Object t)
 	{
@@ -62,7 +51,7 @@ public class LMUtils
 	public static Package[] getAllPackages()
 	{
 		Package[] p = Package.getPackages();
-		Arrays.sort(p, packageComparator);
+		Arrays.sort(p, PACKAGE_COMPARATOR);
 		return p;
 	}
 	
