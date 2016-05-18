@@ -5,5 +5,5 @@ package latmod.lib;
  */
 public interface IIDObject
 {
-	String getID();
+    String getID();
 }
