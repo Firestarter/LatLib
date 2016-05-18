@@ -59,6 +59,7 @@ public class LMListUtils
 	public static int[] toHashCodeArray(Collection<?> c)
 	{
 		if(c == null) { return null; }
+		if(c.isEmpty()) { return new int[0]; }
 		int[] s = new int[c.size()];
 		int i = -1;
 		for(Object o : c)
