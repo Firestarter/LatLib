@@ -11,17 +11,17 @@ public class LMConnection
     public final RequestMethod type;
     public final String url;
     public byte[] data;
-    
+
     public LMConnection(RequestMethod t, String s)
     {
         type = (t == null) ? RequestMethod.SIMPLE_GET : t;
         url = s;
     }
-    
+
     public Response connect() throws Exception
     {
         long startTime = System.currentTimeMillis();
-        
+
         switch(type)
         {
             case SIMPLE_GET:
@@ -41,7 +41,7 @@ public class LMConnection
                 con.setRequestMethod(type.name());
                 con.setRequestProperty("User-Agent", "HTTP/1.1");
                 con.setDoInput(true);
-                
+
                 if(data != null && data.length > 0)
                 {
                     con.setDoOutput(true);
@@ -50,7 +50,7 @@ public class LMConnection
                     os.flush();
                     os.close();
                 }
-                
+
                 int responseCode = con.getResponseCode();
                 return new Response(type, System.currentTimeMillis() - startTime, responseCode, con.getInputStream());
             }

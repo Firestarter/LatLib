@@ -6,10 +6,10 @@ public enum OS
     LINUX,
     OSX,
     OTHER;
-    
+
     public static final OS current = get();
     public static final boolean is64 = System.getProperty("sun.arch.data.model").equals("64");
-    
+
     private static OS get()
     {
         String s = System.getProperty("os.name");

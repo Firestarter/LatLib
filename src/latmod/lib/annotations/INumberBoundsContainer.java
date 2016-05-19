@@ -6,6 +6,8 @@ package latmod.lib.annotations;
 public interface INumberBoundsContainer extends IAnnotationContainer
 {
     void setBounds(double min, double max);
+
     double getMin();
+
     double getMax();
 }

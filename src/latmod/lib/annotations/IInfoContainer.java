@@ -5,6 +5,7 @@ package latmod.lib.annotations;
  */
 public interface IInfoContainer extends IAnnotationContainer
 {
-    void setInfo(String[] s);
     String[] getInfo();
+
+    void setInfo(String[] s);
 }

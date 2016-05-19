@@ -5,19 +5,19 @@ public enum ByteCount
     BYTE(1),
     SHORT(2),
     INT(4);
-    
+
     public final int bytes;
-    
+
     ByteCount(int i)
     { bytes = i; }
-    
+
     public void write(ByteIOStream io, int num)
     {
         if(this == BYTE) { io.writeByte(num); }
         else if(this == SHORT) { io.writeShort(num); }
         else { io.writeInt(num); }
     }
-    
+
     public int read(ByteIOStream io)
     {
         if(this == BYTE)

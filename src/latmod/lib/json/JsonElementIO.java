@@ -28,17 +28,17 @@ public class JsonElementIO
         LONG,
         FLOAT,
         DOUBLE;
-        
+
         public final byte ID;
         public final String name;
-        
+
         JsonID()
         {
             ID = (byte) ordinal();
             name = name().toLowerCase();
         }
     }
-    
+
     public static JsonID getID(JsonElement e)
     {
         if(e == null || e.isJsonNull()) { return JsonID.NULL; }
@@ -47,15 +47,15 @@ public class JsonElementIO
         else
         {
             JsonPrimitive p = e.getAsJsonPrimitive();
-            
+
             if(p.isString()) { return JsonID.STRING; }
             else if(p.isBoolean()) { return JsonID.BOOL; }
             else
             {
                 Number n = p.getAsNumber();
-                
+
                 System.out.println(n.getClass());
-                
+
                 if(n instanceof Integer) { return JsonID.INT; }
                 else if(n instanceof Byte) { return JsonID.BYTE; }
                 else if(n instanceof Short) { return JsonID.SHORT; }
@@ -66,7 +66,7 @@ public class JsonElementIO
             }
         }
     }
-    
+
     public static JsonElement read(ByteIOStream io)
     {
         switch(JsonID.values()[io.readByte()])
@@ -77,23 +77,23 @@ public class JsonElementIO
             {
                 JsonArray a = new JsonArray();
                 int s = io.readInt();
-                
+
                 for(int i = 0; i < s; i++)
-                    a.add(read(io));
-                
+                { a.add(read(io)); }
+
                 return a;
             }
             case OBJECT:
             {
                 JsonObject o = new JsonObject();
                 int s = io.readInt();
-                
+
                 for(int i = 0; i < s; i++)
                 {
                     String key = io.readUTF();
                     o.add(key, read(io));
                 }
-                
+
                 return o;
             }
             case STRING:
@@ -113,31 +113,31 @@ public class JsonElementIO
             case DOUBLE:
                 return new JsonPrimitive(io.readDouble());
         }
-        
+
         return JsonNull.INSTANCE;
     }
-    
+
     public static void write(ByteIOStream io, JsonElement e)
     {
         if(e == null || e.isJsonNull()) { io.writeByte(JsonID.NULL.ID); }
         else if(e.isJsonArray())
         {
             io.writeByte(JsonID.ARRAY.ID);
-            
+
             JsonArray a = e.getAsJsonArray();
             int s = a.size();
             io.writeInt(s);
-            
+
             for(int i = 0; i < s; i++)
-                write(io, a.get(i));
+            { write(io, a.get(i)); }
         }
         else if(e.isJsonObject())
         {
             io.writeByte(JsonID.OBJECT.ID);
-            
+
             Set<Map.Entry<String, JsonElement>> set = e.getAsJsonObject().entrySet();
             io.writeInt(set.size());
-            
+
             for(Map.Entry<String, JsonElement> entry : set)
             {
                 io.writeUTF(entry.getKey());
@@ -147,7 +147,7 @@ public class JsonElementIO
         else
         {
             JsonPrimitive p = e.getAsJsonPrimitive();
-            
+
             if(p.isString())
             {
                 io.writeByte(JsonID.STRING.ID);
@@ -161,9 +161,9 @@ public class JsonElementIO
             else
             {
                 Number n = p.getAsNumber();
-                
+
                 System.out.println(n.getClass());
-                
+
                 if(n instanceof Integer)
                 {
                     io.writeByte(JsonID.INT.ID);

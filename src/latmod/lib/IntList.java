@@ -11,16 +11,38 @@ import java.util.Map;
 
 public class IntList implements Iterable<Integer>
 {
+    public static class IntIterator implements Iterator<Integer>
+    {
+        public final int[] values;
+        public int pos = -1;
+
+        public IntIterator(int[] v)
+        { values = v; }
+
+        @Override
+        public boolean hasNext()
+        { return pos < values.length; }
+
+        @Override
+        public Integer next()
+        { return values[++pos]; }
+
+        @Override
+        public void remove()
+        {
+            throw new UnsupportedOperationException("remove");
+        }
+    }
     private int defVal = -1;
     private int array[];
     private int size;
-    
+
     public IntList(int i)
     { array = new int[i]; }
-    
+
     public IntList()
     { this(0); }
-    
+
     public IntList(int[] ai)
     {
         if(ai != null && ai.length > 0)
@@ -35,10 +57,17 @@ public class IntList implements Iterable<Integer>
             array = new int[0];
         }
     }
-    
+
+    public static IntList asList(int... values)
+    {
+        IntList l = new IntList(values.length);
+        l.addAll(values);
+        return l;
+    }
+
     public int size()
     { return size; }
-    
+
     public void clear()
     {
         if(size > 0)
@@ -47,13 +76,13 @@ public class IntList implements Iterable<Integer>
             array = new int[0];
         }
     }
-    
+
     public IntList setDefVal(int value)
     {
         defVal = value;
         return this;
     }
-    
+
     public void expand(int s)
     {
         if(size + s > array.length)
@@ -63,14 +92,14 @@ public class IntList implements Iterable<Integer>
             array = ai;
         }
     }
-    
+
     public void add(int value)
     {
         expand(1);
         array[size] = value;
         size++;
     }
-    
+
     public void addAll(int... values)
     {
         if(values != null && values.length > 0)
@@ -80,7 +109,7 @@ public class IntList implements Iterable<Integer>
             size += values.length;
         }
     }
-    
+
     public void addAll(IntList l)
     {
         if(l != null && l.size > 0)
@@ -90,21 +119,21 @@ public class IntList implements Iterable<Integer>
             size += l.size;
         }
     }
-    
+
     public int get(int index)
     { return (index >= 0 && index < size) ? array[index] : defVal; }
-    
+
     public int indexOf(int value)
     {
         if(size == 0) { return -1; }
         for(int i = 0; i < size; i++)
-            if(array[i] == value) { return i; }
+        { if(array[i] == value) { return i; } }
         return -1;
     }
-    
+
     public boolean contains(int value)
     { return indexOf(value) != -1; }
-    
+
     public int removeKey(int key)
     {
         if(key < 0 || key >= size) { return defVal; }
@@ -113,41 +142,41 @@ public class IntList implements Iterable<Integer>
         System.arraycopy(array, key + 1, array, key, size - key);
         return rem;
     }
-    
+
     public int removeValue(int value)
     { return removeKey(indexOf(value)); }
-    
+
     public void set(int i, int value)
     { array[i] = value; }
-    
+
     public boolean isEmpty()
     { return size <= 0; }
-    
+
     public int[] toArray()
     { return toArray(null); }
-    
+
     public int[] toArray(int[] a)
     {
         if(a == null || a.length != size) { a = new int[size]; }
         if(size > 0) { System.arraycopy(array, 0, a, 0, size); }
         return a;
     }
-    
+
     public List<Integer> toList()
     {
         ArrayList<Integer> l = new ArrayList<>();
         if(size == 0) { return l; }
         for(int i = 0; i < size; i++)
-            l.add(array[i]);
+        { l.add(array[i]); }
         return l;
     }
-    
+
     public void sort()
     {
         if(size < 2) { return; }
         Arrays.sort(array, 0, size);
     }
-    
+
     public int[] toSortedArray()
     {
         if(size == 0) { return new int[0]; }
@@ -155,16 +184,16 @@ public class IntList implements Iterable<Integer>
         Arrays.sort(a);
         return a;
     }
-    
+
     @Override
     public int hashCode()
     {
         int h = 0;
         for(int i = 0; i < size; i++)
-            h = h * 31 + array[i];
+        { h = h * 31 + array[i]; }
         return h;
     }
-    
+
     @Override
     public boolean equals(Object o)
     {
@@ -181,7 +210,7 @@ public class IntList implements Iterable<Integer>
             return true;
         }
     }
-    
+
     public boolean equalsIgnoreOrder(IntList l)
     {
         if(l == null) { return false; }
@@ -189,16 +218,16 @@ public class IntList implements Iterable<Integer>
         else
         {
             if(size != l.size) { return false; }
-            
+
             IntList l1 = l.copy();
-            
+
             for(int i = 0; i < size; i++)
-                l1.removeValue(array[i]);
-            
+            { l1.removeValue(array[i]); }
+
             return l1.isEmpty();
         }
     }
-    
+
     @Override
     public String toString()
     {
@@ -206,27 +235,27 @@ public class IntList implements Iterable<Integer>
         StringBuilder sb = new StringBuilder();
         sb.append('[');
         sb.append(' ');
-        
+
         for(int i = 0; i < size; i++)
         {
             sb.append(array[i]);
-            
+
             if(i != size - 1)
             {
                 sb.append(',');
                 sb.append(' ');
             }
         }
-        
+
         sb.append(' ');
         sb.append(']');
         return sb.toString();
     }
-    
+
     @Override
     public Iterator<Integer> iterator()
     { return new IntIterator(array); }
-    
+
     public IntList copy()
     {
         IntList l = new IntList(size);
@@ -235,65 +264,35 @@ public class IntList implements Iterable<Integer>
         l.defVal = defVal;
         return l;
     }
-    
+
     //Value, IsInNewList
     public Map<Integer, Boolean> getDifferenceMap(IntList newList)
     {
         HashMap<Integer, Boolean> map = new HashMap<>();
-        
+
         if(isEmpty() && newList.isEmpty()) { return map; }
-        
+
         for(int i = 0; i < size; i++)
         {
             if(!newList.contains(array[i])) { map.put(array[i], false); }
         }
-        
+
         for(int i = 0; i < newList.size; i++)
         {
             if(!contains(newList.array[i])) { map.put(array[i], true); }
         }
-        
+
         return map;
     }
-    
-    public static IntList asList(int... values)
-    {
-        IntList l = new IntList(values.length);
-        l.addAll(values);
-        return l;
-    }
-    
-    public void setJson(JsonElement e)
-    {
-        clear();
-        addAll(LMJsonUtils.fromIntArray(e));
-    }
-    
+
     public JsonElement getJson()
     {
         return LMJsonUtils.toIntArray(array);
     }
-    
-    public static class IntIterator implements Iterator<Integer>
+
+    public void setJson(JsonElement e)
     {
-        public final int[] values;
-        public int pos = -1;
-        
-        public IntIterator(int[] v)
-        { values = v; }
-        
-        @Override
-        public boolean hasNext()
-        { return pos < values.length; }
-        
-        @Override
-        public Integer next()
-        { return values[++pos]; }
-        
-        @Override
-        public void remove()
-        {
-            throw new UnsupportedOperationException("remove");
-        }
+        clear();
+        addAll(LMJsonUtils.fromIntArray(e));
     }
 }
