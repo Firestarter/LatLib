@@ -27,10 +27,14 @@ public class PixelBuffer
     }
 
     public void setRGB(int x, int y, int col)
-    { pixels[x + y * width] = col; }
+    {
+        pixels[x + y * width] = col;
+    }
 
     public int getRGB(int x, int y)
-    { return pixels[x + y * width]; }
+    {
+        return pixels[x + y * width];
+    }
 
     public void setRGB(int startX, int startY, int w, int h, int[] rgbArray)
     {
@@ -38,12 +42,16 @@ public class PixelBuffer
         for(int y = startY; y < startY + h; y++)
         {
             for(int x = startX; x < startX + w; x++)
-            { setRGB(x, y, rgbArray[++off]); }
+            {
+                setRGB(x, y, rgbArray[++off]);
+            }
         }
     }
 
     public void setRGB(int startX, int startY, PixelBuffer buffer)
-    { setRGB(startX, startY, buffer.width, buffer.height, buffer.pixels); }
+    {
+        setRGB(startX, startY, buffer.width, buffer.height, buffer.pixels);
+    }
 
     public int[] getRGB(int startX, int startY, int w, int h, int[] rgbArray)
     {
@@ -65,29 +73,44 @@ public class PixelBuffer
     }
 
     public void fill(int col)
-    { Arrays.fill(pixels, col); }
+    {
+        Arrays.fill(pixels, col);
+    }
 
     public void fill(int startX, int startY, int w, int h, int col)
     {
         for(int y = startY; y < startY + h; y++)
         {
             for(int x = startX; x < startX + w; x++)
-            { setRGB(x, y, col); }
+            {
+                setRGB(x, y, col);
+            }
         }
     }
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null) { return false; }
-        else if(o == this) { return true; }
+        if(o == null)
+        {
+            return false;
+        }
+        else if(o == this)
+        {
+            return true;
+        }
         if(o instanceof PixelBuffer)
         {
             PixelBuffer b = (PixelBuffer) o;
             if(width == b.width && height == b.height)
             {
                 for(int i = 0; i < pixels.length; i++)
-                { if(pixels[i] != b.pixels[i]) { return false; } }
+                {
+                    if(pixels[i] != b.pixels[i])
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
         }
@@ -96,7 +119,9 @@ public class PixelBuffer
 
     @Override
     public int hashCode()
-    { return LMUtils.hashCode(width, height, pixels); }
+    {
+        return LMUtils.hashCode(width, height, pixels);
+    }
 
     public PixelBuffer copy()
     {
@@ -113,5 +138,7 @@ public class PixelBuffer
     }
 
     public void addHSB(float h, float s, float b)
-    { LMColorUtils.addHSB(pixels, h, s, b); }
+    {
+        LMColorUtils.addHSB(pixels, h, s, b);
+    }
 }

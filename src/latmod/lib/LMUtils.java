@@ -86,11 +86,18 @@ public class LMUtils
 
     public static int hashCode(Object... o)
     {
-        if(o == null || o.length == 0) { return 0; }
-        if(o.length == 1) { return hashCodeOf(o[0]); }
-        int h = 0;
-        for(Object anO : o) { h = h * 31 + hashCodeOf(anO); }
-        return h;
+        if(o == null || o.length == 0)
+        {
+            return 0;
+        }
+        else if(o.length == 1)
+        {
+            return hashCodeOf(o[0]);
+        }
+        else
+        {
+            return Arrays.hashCode(o);
+        }
     }
 
     public static long longHashCode(Object... o)
