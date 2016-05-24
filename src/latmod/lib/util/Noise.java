@@ -20,7 +20,9 @@ public class Noise
     {
         double d = 0.5D * MathHelperLM.RAD;
         for(int i = 0; i < perlin_cosTable.length; i++)
-        { perlin_cosTable[i] = (float) MathHelperLM.cos(i * d); }
+        {
+            perlin_cosTable[i] = (float) MathHelperLM.cos(i * d);
+        }
 
     }
 
@@ -28,16 +30,25 @@ public class Noise
 
     public Noise(Random r)
     {
-        if(r == null) { r = new Random(); }
+        if(r == null)
+        {
+            r = new Random();
+        }
         for(int i = 0; i < perlin.length; i++)
-        { perlin[i] = r.nextFloat(); }
+        {
+            perlin[i] = r.nextFloat();
+        }
     }
 
     public Noise()
-    { this(null); }
+    {
+        this(null);
+    }
 
     private float noise_fsc(double f)
-    { return 0.5F * (1F - perlin_cosTable[((int) (f * perlin_PI) % perlin_TWOPI)]); }
+    {
+        return 0.5F * (1F - perlin_cosTable[((int) (f * perlin_PI) % perlin_TWOPI)]);
+    }
 
     public float get(float x, float y, float z)
     {
@@ -105,17 +116,27 @@ public class Noise
     }
 
     public float getD(double x, double y, double z)
-    { return get((float) x, (float) y, (float) z); }
+    {
+        return get((float) x, (float) y, (float) z);
+    }
 
     public float getD(double x, double y)
-    { return get((float) x, (float) y, 0F); }
+    {
+        return get((float) x, (float) y, 0F);
+    }
 
     public float getD(double x)
-    { return get((float) x, 0F, 0F); }
+    {
+        return get((float) x, 0F, 0F);
+    }
 
     public float get(float x, float y)
-    { return get(x, y, 0F); }
+    {
+        return get(x, y, 0F);
+    }
 
     public float get(float x)
-    { return get(x, 0F, 0F); }
+    {
+        return get(x, 0F, 0F);
+    }
 }

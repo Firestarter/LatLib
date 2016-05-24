@@ -21,55 +21,87 @@ public class LMColorUtils
             int r = (i >> 2 & 1) * 170 + j;
             int g = (i >> 1 & 1) * 170 + j;
             int b = (i & 1) * 170 + j;
-            if(i == 6) { r += 85; }
+            if(i == 6)
+            {
+                r += 85;
+            }
             chatFormattingColors[i] = getRGBA(r, g, b, 255);
         }
     }
 
     public static JsonElement serialize(int col)
-    { return new JsonPrimitive('#' + Integer.toHexString(col).toUpperCase()); }
+    {
+        return new JsonPrimitive('#' + Integer.toHexString(col).toUpperCase());
+    }
 
     public static int deserialize(JsonElement e)
     {
-        if(e == null || !e.isJsonPrimitive()) { return 0xFF000000; }
+        if(e == null || !e.isJsonPrimitive())
+        {
+            return 0xFF000000;
+        }
         return (int) Long.parseLong(e.getAsString().substring(1), 16);
     }
 
     public static int getRGBA(int r, int g, int b, int a)
-    { return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | ((b & 255)); }
+    {
+        return ((a & 255) << 24) | ((r & 255) << 16) | ((g & 255) << 8) | ((b & 255));
+    }
 
     public static int getRGBAF(float r, float g, float b, float a)
-    { return getRGBA((int) (r * 255F), (int) (g * 255F), (int) (b * 255F), (int) (a * 255F)); }
+    {
+        return getRGBA((int) (r * 255F), (int) (g * 255F), (int) (b * 255F), (int) (a * 255F));
+    }
 
     public static int getRed(int c)
-    { return (c >> 16) & 255; }
+    {
+        return (c >> 16) & 255;
+    }
 
     public static int getGreen(int c)
-    { return (c >> 8) & 255; }
+    {
+        return (c >> 8) & 255;
+    }
 
     public static int getBlue(int c)
-    { return (c) & 255; }
+    {
+        return (c) & 255;
+    }
 
     public static int getAlpha(int c)
-    { return (c >> 24) & 255; }
+    {
+        return (c >> 24) & 255;
+    }
 
     public static float getRedF(int c)
-    { return getRed(c) / 255F; }
+    {
+        return getRed(c) / 255F;
+    }
 
     public static float getGreenF(int c)
-    { return getGreen(c) / 255F; }
+    {
+        return getGreen(c) / 255F;
+    }
 
     public static float getBlueF(int c)
-    { return getBlue(c) / 255F; }
+    {
+        return getBlue(c) / 255F;
+    }
 
     public static float getAlphaF(int c)
-    { return getAlpha(c) / 255F; }
+    {
+        return getAlpha(c) / 255F;
+    }
 
     public static String getHex(int c)
-    { return '#' + Integer.toHexString(getRGBA(c, 255)).substring(2).toUpperCase(); }
+    {
+        return '#' + Integer.toHexString(getRGBA(c, 255)).substring(2).toUpperCase();
+    }
 
     public static int getRGBA(int c, int a)
-    { return getRGBA(getRed(c), getGreen(c), getBlue(c), a); }
+    {
+        return getRGBA(getRed(c), getGreen(c), getBlue(c), a);
+    }
 
     public static int addBrightness(int c, int b)
     {
@@ -81,7 +113,10 @@ public class LMColorUtils
 
     public static void addHSB(int pixels[], float h, float s, float b)
     {
-        if(pixels == null || pixels.length == 0) { return; }
+        if(pixels == null || pixels.length == 0)
+        {
+            return;
+        }
         float[] hsb = new float[3];
 
         for(int i = 0; i < pixels.length; i++)
@@ -104,7 +139,9 @@ public class LMColorUtils
     }
 
     public static int lerp(int col1, int col2, double m)
-    { return lerp(col1, col2, m, getAlpha(col1)); }
+    {
+        return lerp(col1, col2, m, getAlpha(col1));
+    }
 
     public static int multiply(int col1, int col2, int a)
     {

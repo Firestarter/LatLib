@@ -27,7 +27,10 @@ public class AnnotationHelper
                 if(container instanceof IInfoContainer)
                 {
                     String[] info = ((Info) a).value();
-                    if(info.length == 0) { info = null; }
+                    if(info.length == 0)
+                    {
+                        info = null;
+                    }
                     ((IInfoContainer) container).setInfo(info);
                     return true;
                 }
@@ -75,11 +78,16 @@ public class AnnotationHelper
     }
 
     public static void register(Class<? extends Annotation> c, Handler h)
-    { map.put(c, h); }
+    {
+        map.put(c, h);
+    }
 
     public static void inject(Field field, Object parent, Object obj) throws Exception
     {
-        if(field == null || !(obj instanceof IAnnotationContainer)) { return; }
+        if(field == null || !(obj instanceof IAnnotationContainer))
+        {
+            return;
+        }
         IAnnotationContainer container = (IAnnotationContainer) obj;
 
         for(Annotation a : field.getDeclaredAnnotations())

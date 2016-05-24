@@ -40,7 +40,9 @@ public abstract class LMColor
 
         @Override
         public void setHSB(float h, float s, float b)
-        { setRGBA(0xFF000000 | java.awt.Color.HSBtoRGB(h, s, b)); }
+        {
+            setRGBA(0xFF000000 | java.awt.Color.HSBtoRGB(h, s, b));
+        }
 
         @Override
         public void setRGBA(int col)
@@ -57,23 +59,33 @@ public abstract class LMColor
 
         @Override
         public int color()
-        { return LMColorUtils.getRGBA(red(), green(), blue(), alpha()); }
+        {
+            return LMColorUtils.getRGBA(red(), green(), blue(), alpha());
+        }
 
         @Override
         public int red()
-        { return red; }
+        {
+            return red;
+        }
 
         @Override
         public int green()
-        { return green; }
+        {
+            return green;
+        }
 
         @Override
         public int blue()
-        { return blue; }
+        {
+            return blue;
+        }
 
         @Override
         public int alpha()
-        { return 255; }
+        {
+            return 255;
+        }
 
         @Override
         public float hue()
@@ -137,7 +149,9 @@ public abstract class LMColor
 
         @Override
         public int alpha()
-        { return alpha; }
+        {
+            return alpha;
+        }
     }
 
     public static class HSB extends LMColor
@@ -188,39 +202,57 @@ public abstract class LMColor
         }
 
         public void addHue(float hue)
-        { setHSB(hsb[0] + hue, hsb[1], hsb[2]); }
+        {
+            setHSB(hsb[0] + hue, hsb[1], hsb[2]);
+        }
 
         @Override
         public int color()
-        { return color; }
+        {
+            return color;
+        }
 
         @Override
         public int red()
-        { return LMColorUtils.getRed(color); }
+        {
+            return LMColorUtils.getRed(color);
+        }
 
         @Override
         public int green()
-        { return LMColorUtils.getGreen(color); }
+        {
+            return LMColorUtils.getGreen(color);
+        }
 
         @Override
         public int blue()
-        { return LMColorUtils.getBlue(color); }
+        {
+            return LMColorUtils.getBlue(color);
+        }
 
         @Override
         public int alpha()
-        { return 255; }
+        {
+            return 255;
+        }
 
         @Override
         public float hue()
-        { return hsb[0]; }
+        {
+            return hsb[0];
+        }
 
         @Override
         public float saturation()
-        { return hsb[1]; }
+        {
+            return hsb[1];
+        }
 
         @Override
         public float brightness()
-        { return hsb[2]; }
+        {
+            return hsb[2];
+        }
 
         @Override
         public HSB copy()
@@ -265,7 +297,9 @@ public abstract class LMColor
 
         @Override
         public ImmutableColor copy()
-        { return new ImmutableColor(this); }
+        {
+            return new ImmutableColor(this);
+        }
     }
 
     public abstract void set(LMColor col);
@@ -296,16 +330,24 @@ public abstract class LMColor
 
     @Override
     public final String toString()
-    { return LMColorUtils.getHex(color()); }
+    {
+        return LMColorUtils.getHex(color());
+    }
 
     @Override
     public final int hashCode()
-    { return color(); }
+    {
+        return color();
+    }
 
     @Override
     public final boolean equals(Object o)
-    { return hashCode() == o.hashCode(); }
+    {
+        return hashCode() == o.hashCode();
+    }
 
     public final LMColor immutable()
-    { return new ImmutableColor(this); }
+    {
+        return new ImmutableColor(this);
+    }
 }

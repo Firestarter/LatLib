@@ -28,19 +28,30 @@ public final class Time implements Comparable<Time>
 
     private static void append00(StringBuilder sb, int i)
     {
-        if(i < 10) { sb.append('0'); }
+        if(i < 10)
+        {
+            sb.append('0');
+        }
         sb.append(i);
     }
 
     private static void append000(StringBuilder sb, int i)
     {
-        if(i < 100) { sb.append('0'); }
-        if(i < 10) { sb.append('0'); }
+        if(i < 100)
+        {
+            sb.append('0');
+        }
+        if(i < 10)
+        {
+            sb.append('0');
+        }
         sb.append(i);
     }
 
     public static Time get(Calendar c)
-    { return new Time(c); }
+    {
+        return new Time(c);
+    }
 
     public static Time get(long millis)
     {
@@ -58,24 +69,35 @@ public final class Time implements Comparable<Time>
     }
 
     public static Time now()
-    { return get(Calendar.getInstance()); }
+    {
+        return get(Calendar.getInstance());
+    }
 
     public static Time deserialize(JsonElement e)
     {
-        if(e == null || !e.isJsonPrimitive()) { return null; }
+        if(e == null || !e.isJsonPrimitive())
+        {
+            return null;
+        }
         return get(e.getAsLong());
     }
 
     public boolean equalsTime(long t)
-    { return millis == t; }
+    {
+        return millis == t;
+    }
 
     @Override
     public int hashCode()
-    { return Long.valueOf(millis).hashCode(); }
+    {
+        return Long.valueOf(millis).hashCode();
+    }
 
     @Override
     public boolean equals(Object o)
-    { return o != null && (o == this || (o instanceof Time && equalsTime(((Time) o).millis)) || (o instanceof Number && equalsTime(((Number) o).longValue()))); }
+    {
+        return o != null && (o == this || (o instanceof Time && equalsTime(((Time) o).millis)) || (o instanceof Number && equalsTime(((Number) o).longValue())));
+    }
 
     @Override
     public String toString()
@@ -99,7 +121,9 @@ public final class Time implements Comparable<Time>
 
     @Override
     public int compareTo(Time o)
-    { return Long.compare(millis, o.millis); }
+    {
+        return Long.compare(millis, o.millis);
+    }
 
     // Static //
 
@@ -147,11 +171,17 @@ public final class Time implements Comparable<Time>
     }
 
     public String getDateAndTime()
-    { return getDate() + ' ' + getTime(); }
+    {
+        return getDate() + ' ' + getTime();
+    }
 
     public long getDelta()
-    { return Math.abs(now().millis - millis); }
+    {
+        return Math.abs(now().millis - millis);
+    }
 
     public JsonElement getJson()
-    { return new JsonPrimitive(millis); }
+    {
+        return new JsonPrimitive(millis);
+    }
 }

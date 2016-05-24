@@ -11,15 +11,25 @@ public class IntMap
     public final IntList list;
 
     public IntMap(int s)
-    { list = new IntList(s * 2); }
+    {
+        list = new IntList(s * 2);
+    }
 
     public IntMap()
-    { this(0); }
+    {
+        this(0);
+    }
 
     public static IntMap fromMap(Map<Integer, Integer> map)
     {
-        if(map == null) { return null; }
-        else if(map.isEmpty()) { return new IntMap(); }
+        if(map == null)
+        {
+            return null;
+        }
+        else if(map.isEmpty())
+        {
+            return new IntMap();
+        }
         else
         {
             IntMap m = new IntMap(map.size());
@@ -32,12 +42,17 @@ public class IntMap
     }
 
     public int size()
-    { return list.size() / 2; }
+    {
+        return list.size() / 2;
+    }
 
     @Override
     public String toString()
     {
-        if(list.isEmpty()) { return "{ }"; }
+        if(list.isEmpty())
+        {
+            return "{ }";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append('{');
         sb.append(' ');
@@ -62,18 +77,31 @@ public class IntMap
 
     @Override
     public int hashCode()
-    { return list.hashCode(); }
+    {
+        return list.hashCode();
+    }
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null) { return false; }
-        else if(o == this) { return true; }
-        else { return o instanceof IntMap && list.equals(((IntMap) o).list); }
+        if(o == null)
+        {
+            return false;
+        }
+        else if(o == this)
+        {
+            return true;
+        }
+        else
+        {
+            return o instanceof IntMap && list.equals(((IntMap) o).list);
+        }
     }
 
     public int[] toArray()
-    { return list.toArray(); }
+    {
+        return list.toArray();
+    }
 
     public void fromArray(int[] ai)
     {
@@ -85,7 +113,10 @@ public class IntMap
     {
         for(int i = 0; i < list.size(); i += 2)
         {
-            if(list.get(i) == key) { return i; }
+            if(list.get(i) == key)
+            {
+                return i;
+            }
         }
 
         return -1;
@@ -114,7 +145,9 @@ public class IntMap
     }
 
     public int get(int key)
-    { return list.get(keyIndex(key) + 1); }
+    {
+        return list.get(keyIndex(key) + 1);
+    }
 
     public Map<Integer, Integer> toMap()
     {
@@ -127,15 +160,22 @@ public class IntMap
     }
 
     public boolean containsKey(int key)
-    { return keyIndex(key) != -1; }
+    {
+        return keyIndex(key) != -1;
+    }
 
     public void clear()
-    { list.clear(); }
+    {
+        list.clear();
+    }
 
     public IntList getKeys()
     {
         IntList list1 = new IntList(list.size() / 2);
-        if(list.isEmpty()) { return list1; }
+        if(list.isEmpty())
+        {
+            return list1;
+        }
 
         for(int i = 0; i < list.size(); i += 2)
         {
@@ -148,7 +188,10 @@ public class IntMap
     public IntList getValues()
     {
         IntList list1 = new IntList(list.size() / 2);
-        if(list.isEmpty()) { return list1; }
+        if(list.isEmpty())
+        {
+            return list1;
+        }
 
         for(int i = 0; i < list.size(); i += 2)
         {

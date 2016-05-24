@@ -9,13 +9,24 @@ public enum ByteCount
     public final int bytes;
 
     ByteCount(int i)
-    { bytes = i; }
+    {
+        bytes = i;
+    }
 
     public void write(ByteIOStream io, int num)
     {
-        if(this == BYTE) { io.writeByte(num); }
-        else if(this == SHORT) { io.writeShort(num); }
-        else { io.writeInt(num); }
+        if(this == BYTE)
+        {
+            io.writeByte(num);
+        }
+        else if(this == SHORT)
+        {
+            io.writeShort(num);
+        }
+        else
+        {
+            io.writeInt(num);
+        }
     }
 
     public int read(ByteIOStream io)
@@ -23,13 +34,19 @@ public enum ByteCount
         if(this == BYTE)
         {
             byte b = io.readByte();
-            if(b == -1) { return -1; }
+            if(b == -1)
+            {
+                return -1;
+            }
             return b & 0xFF;
         }
         else if(this == SHORT)
         {
             short s = io.readShort();
-            if(s == -1) { return -1; }
+            if(s == -1)
+            {
+                return -1;
+            }
             return s & 0xFFFF;
         }
         return io.readInt();

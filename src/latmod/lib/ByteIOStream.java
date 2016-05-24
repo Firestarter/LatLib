@@ -17,21 +17,37 @@ public final class ByteIOStream implements DataInput, DataOutput
     protected int pos;
 
     public ByteIOStream(int size)
-    { bytes = new byte[size]; }
+    {
+        bytes = new byte[size];
+    }
 
     public ByteIOStream()
-    { this(0); }
+    {
+        this(0);
+    }
 
     private static void throwUTFException(String s)
     {
-        try { throw new UTFDataFormatException(s); }
-        catch(Exception e) { e.printStackTrace(); }
+        try
+        {
+            throw new UTFDataFormatException(s);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static int getUTFLength(String data)
     {
-        if(data == null) { return -1; }
-        else if(data.isEmpty()) { return 0; }
+        if(data == null)
+        {
+            return -1;
+        }
+        else if(data.isEmpty())
+        {
+            return 0;
+        }
         else
         {
             int len = 0;
@@ -40,9 +56,18 @@ public final class ByteIOStream implements DataInput, DataOutput
             for(int i = 0; i < data.length(); i++)
             {
                 c = data.charAt(i);
-                if((c >= 0x0001) && (c <= 0x007F)) { len++; }
-                else if(c > 0x07FF) { len += 3; }
-                else { len += 2; }
+                if((c >= 0x0001) && (c <= 0x007F))
+                {
+                    len++;
+                }
+                else if(c > 0x07FF)
+                {
+                    len += 3;
+                }
+                else
+                {
+                    len += 2;
+                }
             }
 
             return len;
@@ -50,14 +75,21 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     public int getDataPos()
-    { return pos; }
+    {
+        return pos;
+    }
 
     public int available()
-    { return bytes.length - pos; }
+    {
+        return bytes.length - pos;
+    }
 
     public byte[] toByteArray()
     {
-        if(pos == bytes.length) { return bytes; }
+        if(pos == bytes.length)
+        {
+            return bytes;
+        }
         byte[] b = new byte[pos];
         System.arraycopy(bytes, 0, b, 0, pos);
         return b;
@@ -65,8 +97,14 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     public byte[] toCompressedByteArray()
     {
-        try { return ByteCompressor.compress(bytes, 0, pos); }
-        catch(Exception e) { e.printStackTrace(); }
+        try
+        {
+            return ByteCompressor.compress(bytes, 0, pos);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -81,7 +119,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     public void flip()
-    { pos = 0; }
+    {
+        pos = 0;
+    }
 
     public void setData(byte[] b)
     {
@@ -91,7 +131,10 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     public void setCompressedData(byte[] b)
     {
-        try { setData(ByteCompressor.decompress(b, 0, b.length)); }
+        try
+        {
+            setData(ByteCompressor.decompress(b, 0, b.length));
+        }
         catch(Exception e)
         {
             e.printStackTrace();
@@ -101,7 +144,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public String toString()
-    { return toString(false); }
+    {
+        return toString(false);
+    }
 
     public String toString(boolean compressed)
     {
@@ -115,11 +160,15 @@ public final class ByteIOStream implements DataInput, DataOutput
         {
             @Override
             public void write(int b) throws IOException
-            { ByteIOStream.this.write(b); }
+            {
+                ByteIOStream.this.write(b);
+            }
 
             @Override
             public void write(byte b[], int off, int len) throws IOException
-            { ByteIOStream.this.write(b, off, len); }
+            {
+                ByteIOStream.this.write(b, off, len);
+            }
         };
     }
 
@@ -131,7 +180,9 @@ public final class ByteIOStream implements DataInput, DataOutput
         {
             @Override
             public int read() throws IOException
-            { return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte(); }
+            {
+                return (available() <= 0) ? -1 : ByteIOStream.this.readUnsignedByte();
+            }
 
             @Override
             public int read(byte b[], int off, int len) throws IOException
@@ -142,7 +193,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 
             @Override
             public int available()
-            { return ByteIOStream.this.available(); }
+            {
+                return ByteIOStream.this.available();
+            }
         };
     }
 
@@ -157,23 +210,33 @@ public final class ByteIOStream implements DataInput, DataOutput
     @Override
     public void readFully(byte[] b, int off, int len)
     {
-        if(b == null || len == 0) { return; }
+        if(b == null || len == 0)
+        {
+            return;
+        }
         System.arraycopy(bytes, pos, b, off, len);
         pos += len;
     }
 
     @Override
     public int readUnsignedByte()
-    { return readByte() & 0xFF; }
+    {
+        return readByte() & 0xFF;
+    }
 
     @Override
     public void readFully(byte[] b)
-    { readFully(b, 0, b.length); }
+    {
+        readFully(b, 0, b.length);
+    }
 
     public byte[] readByteArray(ByteCount c)
     {
         int s = c.read(this);
-        if(s == -1) { return null; }
+        if(s == -1)
+        {
+            return null;
+        }
         byte[] b = new byte[s];
         readFully(b);
         return b;
@@ -181,18 +244,28 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public boolean readBoolean()
-    { return readUnsignedByte() == 1; }
+    {
+        return readUnsignedByte() == 1;
+    }
 
     @Override
     public char readChar()
-    { return (char) readUnsignedShort(); }
+    {
+        return (char) readUnsignedShort();
+    }
 
     @Override
     public String readUTF()
     {
         int l = readUnsignedShort();
-        if(l == 65535) { return null; }
-        else if(l == 0) { return ""; }
+        if(l == 65535)
+        {
+            return null;
+        }
+        else if(l == 0)
+        {
+            return "";
+        }
 
         char[] utf_chars = new char[l];
 
@@ -203,7 +276,10 @@ public final class ByteIOStream implements DataInput, DataOutput
         while(c1 < l)
         {
             c = (int) bytes[c1 + pos0] & 0xFF;
-            if(c > 127) { break; }
+            if(c > 127)
+            {
+                break;
+            }
             c1++;
             utf_chars[cac++] = (char) c;
         }
@@ -228,18 +304,29 @@ public final class ByteIOStream implements DataInput, DataOutput
                 case 12:
                 case 13:
                     c1 += 2;
-                    if(c1 > l) { throwUTFException("malformed input: partial character at end"); }
+                    if(c1 > l)
+                    {
+                        throwUTFException("malformed input: partial character at end");
+                    }
                     c2 = (int) bytes[c1 + pos0 - 1];
-                    if((c2 & 0xC0) != 0x80) { throwUTFException("malformed input around byte " + c1); }
+                    if((c2 & 0xC0) != 0x80)
+                    {
+                        throwUTFException("malformed input around byte " + c1);
+                    }
                     utf_chars[cac++] = (char) (((c & 0x1F) << 6) | (c2 & 0x3F));
                     break;
                 case 14:
                     c1 += 3;
-                    if(c1 > l) { throwUTFException("malformed input: partial character at end"); }
+                    if(c1 > l)
+                    {
+                        throwUTFException("malformed input: partial character at end");
+                    }
                     c2 = (int) bytes[c1 + pos0 - 2];
                     c3 = (int) bytes[c1 + pos0 - 1];
                     if(((c2 & 0xC0) != 0x80) || ((c3 & 0xC0) != 0x80))
-                    { throwUTFException("malformed input around byte " + (c1 - 1)); }
+                    {
+                        throwUTFException("malformed input around byte " + (c1 - 1));
+                    }
                     utf_chars[cac++] = (char) (((c & 0x0F) << 12) | ((c2 & 0x3F) << 6) | ((c3 & 0x3F)));
                     break;
                 default:
@@ -255,7 +342,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     @Deprecated
     @Override
     public String readLine()
-    { return null; }
+    {
+        return null;
+    }
 
     @Override
     public int readUnsignedShort()
@@ -267,7 +356,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public short readShort()
-    { return (short) readUnsignedShort(); }
+    {
+        return (short) readUnsignedShort();
+    }
 
     @Override
     public int readInt()
@@ -287,11 +378,15 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public float readFloat()
-    { return Float.intBitsToFloat(readInt()); }
+    {
+        return Float.intBitsToFloat(readInt());
+    }
 
     @Override
     public double readDouble()
-    { return Double.longBitsToDouble(readLong()); }
+    {
+        return Double.longBitsToDouble(readLong());
+    }
 
     public UUID readUUID()
     {
@@ -305,10 +400,15 @@ public final class ByteIOStream implements DataInput, DataOutput
     public int[] readIntArray(ByteCount c)
     {
         int len = c.read(this);
-        if(len == -1) { return null; }
+        if(len == -1)
+        {
+            return null;
+        }
         int[] ai = new int[len];
         for(int i = 0; i < len; i++)
-        { ai[i] = readInt(); }
+        {
+            ai[i] = readInt();
+        }
         return ai;
     }
 
@@ -322,12 +422,17 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public void write(int b)
-    { writeByte(b); }
+    {
+        writeByte(b);
+    }
 
     @Override
     public void write(byte[] b, int off, int len)
     {
-        if(b == null || len == 0) { return; }
+        if(b == null || len == 0)
+        {
+            return;
+        }
         expand(len);
         System.arraycopy(b, off, bytes, pos, len);
         pos += len;
@@ -335,7 +440,9 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public void write(byte[] b)
-    { write(b, 0, b.length); }
+    {
+        write(b, 0, b.length);
+    }
 
     public void writeByteArray(byte[] b, ByteCount c)
     {
@@ -350,11 +457,15 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public void writeBoolean(boolean b)
-    { writeByte(b ? 1 : 0); }
+    {
+        writeByte(b ? 1 : 0);
+    }
 
     @Override
     public void writeChar(int c)
-    { writeShort(c); }
+    {
+        writeShort(c);
+    }
 
     @Override
     public void writeUTF(String s)
@@ -376,12 +487,24 @@ public final class ByteIOStream implements DataInput, DataOutput
         for(int i = 0; i < sl; i++)
         {
             c = s.charAt(i);
-            if((c >= 0x0001) && (c <= 0x007F)) { l++; }
-            else if(c > 0x07FF) { l += 3; }
-            else { l += 2; }
+            if((c >= 0x0001) && (c <= 0x007F))
+            {
+                l++;
+            }
+            else if(c > 0x07FF)
+            {
+                l += 3;
+            }
+            else
+            {
+                l += 2;
+            }
         }
 
-        if(l >= 65535) { throwUTFException("encoded string too long: " + l + " bytes"); }
+        if(l >= 65535)
+        {
+            throwUTFException("encoded string too long: " + l + " bytes");
+        }
 
         writeShort(l);
         expand(l);
@@ -390,14 +513,20 @@ public final class ByteIOStream implements DataInput, DataOutput
         for(i = 0; i < sl; i++)
         {
             c = s.charAt(i);
-            if(!(c >= 0x0001 && c <= 0x007F)) { break; }
+            if(!(c >= 0x0001 && c <= 0x007F))
+            {
+                break;
+            }
             writeByte(c);
         }
 
         for(; i < sl; i++)
         {
             c = s.charAt(i);
-            if(c >= 0x0001 && c <= 0x007F) { writeByte(c); }
+            if(c >= 0x0001 && c <= 0x007F)
+            {
+                writeByte(c);
+            }
             else if(c > 0x07FF)
             {
                 writeByte(0xE0 | ((c >> 12) & 0x0F));
@@ -415,17 +544,27 @@ public final class ByteIOStream implements DataInput, DataOutput
     @Override
     public void writeBytes(String s)
     {
-        if(s == null || s.isEmpty()) { return; }
+        if(s == null || s.isEmpty())
+        {
+            return;
+        }
         for(int i = 0; i < s.length(); i++)
-        { writeByte((byte) s.charAt(i)); }
+        {
+            writeByte((byte) s.charAt(i));
+        }
     }
 
     @Override
     public void writeChars(String s)
     {
-        if(s == null || s.isEmpty()) { return; }
+        if(s == null || s.isEmpty())
+        {
+            return;
+        }
         for(int i = 0; i < s.length(); i++)
-        { writeChar(s.charAt(i)); }
+        {
+            writeChar(s.charAt(i));
+        }
     }
 
     @Override
@@ -454,11 +593,15 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public void writeFloat(float f)
-    { writeInt(Float.floatToIntBits(f)); }
+    {
+        writeInt(Float.floatToIntBits(f));
+    }
 
     @Override
     public void writeDouble(double d)
-    { writeLong(Double.doubleToLongBits(d)); }
+    {
+        writeLong(Double.doubleToLongBits(d));
+    }
 
     public void writeUUID(UUID uuid)
     {
@@ -479,5 +622,7 @@ public final class ByteIOStream implements DataInput, DataOutput
 
     @Override
     public int skipBytes(int n)
-    { return 0; }
+    {
+        return 0;
+    }
 }

@@ -8,11 +8,16 @@ import java.util.Locale;
 public class EnumSerializerLM
 {
     public static JsonElement serialize(Enum e)
-    { return new JsonPrimitive(lowerCaseName(e)); }
+    {
+        return new JsonPrimitive(lowerCaseName(e));
+    }
 
     public static <E extends Enum<E>> E deserialize(Class<?> type, JsonElement e)
     {
-        if(!type.isEnum() || e == null || !e.isJsonPrimitive()) { return null; }
+        if(!type.isEnum() || e == null || !e.isJsonPrimitive())
+        {
+            return null;
+        }
         else
         {
             String id = e.getAsString();
@@ -20,12 +25,17 @@ public class EnumSerializerLM
 
             for(Object anO : o)
             {
-                if(lowerCaseName(anO).equals(id)) { return (E) anO; }
+                if(lowerCaseName(anO).equals(id))
+                {
+                    return (E) anO;
+                }
             }
         }
         return null;
     }
 
     public static String lowerCaseName(Object o)
-    { return o instanceof Enum ? ((Enum<?>) o).name().toLowerCase(Locale.US) : o.toString().toLowerCase(Locale.US); }
+    {
+        return o instanceof Enum ? ((Enum<?>) o).name().toLowerCase(Locale.US) : o.toString().toLowerCase(Locale.US);
+    }
 }

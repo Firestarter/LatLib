@@ -18,62 +18,96 @@ public class Bits
     {
         int d = 0;
         for(int i = 0; i < b.length; i++)
-        { d |= (b[i] ? 1 : 0) << i; }
+        {
+            d |= (b[i] ? 1 : 0) << i;
+        }
         return d;
     }
 
     public static void toBool(boolean[] b, int d)
     {
         for(int j = 0; j < b.length; j++)
-        { b[j] = ((d >> j) & 1) == 1; }
+        {
+            b[j] = ((d >> j) & 1) == 1;
+        }
     }
 
     public static boolean getBit(byte bits, byte i)
-    { return ((bits >> i) & 1) == 1; }
+    {
+        return ((bits >> i) & 1) == 1;
+    }
 
     public static int toBit(boolean b, byte i)
-    { return (b ? 1 : 0) << i; }
+    {
+        return (b ? 1 : 0) << i;
+    }
 
     public static byte setBit(byte bits, byte i, boolean v)
     {
-        if(v) { return (byte) ((bits & 0xFF) | (1 << i)); }
-        else { return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF)); }
+        if(v)
+        {
+            return (byte) ((bits & 0xFF) | (1 << i));
+        }
+        else
+        {
+            return (byte) ((bits & 0xFF) & (not(1 << i) & 0xFF));
+        }
     }
 
     public static int not(int bits)
-    { return (~bits) & 0xFF; }
+    {
+        return (~bits) & 0xFF;
+    }
 
     //
 
     //Int
     public static long intsToLong(int a, int b)
-    { return (((long) a) << 32) | (b & MAX_INT); }
+    {
+        return (((long) a) << 32) | (b & MAX_INT);
+    }
 
     public static int intFromLongA(long l)
-    { return (int) (l >> 32); }
+    {
+        return (int) (l >> 32);
+    }
 
     public static int intFromLongB(long l)
-    { return (int) l; }
+    {
+        return (int) l;
+    }
 
     //Short
     public static int shortsToInt(int a, int b)
-    { return ((short) a << 16) | ((short) b & MAX_SHORT); }
+    {
+        return ((short) a << 16) | ((short) b & MAX_SHORT);
+    }
 
     public static short shortFromIntA(int i)
-    { return (short) (i >> 16); }
+    {
+        return (short) (i >> 16);
+    }
 
     public static short shortFromIntB(int i)
-    { return (short) (i & MAX_SHORT); }
+    {
+        return (short) (i & MAX_SHORT);
+    }
 
     //Byte
     public static short bytesToShort(int a, int b)
-    { return (short) (((a & MAX_BYTE) << 8) | (b & MAX_BYTE)); }
+    {
+        return (short) (((a & MAX_BYTE) << 8) | (b & MAX_BYTE));
+    }
 
     public static byte byteFromShortA(short s)
-    { return (byte) ((s >> 8) & MAX_BYTE); }
+    {
+        return (byte) ((s >> 8) & MAX_BYTE);
+    }
 
     public static byte byteFromShortB(short s)
-    { return (byte) (s & MAX_BYTE); }
+    {
+        return (byte) (s & MAX_BYTE);
+    }
 
     // - //
 
@@ -107,7 +141,10 @@ public class Bits
 
     public static List<UUID> toUUIDList(byte[] b)
     {
-        if(b == null || b.length == 0) { return new ArrayList<>(); }
+        if(b == null || b.length == 0)
+        {
+            return new ArrayList<>();
+        }
         List<UUID> list = new ArrayList<>(b.length / 16);
 
         for(int i = 0; i < b.length; i += 16)

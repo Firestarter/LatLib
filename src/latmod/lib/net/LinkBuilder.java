@@ -9,7 +9,9 @@ public class LinkBuilder
     private HashMap<String, Object> args;
 
     public LinkBuilder(String init)
-    { base = new StringBuilder(init); }
+    {
+        base = new StringBuilder(init);
+    }
 
     public LinkBuilder append(String s)
     {
@@ -19,7 +21,10 @@ public class LinkBuilder
 
     public LinkBuilder put(String s, Object o)
     {
-        if(args == null) { args = new HashMap<>(); }
+        if(args == null)
+        {
+            args = new HashMap<>();
+        }
         args.put(s, o);
         return this;
     }

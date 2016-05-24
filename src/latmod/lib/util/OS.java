@@ -13,11 +13,23 @@ public enum OS
     private static OS get()
     {
         String s = System.getProperty("os.name");
-        if(s == null || s.isEmpty()) { return OTHER; }
+        if(s == null || s.isEmpty())
+        {
+            return OTHER;
+        }
         s = s.toLowerCase();
-        if(s.contains("win")) { return WINDOWS; }
-        else if(s.contains("mac")) { return OSX; }
-        else if(s.contains("linux") || s.contains("unix")) { return LINUX; }
+        if(s.contains("win"))
+        {
+            return WINDOWS;
+        }
+        else if(s.contains("mac"))
+        {
+            return OSX;
+        }
+        else if(s.contains("linux") || s.contains("unix"))
+        {
+            return LINUX;
+        }
         return OTHER;
     }
 }

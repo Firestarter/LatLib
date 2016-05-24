@@ -4,10 +4,14 @@ public class Pos2I
 {
     public int x, y;
 
-    public Pos2I() { }
+    public Pos2I()
+    {
+    }
 
     public Pos2I(int px, int py)
-    { set(px, py); }
+    {
+        set(px, py);
+    }
 
     public void set(int px, int py)
     {
@@ -16,23 +20,35 @@ public class Pos2I
     }
 
     public Pos2D toPos2D()
-    { return new Pos2D(x, y); }
+    {
+        return new Pos2D(x, y);
+    }
 
     @Override
     public int hashCode()
-    { return x * 31 + y; }
+    {
+        return x * 31 + y;
+    }
 
     public boolean equalsPos(Pos2I o)
-    { return o.x == x && o.y == y; }
+    {
+        return o.x == x && o.y == y;
+    }
 
     @Override
     public String toString()
-    { return "[" + x + ',' + ' ' + y + ']'; }
+    {
+        return "[" + x + ',' + ' ' + y + ']';
+    }
 
     @Override
     public boolean equals(Object o)
-    { return o != null && (o == this || equalsPos((Pos2I) o)); }
+    {
+        return o != null && (o == this || equalsPos((Pos2I) o));
+    }
 
     public Pos2I copy()
-    { return new Pos2I(x, y); }
+    {
+        return new Pos2I(x, y);
+    }
 }

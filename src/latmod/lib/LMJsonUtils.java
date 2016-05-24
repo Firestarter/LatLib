@@ -45,29 +45,39 @@ public class LMJsonUtils
                 @SuppressWarnings("unchecked")
                 @Override
                 public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException
-                { return (T) gson.fromJson(json, typeOfT); }
+                {
+                    return (T) gson.fromJson(json, typeOfT);
+                }
             };
 
             serializationContext = new JsonSerializationContext()
             {
                 @Override
                 public JsonElement serialize(Object src)
-                { return gson.toJsonTree(src); }
+                {
+                    return gson.toJsonTree(src);
+                }
 
                 @Override
                 public JsonElement serialize(Object src, Type typeOfSrc)
-                { return gson.toJsonTree(src, typeOfSrc); }
+                {
+                    return gson.toJsonTree(src, typeOfSrc);
+                }
             };
 
             prettySerializationContext = new JsonSerializationContext()
             {
                 @Override
                 public JsonElement serialize(Object src)
-                { return gson_pretty.toJsonTree(src); }
+                {
+                    return gson_pretty.toJsonTree(src);
+                }
 
                 @Override
                 public JsonElement serialize(Object src, Type typeOfSrc)
-                { return gson_pretty.toJsonTree(src, typeOfSrc); }
+                {
+                    return gson_pretty.toJsonTree(src, typeOfSrc);
+                }
             };
         }
 
@@ -76,13 +86,19 @@ public class LMJsonUtils
 
     public static String toJson(Gson gson, JsonElement e)
     {
-        if(e == null) { return null; }
+        if(e == null)
+        {
+            return null;
+        }
         return gson.toJson(e);
     }
 
     public static boolean toJson(Gson gson, File f, JsonElement o)
     {
-        if(o == null) { return false; }
+        if(o == null)
+        {
+            return false;
+        }
 
         try
         {
@@ -99,28 +115,41 @@ public class LMJsonUtils
     }
 
     public static String toJson(JsonElement o)
-    { return toJson(getGson(false), o); }
+    {
+        return toJson(getGson(false), o);
+    }
 
     public static boolean toJson(File f, JsonElement o)
-    { return toJson(getGson(true), f, o); }
+    {
+        return toJson(getGson(true), f, o);
+    }
 
     public static JsonElement fromJson(String json)
-    { return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
+    {
+        return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json);
+    }
 
     public static JsonElement fromJson(Reader json)
-    { return (json == null) ? JsonNull.INSTANCE : new JsonParser().parse(json); }
+    {
+        return (json == null) ? JsonNull.INSTANCE : new JsonParser().parse(json);
+    }
 
     public static JsonElement fromJson(File json)
     {
         try
         {
-            if(json == null || !json.exists()) { return JsonNull.INSTANCE; }
+            if(json == null || !json.exists())
+            {
+                return JsonNull.INSTANCE;
+            }
             BufferedReader reader = new BufferedReader(new FileReader(json));
             JsonElement e = fromJson(reader);
             reader.close();
             return e;
         }
-        catch(Exception ex) { }
+        catch(Exception ex)
+        {
+        }
         return JsonNull.INSTANCE;
     }
 
@@ -133,7 +162,9 @@ public class LMJsonUtils
             if(anA != null)
             {
                 for(int j = 0; j < anA.size(); j++)
-                { a1.add(anA.get(j)); }
+                {
+                    a1.add(anA.get(j));
+                }
             }
         }
 
@@ -144,24 +175,41 @@ public class LMJsonUtils
 
     public static JsonArray toIntArray(int[] ai)
     {
-        if(ai == null) { return null; }
+        if(ai == null)
+        {
+            return null;
+        }
         JsonArray a = new JsonArray();
-        if(ai.length == 0) { return a; }
-        for(int anAi : ai) { a.add(new JsonPrimitive(anAi)); }
+        if(ai.length == 0)
+        {
+            return a;
+        }
+        for(int anAi : ai)
+        {
+            a.add(new JsonPrimitive(anAi));
+        }
         return a;
     }
 
     public static int[] fromIntArray(JsonElement e)
     {
-        if(e == null || e.isJsonNull()) { return null; }
+        if(e == null || e.isJsonNull())
+        {
+            return null;
+        }
 
         if(e.isJsonArray())
         {
             JsonArray a = e.getAsJsonArray();
             int[] ai = new int[a.size()];
-            if(ai.length == 0) { return ai; }
+            if(ai.length == 0)
+            {
+                return ai;
+            }
             for(int i = 0; i < ai.length; i++)
-            { ai[i] = a.get(i).getAsInt(); }
+            {
+                ai[i] = a.get(i).getAsInt();
+            }
             return ai;
         }
 
@@ -170,24 +218,41 @@ public class LMJsonUtils
 
     public static JsonArray toNumberArray(Number[] ai)
     {
-        if(ai == null) { return null; }
+        if(ai == null)
+        {
+            return null;
+        }
         JsonArray a = new JsonArray();
-        if(ai.length == 0) { return a; }
-        for(Number anAi : ai) { a.add(new JsonPrimitive(anAi)); }
+        if(ai.length == 0)
+        {
+            return a;
+        }
+        for(Number anAi : ai)
+        {
+            a.add(new JsonPrimitive(anAi));
+        }
         return a;
     }
 
     public static Number[] fromNumberArray(JsonElement e)
     {
-        if(e == null || e.isJsonNull()) { return null; }
+        if(e == null || e.isJsonNull())
+        {
+            return null;
+        }
 
         if(e.isJsonArray())
         {
             JsonArray a = e.getAsJsonArray();
             Number[] ai = new Number[a.size()];
-            if(ai.length == 0) { return ai; }
+            if(ai.length == 0)
+            {
+                return ai;
+            }
             for(int i = 0; i < ai.length; i++)
-            { ai[i] = a.get(i).getAsNumber(); }
+            {
+                ai[i] = a.get(i).getAsNumber();
+            }
             return ai;
         }
 
@@ -196,21 +261,38 @@ public class LMJsonUtils
 
     public static JsonArray toStringArray(String[] ai)
     {
-        if(ai == null) { return null; }
+        if(ai == null)
+        {
+            return null;
+        }
         JsonArray a = new JsonArray();
-        if(ai.length == 0) { return a; }
-        for(String anAi : ai) { a.add(new JsonPrimitive(anAi)); }
+        if(ai.length == 0)
+        {
+            return a;
+        }
+        for(String anAi : ai)
+        {
+            a.add(new JsonPrimitive(anAi));
+        }
         return a;
     }
 
     public static String[] fromStringArray(JsonElement e)
     {
-        if(e == null || e.isJsonNull() || !e.isJsonArray()) { return null; }
+        if(e == null || e.isJsonNull() || !e.isJsonArray())
+        {
+            return null;
+        }
         JsonArray a = e.getAsJsonArray();
         String[] ai = new String[a.size()];
-        if(ai.length == 0) { return ai; }
+        if(ai.length == 0)
+        {
+            return ai;
+        }
         for(int i = 0; i < ai.length; i++)
-        { ai[i] = a.get(i).getAsString(); }
+        {
+            ai[i] = a.get(i).getAsString();
+        }
         return ai;
     }
 
@@ -223,7 +305,9 @@ public class LMJsonUtils
             if(anO != null)
             {
                 for(Map.Entry<String, JsonElement> e : anO.entrySet())
-                { o1.add(e.getKey(), e.getValue()); }
+                {
+                    o1.add(e.getKey(), e.getValue());
+                }
             }
         }
 
@@ -231,7 +315,9 @@ public class LMJsonUtils
     }
 
     public static void printPretty(JsonElement e)
-    { System.out.println(toJson(getGson(true), e)); }
+    {
+        System.out.println(toJson(getGson(true), e));
+    }
 
     public static List<JsonElement> deserializeText(List<String> text)
     {
@@ -257,13 +343,19 @@ public class LMJsonUtils
                     for(int i = 0; i < s.length(); i++)
                     {
                         char c = s.charAt(i);
-                        if(c == '{') { inc++; }
-                        else if(c == '}') { inc--; }
+                        if(c == '{')
+                        {
+                            inc++;
+                        }
+                        else if(c == '}')
+                        {
+                            inc--;
+                        }
                         sb.append(c);
 
                         if(inc == 0)
                         {
-                            System.out.println(":: " + sb.toString());
+                            System.out.println(":: " + sb);
                             elements.add(fromJson(sb.toString()));
                             sb.setLength(0);
                         }
