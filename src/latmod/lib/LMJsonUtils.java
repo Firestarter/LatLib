@@ -173,7 +173,7 @@ public class LMJsonUtils
 
     // -- //
 
-    public static JsonArray toIntArray(int[] ai)
+    public static JsonArray toIntArray(int... ai)
     {
         if(ai == null)
         {
@@ -259,7 +259,7 @@ public class LMJsonUtils
         return new Number[] {e.getAsNumber()};
     }
 
-    public static JsonArray toStringArray(String[] ai)
+    public static JsonArray toStringArray(String... ai)
     {
         if(ai == null)
         {
