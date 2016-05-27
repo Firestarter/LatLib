@@ -300,4 +300,16 @@ public class LMUtils
 
         return l;
     }
+
+    public static <T extends Enum<T>> T next(int current, T[] values, boolean forward)
+    {
+        if(forward)
+        {
+            return values[(current + 1) % values.length];
+        }
+        else
+        {
+            return values[(current - 1) & (values.length - 1)];
+        }
+    }
 }
