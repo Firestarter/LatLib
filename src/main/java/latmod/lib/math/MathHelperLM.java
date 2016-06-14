@@ -1,6 +1,4 @@
-package latmod.lib;
-
-import latmod.lib.util.VecLM;
+package latmod.lib.math;
 
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -10,8 +8,8 @@ import java.util.Random;
  */
 public class MathHelperLM
 {
-    public static final Random rand = new Random();
-    public static final DecimalFormat smallDoubleFormatter = new DecimalFormat("#0.00");
+    public static final Random RAND = new Random();
+    public static final DecimalFormat SMALL_DOUBLE_FORMATTER = new DecimalFormat("#0.00");
 
     public static final double RAD = Math.PI / 180D;
     public static final double DEG = 180D / Math.PI;
@@ -316,7 +314,7 @@ public class MathHelperLM
 
     public static String toSmallDouble(double d)
     {
-        return smallDoubleFormatter.format(d);
+        return SMALL_DOUBLE_FORMATTER.format(d);
     }
 
     public static double map(double val, double min1, double max1, double min2, double max2)
@@ -392,34 +390,10 @@ public class MathHelperLM
         return (int) (d / max * 100D);
     }
 
-    public static int[] flip(int[] i)
-    {
-        if(i == null)
-        {
-            return null;
-        }
-        int ai[] = new int[i.length];
-        for(int j = 0; j < i.length; j++)
-        {
-            ai[j] = i[(i.length - 1) - j];
-        }
-        return ai;
-    }
-
-    public static int[] getAllInts(int min, int size)
-    {
-        int[] ai = new int[size];
-        for(int i = 0; i < size; i++)
-        {
-            ai[i] = min + i;
-        }
-        return ai;
-    }
-
     public static double wrap(double i, double n)
     {
         i = i % n;
-        if(i < 0)
+        if(i < 0D)
         {
             i += n;
         }

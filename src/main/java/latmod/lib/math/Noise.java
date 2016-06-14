@@ -1,6 +1,4 @@
-package latmod.lib.util;
-
-import latmod.lib.MathHelperLM;
+package latmod.lib.math;
 
 import java.util.Random;
 
@@ -10,8 +8,6 @@ import java.util.Random;
  */
 public class Noise
 {
-    public static final Noise def = new Noise();
-
     private static final float perlin_cosTable[] = new float[720];
     private static final int perlin_TWOPI = 720;
     private static final int perlin_PI = perlin_TWOPI >> 1;

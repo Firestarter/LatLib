@@ -1,4 +1,4 @@
-package latmod.lib.net;
+package latmod.lib.io;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

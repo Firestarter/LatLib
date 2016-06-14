@@ -1,5 +1,6 @@
 package latmod.lib.annotations;
 
+import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -14,88 +15,75 @@ public class AnnotationHelper
 
     public interface Handler
     {
-        boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container);
+        boolean onAnnotationDeclared(@Nonnull Annotation a, @Nonnull IAnnotationContainer container);
     }
 
     static
     {
-        register(Info.class, new Handler()
+        register(Info.class, (a, container) ->
         {
-            @Override
-            public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
+            if(container instanceof IInfoContainer)
             {
-                if(container instanceof IInfoContainer)
+                String[] info = ((Info) a).value();
+                if(info.length == 0)
                 {
-                    String[] info = ((Info) a).value();
-                    if(info.length == 0)
-                    {
-                        info = null;
-                    }
-                    ((IInfoContainer) container).setInfo(info);
-                    return true;
+                    info = null;
                 }
-
-                return false;
+                ((IInfoContainer) container).setInfo(info);
+                return true;
             }
+
+            return false;
         });
 
-        register(NumberBounds.class, new Handler()
+        register(NumberBounds.class, (a, container) ->
         {
-            @Override
-            public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
+            if(container instanceof INumberBoundsContainer)
             {
-                if(container instanceof INumberBoundsContainer)
-                {
-                    NumberBounds b = (NumberBounds) a;
-                    ((INumberBoundsContainer) container).setBounds(b.min(), b.max());
-                    return true;
-                }
-
-                return false;
+                NumberBounds b = (NumberBounds) a;
+                ((INumberBoundsContainer) container).setBounds(b.min(), b.max());
+                return true;
             }
+
+            return false;
         });
 
-        register(Flags.class, new Handler()
+        register(Flags.class, (a, container) ->
         {
-            @Override
-            public boolean onAnnotationDeclared(Annotation a, IAnnotationContainer container)
+            if(container instanceof IFlagContainer)
             {
-                if(container instanceof IFlagContainer)
+                IFlagContainer fc = (IFlagContainer) container;
+
+                for(byte flag : ((Flags) a).value())
                 {
-                    IFlagContainer fc = (IFlagContainer) container;
-
-                    for(byte flag : ((Flags) a).value())
-                    {
-                        fc.setFlag(flag, true);
-                    }
-
-                    return true;
+                    fc.setFlag(flag, true);
                 }
 
-                return false;
+                return true;
             }
+
+            return false;
         });
     }
 
-    public static void register(Class<? extends Annotation> c, Handler h)
+    public static void register(@Nonnull Class<? extends Annotation> c, @Nonnull Handler h)
     {
         map.put(c, h);
     }
 
-    public static void inject(Field field, Object parent, Object obj) throws Exception
+    public static void inject(@Nonnull Field field, Object obj) throws Exception
     {
-        if(field == null || !(obj instanceof IAnnotationContainer))
+        if(obj instanceof IAnnotationContainer)
         {
-            return;
-        }
-        IAnnotationContainer container = (IAnnotationContainer) obj;
+            IAnnotationContainer container = (IAnnotationContainer) obj;
 
-        for(Annotation a : field.getDeclaredAnnotations())
-        {
-            Handler h = map.get(a.annotationType());
-            if(h != null)
+            for(Annotation a : field.getDeclaredAnnotations())
             {
-                h.onAnnotationDeclared(a, container);
+                Handler h = map.get(a.annotationType());
+                if(h != null)
+                {
+                    h.onAnnotationDeclared(a, container);
+                }
             }
         }
     }

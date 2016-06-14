@@ -1,4 +1,4 @@
-package latmod.lib.net;
+package latmod.lib.io;
 
 public enum RequestMethod
 {

@@ -1,5 +1,10 @@
-package latmod.lib;
+package latmod.lib.util;
 
+import latmod.lib.RemoveFilter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,6 +14,7 @@ import java.util.List;
 /**
  * Created by LatvianModder on 06.01.2016.
  */
+@ParametersAreNonnullByDefault
 public class LMListUtils
 {
     public static String toString(Collection<?> c)
@@ -42,12 +48,9 @@ public class LMListUtils
         return sb.toString();
     }
 
+    @Nonnull
     public static String[] toStringArray(Collection<?> c)
     {
-        if(c == null)
-        {
-            return null;
-        }
         String[] s = new String[c.size()];
         if(s.length == 0)
         {
@@ -61,12 +64,9 @@ public class LMListUtils
         return s;
     }
 
+    @Nonnull
     public static List<String> toStringList(Collection<?> c)
     {
-        if(c == null)
-        {
-            return null;
-        }
         List<String> list = new ArrayList<>(c.size());
         if(c.isEmpty())
         {
@@ -79,12 +79,9 @@ public class LMListUtils
         return list;
     }
 
+    @Nonnull
     public static int[] toHashCodeArray(Collection<?> c)
     {
-        if(c == null)
-        {
-            return null;
-        }
         if(c.isEmpty())
         {
             return new int[0];
@@ -100,10 +97,6 @@ public class LMListUtils
 
     public static void removeNullValues(List<?> list)
     {
-        if(list == null)
-        {
-            return;
-        }
         for(int i = list.size() - 1; i >= 0; i--)
         {
             if(list.get(i) == null)
@@ -113,24 +106,8 @@ public class LMListUtils
         }
     }
 
-    public static void removeAll(List<?> list, IntList l)
+    public static <E> void removeAll(List<E> list, @Nullable RemoveFilter<E> f)
     {
-        if(list == null)
-        {
-            return;
-        }
-        for(int i = 0; i < l.size(); i++)
-        {
-            list.remove(l.get(i));
-        }
-    }
-
-    public static <E> void removeAll(List<E> list, RemoveFilter<E> f)
-    {
-        if(list == null)
-        {
-            return;
-        }
         if(f == null)
         {
             list.clear();
@@ -147,16 +124,14 @@ public class LMListUtils
         }
     }
 
+    @Nonnull
     public static <E> List<E> sortToNew(Collection<E> c, Comparator<? super E> comparator)
     {
-        if(c == null)
+        if(c.isEmpty())
         {
-            return null;
+            return Collections.emptyList();
         }
-        else if(c.isEmpty())
-        {
-            return new ArrayList<>();
-        }
+
         List<E> list = new ArrayList<>(c.size());
         list.addAll(c);
         Collections.sort(list, comparator);
@@ -165,29 +140,28 @@ public class LMListUtils
 
     public static boolean trim(List<?> list, int t)
     {
-        if(list != null && list.size() > t)
+        if(list.size() > t)
         {
             while(list.size() > t)
             {
                 list.remove(t);
                 t--;
             }
+
             return true;
         }
 
         return false;
     }
 
+    @Nonnull
     public static <E> List<E> clone(Collection<E> c)
     {
-        if(c == null)
-        {
-            return null;
-        }
         if(c.isEmpty())
         {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
+
         ArrayList<E> list1 = new ArrayList<>(c.size());
         list1.addAll(c);
         return list1;
@@ -206,9 +180,10 @@ public class LMListUtils
         return false;
     }
 
+    @Nonnull
     public static <E> List<E> flip(List<E> list)
     {
-        if(list == null || list.isEmpty())
+        if(list.isEmpty())
         {
             return list;
         }

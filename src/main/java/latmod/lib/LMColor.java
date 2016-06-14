@@ -1,5 +1,8 @@
 package latmod.lib;
 
+import latmod.lib.math.MathHelperLM;
+import latmod.lib.util.LMColorUtils;
+
 /**
  * Created by LatvianModder on 08.01.2016.
  */

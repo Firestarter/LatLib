@@ -1,12 +1,14 @@
-package latmod.lib;
+package latmod.lib.io;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class ByteCompressor
 {
-    public static byte[] compress(byte[] data, int off, int len) throws Exception
+    @Nonnull
+    public static byte[] compress(@Nonnull byte[] data, int off, int len) throws Exception
     {
         Deflater d = new Deflater();
         d.setInput(data, off, len);
@@ -26,7 +28,8 @@ public class ByteCompressor
         return output;
     }
 
-    public static byte[] decompress(byte[] data, int off, int len) throws Exception
+    @Nonnull
+    public static byte[] decompress(@Nonnull byte[] data, int off, int len) throws Exception
     {
         Inflater i = new Inflater();
         i.setInput(data, off, len);

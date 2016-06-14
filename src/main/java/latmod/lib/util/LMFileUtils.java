@@ -1,5 +1,8 @@
-package latmod.lib;
+package latmod.lib.util;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,9 +13,11 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class LMFileUtils
 {
     public static final File latmodHomeFolder = getFolder();
@@ -25,23 +30,8 @@ public class LMFileUtils
     public static final double MB_D = KB_D * 1024D;
     public static final double GB_D = MB_D * 1024D;
 
-    public static final Comparator<File> fileComparator = new Comparator<File>()
-    {
-        @Override
-        public int compare(File o1, File o2)
-        {
-            return o1.getName().compareToIgnoreCase(o2.getName());
-        }
-    };
-
-    public static final Comparator<File> deepFileComparator = new Comparator<File>()
-    {
-        @Override
-        public int compare(File o1, File o2)
-        {
-            return o1.getAbsolutePath().compareToIgnoreCase(o2.getAbsolutePath());
-        }
-    };
+    public static final Comparator<File> FILE_COMPARATOR = (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName());
+    public static final Comparator<File> DEEP_FILE_COMPARATOR = (o1, o2) -> o1.getAbsolutePath().compareToIgnoreCase(o2.getAbsolutePath());
 
     private static File getFolder()
     {
@@ -49,9 +39,10 @@ public class LMFileUtils
         return new File(System.getProperty("user.home"), "/LatMod/");
     }
 
+    @Nonnull
     public static File newFile(File f)
     {
-        if(f == null || f.exists())
+        if(f.exists())
         {
             return f;
         }
@@ -88,11 +79,13 @@ public class LMFileUtils
         fw.close();
     }
 
+    @Nonnull
     public static List<String> load(File f) throws Exception
     {
         return LMStringUtils.readStringList(new FileInputStream(f));
     }
 
+    @Nonnull
     public static String loadAsText(File f) throws Exception
     {
         return LMStringUtils.readString(new FileInputStream(f));
@@ -111,18 +104,19 @@ public class LMFileUtils
         }
         catch(Exception e)
         {
+            return false;
         }
-        return false;
     }
 
+    @Nonnull
     public static List<File> listAll(File f)
     {
-        ArrayList<File> l = new ArrayList<>();
+        List<File> l = new ArrayList<>();
         addAllFiles(l, f);
         return l;
     }
 
-    private static void addAllFiles(ArrayList<File> l, File f)
+    public static void addAllFiles(Collection<File> l, File f)
     {
         if(f.isDirectory())
         {
@@ -144,7 +138,7 @@ public class LMFileUtils
 
     public static long getSize(File f)
     {
-        if(f == null || !f.exists())
+        if(!f.exists())
         {
             return 0L;
         }
@@ -168,6 +162,7 @@ public class LMFileUtils
         return 0L;
     }
 
+    @Nonnull
     public static String getSizeS(double b)
     {
         if(b >= GB_D)
@@ -192,56 +187,39 @@ public class LMFileUtils
         return b + "B";
     }
 
+    @Nonnull
     public static String getSizeS(File f)
     {
         return getSizeS(getSize(f));
     }
 
-    @SuppressWarnings("resource")
-    public static Exception copyFile(File src, File dst)
+    public static void copyFile(File src, File dst) throws Exception
     {
-        if(src != null && dst != null && src.exists() && !src.equals(dst))
+        if(src.exists() && !src.equals(dst))
         {
             if(src.isDirectory() && dst.isDirectory())
             {
                 for(File f : listAll(src))
                 {
                     File dst1 = new File(dst.getAbsolutePath() + File.separatorChar + (f.getAbsolutePath().replace(src.getAbsolutePath(), "")));
-                    Exception e = copyFile(f, dst1);
-                    if(e != null)
-                    {
-                        return e;
-                    }
+                    copyFile(f, dst1);
                 }
-
-                return null;
             }
-
-            dst = newFile(dst);
-
-            FileChannel srcC, dstC;
-
-            try
+            else
             {
-                srcC = new FileInputStream(src).getChannel();
-                dstC = new FileOutputStream(dst).getChannel();
+                dst = newFile(dst);
+                FileChannel srcC = new FileInputStream(src).getChannel();
+                FileChannel dstC = new FileOutputStream(dst).getChannel();
                 dstC.transferFrom(srcC, 0L, srcC.size());
                 srcC.close();
                 dstC.close();
-                return null;
-            }
-            catch(Exception e)
-            {
-                return e;
             }
         }
-
-        return null;
     }
 
     public static boolean delete(File f)
     {
-        if(f == null || !f.exists())
+        if(!f.exists())
         {
             return false;
         }
@@ -257,14 +235,16 @@ public class LMFileUtils
         return f.delete();
     }
 
+    @Nonnull
     public static File getSourceDirectory(Class<?> c)
     {
         return new File(c.getProtectionDomain().getCodeSource().getLocation().getFile());
     }
 
+    @Nullable
     public static String getRawFileName(File f)
     {
-        if(f == null || !f.exists())
+        if(!f.exists())
         {
             return null;
         }

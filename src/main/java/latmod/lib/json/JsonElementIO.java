@@ -5,8 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import latmod.lib.ByteIOStream;
+import latmod.lib.io.ByteIOStream;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,43 +17,20 @@ import java.util.Set;
  */
 public class JsonElementIO
 {
-    public enum JsonID
-    {
-        NULL,
-        ARRAY,
-        OBJECT,
-        STRING,
-        BOOL,
-        BYTE,
-        SHORT,
-        INT,
-        LONG,
-        FLOAT,
-        DOUBLE;
-
-        public final byte ID;
-        public final String name;
-
-        JsonID()
-        {
-            ID = (byte) ordinal();
-            name = name().toLowerCase();
-        }
-    }
-
-    public static JsonID getID(JsonElement e)
+    @Nonnull
+    public static EnumJsonID getID(@Nullable JsonElement e)
     {
         if(e == null || e.isJsonNull())
         {
-            return JsonID.NULL;
+            return EnumJsonID.NULL;
         }
         else if(e.isJsonArray())
         {
-            return JsonID.ARRAY;
+            return EnumJsonID.ARRAY;
         }
         else if(e.isJsonObject())
         {
-            return JsonID.OBJECT;
+            return EnumJsonID.OBJECT;
         }
         else
         {
@@ -59,11 +38,11 @@ public class JsonElementIO
 
             if(p.isString())
             {
-                return JsonID.STRING;
+                return EnumJsonID.STRING;
             }
             else if(p.isBoolean())
             {
-                return JsonID.BOOL;
+                return EnumJsonID.BOOL;
             }
             else
             {
@@ -73,39 +52,40 @@ public class JsonElementIO
 
                 if(n instanceof Integer)
                 {
-                    return JsonID.INT;
+                    return EnumJsonID.INT;
                 }
                 else if(n instanceof Byte)
                 {
-                    return JsonID.BYTE;
+                    return EnumJsonID.BYTE;
                 }
                 else if(n instanceof Short)
                 {
-                    return JsonID.SHORT;
+                    return EnumJsonID.SHORT;
                 }
                 else if(n instanceof Long)
                 {
-                    return JsonID.LONG;
+                    return EnumJsonID.LONG;
                 }
                 else if(n instanceof Float)
                 {
-                    return JsonID.FLOAT;
+                    return EnumJsonID.FLOAT;
                 }
                 else if(n instanceof Double)
                 {
-                    return JsonID.DOUBLE;
+                    return EnumJsonID.DOUBLE;
                 }
                 else
                 {
-                    return JsonID.NULL;
+                    return EnumJsonID.NULL;
                 }
             }
         }
     }
 
-    public static JsonElement read(ByteIOStream io)
+    @Nonnull
+    public static JsonElement read(@Nonnull ByteIOStream io)
     {
-        switch(JsonID.values()[io.readByte()])
+        switch(EnumJsonID.values()[io.readByte()])
         {
             case NULL:
                 return JsonNull.INSTANCE;
@@ -129,13 +109,18 @@ public class JsonElementIO
                 for(int i = 0; i < s; i++)
                 {
                     String key = io.readUTF();
-                    o.add(key, read(io));
+
+                    if(key != null)
+                    {
+                        o.add(key, read(io));
+                    }
                 }
 
                 return o;
             }
             case STRING:
-                return new JsonPrimitive(io.readUTF());
+                String s = io.readUTF();
+                return s == null ? JsonNull.INSTANCE : new JsonPrimitive(s);
             case BOOL:
                 return new JsonPrimitive(io.readBoolean());
             case BYTE:
@@ -155,15 +140,15 @@ public class JsonElementIO
         return JsonNull.INSTANCE;
     }
 
-    public static void write(ByteIOStream io, JsonElement e)
+    public static void write(@Nonnull ByteIOStream io, @Nullable JsonElement e)
     {
         if(e == null || e.isJsonNull())
         {
-            io.writeByte(JsonID.NULL.ID);
+            io.writeByte(EnumJsonID.NULL.ID);
         }
         else if(e.isJsonArray())
         {
-            io.writeByte(JsonID.ARRAY.ID);
+            io.writeByte(EnumJsonID.ARRAY.ID);
 
             JsonArray a = e.getAsJsonArray();
             int s = a.size();
@@ -176,7 +161,7 @@ public class JsonElementIO
         }
         else if(e.isJsonObject())
         {
-            io.writeByte(JsonID.OBJECT.ID);
+            io.writeByte(EnumJsonID.OBJECT.ID);
 
             Set<Map.Entry<String, JsonElement>> set = e.getAsJsonObject().entrySet();
             io.writeInt(set.size());
@@ -193,12 +178,12 @@ public class JsonElementIO
 
             if(p.isString())
             {
-                io.writeByte(JsonID.STRING.ID);
+                io.writeByte(EnumJsonID.STRING.ID);
                 io.writeUTF(p.getAsString());
             }
             else if(p.isBoolean())
             {
-                io.writeByte(JsonID.BOOL.ID);
+                io.writeByte(EnumJsonID.BOOL.ID);
                 io.writeBoolean(p.getAsBoolean());
             }
             else
@@ -209,37 +194,37 @@ public class JsonElementIO
 
                 if(n instanceof Integer)
                 {
-                    io.writeByte(JsonID.INT.ID);
+                    io.writeByte(EnumJsonID.INT.ID);
                     io.writeInt(n.intValue());
                 }
                 else if(n instanceof Byte)
                 {
-                    io.writeByte(JsonID.BYTE.ID);
+                    io.writeByte(EnumJsonID.BYTE.ID);
                     io.writeByte(n.byteValue());
                 }
                 else if(n instanceof Short)
                 {
-                    io.writeByte(JsonID.SHORT.ID);
+                    io.writeByte(EnumJsonID.SHORT.ID);
                     io.writeShort(n.shortValue());
                 }
                 else if(n instanceof Long)
                 {
-                    io.writeByte(JsonID.LONG.ID);
+                    io.writeByte(EnumJsonID.LONG.ID);
                     io.writeLong(n.longValue());
                 }
                 else if(n instanceof Float)
                 {
-                    io.writeByte(JsonID.FLOAT.ID);
+                    io.writeByte(EnumJsonID.FLOAT.ID);
                     io.writeFloat(n.floatValue());
                 }
                 else if(n instanceof Double)
                 {
-                    io.writeByte(JsonID.DOUBLE.ID);
+                    io.writeByte(EnumJsonID.DOUBLE.ID);
                     io.writeDouble(n.doubleValue());
                 }
                 else
                 {
-                    io.writeByte(JsonID.NULL.ID);
+                    io.writeByte(EnumJsonID.NULL.ID);
                 }
             }
         }

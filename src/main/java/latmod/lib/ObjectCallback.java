@@ -1,5 +1,8 @@
 package latmod.lib;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Created by LatvianModder on 30.05.2016.
  */
@@ -7,7 +10,7 @@ public class ObjectCallback
 {
     public interface Handler
     {
-        void onCallback(ObjectCallback c);
+        void onCallback(@Nonnull ObjectCallback c);
     }
 
     public final Object ID;
@@ -15,7 +18,7 @@ public class ObjectCallback
     public final boolean close;
     public final Object object;
 
-    public ObjectCallback(Object id, boolean s, boolean c, Object o)
+    public ObjectCallback(@Nullable Object id, boolean s, boolean c, @Nullable Object o)
     {
         ID = id;
         set = s;

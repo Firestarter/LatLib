@@ -1,28 +1,32 @@
-package latmod.lib.util;
+package latmod.lib;
 
-import latmod.lib.IIDObject;
-import latmod.lib.LMUtils;
+import latmod.lib.util.LMUtils;
+
+import javax.annotation.Nonnull;
 
 public class FinalIDObject implements IIDObject
 {
     private final String ID;
 
-    public FinalIDObject(String id)
+    public FinalIDObject(@Nonnull String id)
     {
-        if(id == null || id.isEmpty())
+        if(id.isEmpty())
         {
-            throw new NullPointerException("ID can't be null!");
+            throw new NullPointerException("ID can't be empty!");
         }
+
         ID = id;
     }
 
     @Override
+    @Nonnull
     public final String getID()
     {
         return ID;
     }
 
     @Override
+    @Nonnull
     public String toString()
     {
         return ID;

@@ -1,5 +1,10 @@
 package latmod.lib;
 
+import com.sun.istack.internal.Nullable;
+import latmod.lib.util.LMColorUtils;
+import latmod.lib.util.LMUtils;
+
+import javax.annotation.Nonnull;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -15,13 +20,13 @@ public class PixelBuffer
         pixels = new int[w * h];
     }
 
-    public PixelBuffer(BufferedImage img)
+    public PixelBuffer(@Nonnull BufferedImage img)
     {
         this(img.getWidth(), img.getHeight());
         img.getRGB(0, 0, width, height, pixels, 0, width);
     }
 
-    public void setPixels(int[] rgbArray)
+    public void setPixels(@Nonnull int[] rgbArray)
     {
         if(rgbArray.length == pixels.length)
         {
@@ -39,7 +44,7 @@ public class PixelBuffer
         return pixels[x + y * width];
     }
 
-    public void setRGB(int startX, int startY, int w, int h, int[] rgbArray)
+    public void setRGB(int startX, int startY, int w, int h, @Nonnull int[] rgbArray)
     {
         int off = -1;
         for(int y = startY; y < startY + h; y++)
@@ -51,12 +56,13 @@ public class PixelBuffer
         }
     }
 
-    public void setRGB(int startX, int startY, PixelBuffer buffer)
+    public void setRGB(int startX, int startY, @Nonnull PixelBuffer buffer)
     {
         setRGB(startX, startY, buffer.width, buffer.height, buffer.pixels);
     }
 
-    public int[] getRGB(int startX, int startY, int w, int h, int[] rgbArray)
+    @Nonnull
+    public int[] getRGB(int startX, int startY, int w, int h, @Nullable int[] rgbArray)
     {
         if(rgbArray == null || rgbArray.length != w * h)
         {
@@ -131,6 +137,7 @@ public class PixelBuffer
         return LMUtils.hashCode(width, height, pixels);
     }
 
+    @Nonnull
     public PixelBuffer copy()
     {
         PixelBuffer b = new PixelBuffer(width, height);
@@ -138,6 +145,7 @@ public class PixelBuffer
         return b;
     }
 
+    @Nonnull
     public PixelBuffer getSubimage(int x, int y, int w, int h)
     {
         PixelBuffer b = new PixelBuffer(w, h);

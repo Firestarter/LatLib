@@ -3,6 +3,8 @@ package latmod.lib;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Calendar;
 
 public final class Time implements Comparable<Time>
@@ -15,7 +17,7 @@ public final class Time implements Comparable<Time>
     public final int month;
     public final int year;
 
-    private Time(Calendar c)
+    private Time(@Nonnull Calendar c)
     {
         millis = c.getTimeInMillis();
         seconds = c.get(Calendar.SECOND);
@@ -48,7 +50,7 @@ public final class Time implements Comparable<Time>
         sb.append(i);
     }
 
-    public static Time get(Calendar c)
+    public static Time get(@Nonnull Calendar c)
     {
         return new Time(c);
     }
@@ -73,13 +75,15 @@ public final class Time implements Comparable<Time>
         return get(Calendar.getInstance());
     }
 
-    public static Time deserialize(JsonElement e)
+    @Nullable
+    public static Time deserialize(@Nonnull JsonElement e)
     {
-        if(e == null || !e.isJsonPrimitive())
+        if(e.isJsonPrimitive())
         {
-            return null;
+            return get(e.getAsLong());
         }
-        return get(e.getAsLong());
+
+        return null;
     }
 
     public boolean equalsTime(long t)
@@ -120,7 +124,7 @@ public final class Time implements Comparable<Time>
     }
 
     @Override
-    public int compareTo(Time o)
+    public int compareTo(@Nonnull Time o)
     {
         return Long.compare(millis, o.millis);
     }

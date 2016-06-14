@@ -1,12 +1,15 @@
-package latmod.lib;
+package latmod.lib.math;
 
-import java.util.Arrays;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNullableByDefault;
 
 /**
  * Made by LatvianModder
  */
+@ParametersAreNullableByDefault
 public class Converter
 {
+    @Nullable
     public static int[] toInts(byte[] b)
     {
         if(b == null)
@@ -21,6 +24,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static int[] toInts(short[] b)
     {
         if(b == null)
@@ -35,6 +39,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static byte[] toBytes(int[] b)
     {
         if(b == null)
@@ -49,6 +54,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static Integer[] fromInts(int[] i)
     {
         if(i == null)
@@ -63,6 +69,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static int[] toInts(Integer[] i)
     {
         if(i == null)
@@ -77,6 +84,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static Float[] fromFloats(float[] i)
     {
         if(i == null)
@@ -91,6 +99,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static float[] toFloats(Float[] i)
     {
         if(i == null)
@@ -105,6 +114,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static Double[] fromDoubles(double[] i)
     {
         if(i == null)
@@ -119,6 +129,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static double[] toDoubles(Double[] i)
     {
         if(i == null)
@@ -133,6 +144,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static Byte[] fromBytes(byte[] i)
     {
         if(i == null)
@@ -147,6 +159,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static byte[] toBytes(Byte[] i)
     {
         if(i == null)
@@ -161,6 +174,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static float[] toFloats(double[] i)
     {
         if(i == null)
@@ -175,6 +189,7 @@ public class Converter
         return ai;
     }
 
+    @Nullable
     public static double[] toDoubles(float[] i)
     {
         if(i == null)
@@ -189,27 +204,6 @@ public class Converter
         return ai;
     }
 
-    public static void toBools(boolean[] bools, IntList idx, boolean isTrue)
-    {
-        Arrays.fill(bools, !isTrue);
-        for(int i = 0; i < idx.size(); i++)
-        {
-            bools[idx.get(i)] = isTrue;
-        }
-    }
-
-    public static void fromBools(boolean[] bools, IntList il, boolean isTrue)
-    {
-        il.clear();
-        for(int i = 0; i < bools.length; i++)
-        {
-            if(bools[i] == isTrue)
-            {
-                il.add(i);
-            }
-        }
-    }
-
     public static boolean canParseInt(String s)
     {
         try
@@ -219,8 +213,8 @@ public class Converter
         }
         catch(Exception e)
         {
+            return false;
         }
-        return false;
     }
 
     public static boolean canParseDouble(String s)
@@ -232,8 +226,8 @@ public class Converter
         }
         catch(Exception e)
         {
+            return false;
         }
-        return false;
     }
 
     public static int toInt(String text, int def)
@@ -244,17 +238,7 @@ public class Converter
         }
         catch(Exception e)
         {
+            return def;
         }
-        return def;
-    }
-
-    public static int nonNull(Integer i)
-    {
-        return (i == null) ? 0 : i;
-    }
-
-    public static double nonNull(Double d)
-    {
-        return (d == null) ? 0D : d;
     }
 }

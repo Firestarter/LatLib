@@ -1,5 +1,10 @@
-package latmod.lib;
+package latmod.lib.util;
 
+import latmod.lib.IIDObject;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
@@ -9,14 +14,17 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Made by LatvianModder
  */
+@ParametersAreNonnullByDefault
 public class LMUtils
 {
     // Class / Object //
@@ -24,23 +32,16 @@ public class LMUtils
     public static final Comparator<Package> PACKAGE_COMPARATOR = (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName());
     public static final Comparator<Object> ID_COMPARATOR = (o1, o2) -> LMUtils.getID(o1).compareToIgnoreCase(LMUtils.getID(o2));
 
-    public static <T> T convert(Object t)
+    @Nullable
+    public static <T> T convert(@Nullable Object t)
     {
-        if(t == null)
-        {
-            return null;
-        }
-        return (T) t;
+        return (t == null) ? null : (T) t;
     }
 
     @SuppressWarnings("all")
+    @Nonnull
     public static <E> E newObject(Class<?> c, Object... o) throws Exception
     {
-        if(c == null)
-        {
-            return null;
-        }
-
         if(o != null && o.length > 0)
         {
             Class<?>[] params = new Class<?>[o.length];
@@ -56,6 +57,7 @@ public class LMUtils
         return (E) c.newInstance();
     }
 
+    @Nonnull
     public static Package[] getAllPackages()
     {
         Package[] p = Package.getPackages();
@@ -63,21 +65,14 @@ public class LMUtils
         return p;
     }
 
-    public static String classpath(Class<?> c)
+    @Nonnull
+    public static Collection<Class<?>> addSubclasses(Class<?> c, Collection<Class<?>> al, boolean all)
     {
-        return (c == null) ? null : c.getName();
-    }
-
-    public static List<Class<?>> addSubclasses(Class<?> c, List<Class<?>> al, boolean all)
-    {
-        if(c == null)
-        {
-            return null;
-        }
         if(al == null)
         {
-            al = new ArrayList<>();
+            al = new HashSet<>();
         }
+
         List<Class<?>> al1 = new ArrayList<>();
         Collections.addAll(al1, c.getDeclaredClasses());
         if(all && !al1.isEmpty())
@@ -87,20 +82,17 @@ public class LMUtils
                 al.addAll(addSubclasses(anAl1, null, true));
             }
         }
+
         al.addAll(al1);
         return al;
     }
 
-    public static boolean areObjectsEqual(Object o1, Object o2, boolean allowNulls)
+    public static boolean areObjectsEqual(@Nullable Object o1, @Nullable Object o2, boolean allowNulls)
     {
-        if(o1 == null && o2 == null)
-        {
-            return allowNulls;
-        }
-        return !(o1 == null || o2 == null) && (o1 == o2 || o1.equals(o2));
+        return (o1 == null && o2 == null) ? allowNulls : (!(o1 == null || o2 == null) && (o1 == o2 || o1.equals(o2)));
     }
 
-    public static int hashCodeOf(Object o)
+    public static int hashCodeOf(@Nullable Object o)
     {
         return o == null ? 0 : o.hashCode();
     }
@@ -125,30 +117,25 @@ public class LMUtils
     {
         if(o == null || o.length == 0)
         {
-            return 0;
+            return 0L;
         }
-        if(o.length == 1)
+        else if(o.length == 1)
         {
             return hashCodeOf(o[0]);
         }
-        long h = 0L;
+
+        long h = 1L;
         for(Object anO : o)
         {
             h = h * 31L + hashCodeOf(anO);
         }
-        return h;
-    }
 
-    public static void throwException(Exception e) throws Exception
-    {
-        if(e != null)
-        {
-            throw e;
-        }
+        return h;
     }
 
     // Net //
 
+    @Nullable
     public static String getHostAddress()
     {
         try
@@ -157,10 +144,11 @@ public class LMUtils
         }
         catch(Exception e)
         {
+            return null;
         }
-        return null;
     }
 
+    @Nullable
     public static String getExternalAddress()
     {
         try
@@ -169,8 +157,8 @@ public class LMUtils
         }
         catch(Exception e)
         {
+            return null;
         }
-        return null;
     }
 
     // Misc //
@@ -200,7 +188,7 @@ public class LMUtils
         }
     }
 
-    public static String getID(Object o)
+    public static String getID(@Nullable Object o)
     {
         if(o == null)
         {
@@ -216,30 +204,22 @@ public class LMUtils
         }
     }
 
-    public static <T> T nonNull(T t)
+    public static String fromUUID(@Nullable UUID id)
     {
-        if(t == null)
+        if(id != null)
         {
-            throw new NullPointerException();
+            long msb = id.getMostSignificantBits();
+            long lsb = id.getLeastSignificantBits();
+            StringBuilder sb = new StringBuilder(32);
+            digitsUUID(sb, msb >> 32, 8);
+            digitsUUID(sb, msb >> 16, 4);
+            digitsUUID(sb, msb, 4);
+            digitsUUID(sb, lsb >> 48, 4);
+            digitsUUID(sb, lsb, 12);
+            return sb.toString();
         }
-        return t;
-    }
 
-    public static String fromUUID(UUID id)
-    {
-        if(id == null)
-        {
-            return null;
-        }
-        long msb = id.getMostSignificantBits();
-        long lsb = id.getLeastSignificantBits();
-        StringBuilder sb = new StringBuilder(32);
-        digitsUUID(sb, msb >> 32, 8);
-        digitsUUID(sb, msb >> 16, 4);
-        digitsUUID(sb, msb, 4);
-        digitsUUID(sb, lsb >> 48, 4);
-        digitsUUID(sb, lsb, 12);
-        return sb.toString();
+        return null;
     }
 
     private static void digitsUUID(StringBuilder sb, long val, int digits)
@@ -249,7 +229,7 @@ public class LMUtils
         sb.append(s, 1, s.length());
     }
 
-    public static UUID fromString(String s)
+    public static UUID fromString(@Nullable String s)
     {
         if(s == null || !(s.length() == 32 || s.length() == 36))
         {
@@ -283,7 +263,8 @@ public class LMUtils
         return null;
     }
 
-    public static <E> List<E> getObjects(Class<E> type, Class<?> fields, Object obj) throws IllegalAccessException
+    @Nonnull
+    public static <E> List<E> getObjects(@Nullable Class<E> type, Class<?> fields, @Nullable Object obj) throws IllegalAccessException
     {
         List<E> l = new ArrayList<>();
 
@@ -299,17 +280,5 @@ public class LMUtils
         }
 
         return l;
-    }
-
-    public static <T extends Enum<T>> T next(int current, T[] values, boolean forward)
-    {
-        if(forward)
-        {
-            return values[(current + 1) % values.length];
-        }
-        else
-        {
-            return values[(current - 1) & (values.length - 1)];
-        }
     }
 }

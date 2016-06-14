@@ -1,4 +1,4 @@
-package latmod.lib.util;
+package latmod.lib;
 
 public enum EnumEnabled
 {

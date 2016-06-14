@@ -1,4 +1,4 @@
-package latmod.lib.net;
+package latmod.lib.io;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 public class LinkBuilder
 {
     private final StringBuilder base;
-    private HashMap<String, Object> args;
+    private Map<String, Object> args;
 
     public LinkBuilder(String init)
     {

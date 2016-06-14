@@ -1,7 +1,6 @@
-package latmod.lib.util;
+package latmod.lib.math;
 
-import latmod.lib.MathHelperLM;
-
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -24,7 +23,7 @@ public final class VecLM
         z = nz;
     }
 
-    public VecLM(Random r, boolean sin)
+    public VecLM(@Nonnull Random r, boolean sin)
     {
         this(r.nextFloat(), r.nextFloat(), r.nextFloat());
         if(sin)
@@ -41,7 +40,7 @@ public final class VecLM
         z = nz;
     }
 
-    public void set(VecLM v)
+    public void set(@Nonnull VecLM v)
     {
         set(v.x, v.y, v.z);
     }
@@ -51,7 +50,7 @@ public final class VecLM
         set(x + ax, y + ay, z + az);
     }
 
-    public void add(VecLM v, double s)
+    public void add(@Nonnull VecLM v, double s)
     {
         add(v.x * s, v.y * s, v.z * s);
     }
@@ -63,7 +62,7 @@ public final class VecLM
         z *= sz;
     }
 
-    public void scale(VecLM v, double s)
+    public void scale(@Nonnull VecLM v, double s)
     {
         scale(v.x * s, v.y * s, v.z * s);
     }
@@ -89,11 +88,12 @@ public final class VecLM
         return (o instanceof VecLM && equalsPos((VecLM) o));
     }
 
-    public boolean equalsPos(VecLM v)
+    public boolean equalsPos(@Nonnull VecLM v)
     {
         return v.x == x && v.y == y && v.z == z;
     }
 
+    @Nonnull
     public VecLM copy()
     {
         return new VecLM(x, y, z);
@@ -154,20 +154,13 @@ public final class VecLM
 
     public double length()
     {
-        if(isNull())
-        {
-            return 0D;
-        }
-        return MathHelperLM.dist(0D, 0D, 0D, x, y, z);
+        return isNull() ? 0D : MathHelperLM.dist(0D, 0D, 0D, x, y, z);
     }
 
+    @Nonnull
     public VecLM normalize()
     {
         double d = length();
-        if(d == 0D)
-        {
-            return new VecLM(0D, 0D, 0D);
-        }
-        return new VecLM(x / d, y / d, z / d);
+        return (d == 0D) ? new VecLM(0D, 0D, 0D) : new VecLM(x / d, y / d, z / d);
     }
 }

@@ -1,4 +1,4 @@
-package latmod.lib.util;
+package latmod.lib;
 
 public enum OS
 {
@@ -8,7 +8,8 @@ public enum OS
     OTHER;
 
     public static final OS current = get();
-    public static final boolean is64 = System.getProperty("sun.arch.data.model").equals("64");
+    public static final String ARCH = System.getProperty("sun.arch.data.model");
+    public static final boolean IS_64_ARCH = ARCH.equals("64");
 
     private static OS get()
     {

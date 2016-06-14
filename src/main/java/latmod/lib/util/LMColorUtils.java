@@ -1,7 +1,11 @@
-package latmod.lib;
+package latmod.lib.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import latmod.lib.math.MathHelperLM;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class LMColorUtils
 {
@@ -29,17 +33,19 @@ public class LMColorUtils
         }
     }
 
+    @Nonnull
     public static JsonElement serialize(int col)
     {
         return new JsonPrimitive('#' + Integer.toHexString(col).toUpperCase());
     }
 
-    public static int deserialize(JsonElement e)
+    public static int deserialize(@Nullable JsonElement e)
     {
         if(e == null || !e.isJsonPrimitive())
         {
             return 0xFF000000;
         }
+
         return (int) Long.parseLong(e.getAsString().substring(1), 16);
     }
 
@@ -111,21 +117,20 @@ public class LMColorUtils
         return getRGBA(red, green, blue, getAlpha(c));
     }
 
-    public static void addHSB(int pixels[], float h, float s, float b)
+    public static void addHSB(@Nonnull int pixels[], float h, float s, float b)
     {
-        if(pixels == null || pixels.length == 0)
+        if(pixels.length > 0)
         {
-            return;
-        }
-        float[] hsb = new float[3];
+            float[] hsb = new float[3];
 
-        for(int i = 0; i < pixels.length; i++)
-        {
-            java.awt.Color.RGBtoHSB(getRed(pixels[i]), getGreen(pixels[i]), getBlue(pixels[i]), hsb);
-            hsb[0] += h;
-            hsb[1] = MathHelperLM.clampFloat(hsb[1] + s, 0F, 1F);
-            hsb[2] = MathHelperLM.clampFloat(hsb[2] + b, 0F, 1F);
-            pixels[i] = getRGBA(java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]), 255);
+            for(int i = 0; i < pixels.length; i++)
+            {
+                java.awt.Color.RGBtoHSB(getRed(pixels[i]), getGreen(pixels[i]), getBlue(pixels[i]), hsb);
+                hsb[0] += h;
+                hsb[1] = MathHelperLM.clampFloat(hsb[1] + s, 0F, 1F);
+                hsb[2] = MathHelperLM.clampFloat(hsb[2] + b, 0F, 1F);
+                pixels[i] = getRGBA(java.awt.Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]), 255);
+            }
         }
     }
 

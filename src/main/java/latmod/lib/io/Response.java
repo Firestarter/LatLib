@@ -1,9 +1,10 @@
-package latmod.lib.net;
+package latmod.lib.io;
 
 import com.google.gson.JsonElement;
-import latmod.lib.LMJsonUtils;
-import latmod.lib.LMStringUtils;
+import latmod.lib.json.LMJsonUtils;
+import latmod.lib.util.LMStringUtils;
 
+import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ public final class Response
     public final int code;
     public final InputStream stream;
 
-    public Response(RequestMethod m, long ms, int c, InputStream is)
+    public Response(@Nonnull RequestMethod m, long ms, int c, @Nonnull InputStream is)
     {
         method = m;
         millis = ms;
@@ -26,7 +27,7 @@ public final class Response
         stream = is;
     }
 
-    public Response(InputStream is)
+    public Response(@Nonnull InputStream is)
     {
         this(RequestMethod.SIMPLE_GET, 0L, 200, is);
     }
@@ -37,21 +38,25 @@ public final class Response
         return method + "-" + Integer.toString(code);
     }
 
+    @Nonnull
     public String asString() throws Exception
     {
         return LMStringUtils.readString(stream);
     }
 
+    @Nonnull
     public List<String> asStringList() throws Exception
     {
         return LMStringUtils.readStringList(stream);
     }
 
+    @Nonnull
     public JsonElement asJson() throws Exception
     {
         return LMJsonUtils.fromJson(new BufferedReader(new InputStreamReader(stream)));
     }
 
+    @Nonnull
     public BufferedImage asImage() throws Exception
     {
         return ImageIO.read(stream);

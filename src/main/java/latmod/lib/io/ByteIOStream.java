@@ -1,5 +1,9 @@
-package latmod.lib;
+package latmod.lib.io;
 
+import latmod.lib.util.LMStringUtils;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -165,7 +169,7 @@ public final class ByteIOStream implements DataInput, DataOutput
             }
 
             @Override
-            public void write(byte b[], int off, int len) throws IOException
+            public void write(@Nonnull byte b[], int off, int len) throws IOException
             {
                 ByteIOStream.this.write(b, off, len);
             }
@@ -185,7 +189,7 @@ public final class ByteIOStream implements DataInput, DataOutput
             }
 
             @Override
-            public int read(byte b[], int off, int len) throws IOException
+            public int read(@Nonnull byte b[], int off, int len) throws IOException
             {
                 ByteIOStream.this.readFully(b, off, len);
                 return len;
@@ -208,9 +212,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void readFully(byte[] b, int off, int len)
+    public void readFully(@Nonnull byte[] b, int off, int len)
     {
-        if(b == null || len == 0)
+        if(len == 0)
         {
             return;
         }
@@ -225,7 +229,7 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void readFully(byte[] b)
+    public void readFully(@Nonnull byte[] b)
     {
         readFully(b, 0, b.length);
     }
@@ -254,6 +258,7 @@ public final class ByteIOStream implements DataInput, DataOutput
         return (char) readUnsignedShort();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public String readUTF()
     {
@@ -334,9 +339,7 @@ public final class ByteIOStream implements DataInput, DataOutput
             }
         }
 
-        String s = new String(utf_chars, 0, cac);
-        utf_chars = null;
-        return s;
+        return new String(utf_chars, 0, cac);
     }
 
     @Deprecated
@@ -427,9 +430,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void write(byte[] b, int off, int len)
+    public void write(@Nonnull byte[] b, int off, int len)
     {
-        if(b == null || len == 0)
+        if(len == 0)
         {
             return;
         }
@@ -439,7 +442,7 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void write(byte[] b)
+    public void write(@Nonnull byte[] b)
     {
         write(b, 0, b.length);
     }
@@ -468,13 +471,8 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void writeUTF(String s)
+    public void writeUTF(@Nonnull String s)
     {
-        if(s == null)
-        {
-            writeShort(-1);
-            return;
-        }
         int sl = s.length();
         if(sl == 0)
         {
@@ -509,7 +507,7 @@ public final class ByteIOStream implements DataInput, DataOutput
         writeShort(l);
         expand(l);
 
-        int i = 0;
+        int i;
         for(i = 0; i < sl; i++)
         {
             c = s.charAt(i);
@@ -542,9 +540,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void writeBytes(String s)
+    public void writeBytes(@Nonnull String s)
     {
-        if(s == null || s.isEmpty())
+        if(s.isEmpty())
         {
             return;
         }
@@ -555,9 +553,9 @@ public final class ByteIOStream implements DataInput, DataOutput
     }
 
     @Override
-    public void writeChars(String s)
+    public void writeChars(@Nonnull String s)
     {
-        if(s == null || s.isEmpty())
+        if(s.isEmpty())
         {
             return;
         }
@@ -610,13 +608,17 @@ public final class ByteIOStream implements DataInput, DataOutput
         pos += 16;
     }
 
-    public void writeIntArray(int[] ai, ByteCount c)
+    public void writeIntArray(@Nullable int[] ai, ByteCount c)
     {
         int asize = (ai == null) ? -1 : ai.length;
         c.write(this, asize);
-        for(int i = 0; i < asize; i++)
+
+        if(ai != null)
         {
-            writeInt(ai[i]);
+            for(int i = 0; i < asize; i++)
+            {
+                writeInt(ai[i]);
+            }
         }
     }
 

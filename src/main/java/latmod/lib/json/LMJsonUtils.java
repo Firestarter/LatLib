@@ -1,4 +1,4 @@
-package latmod.lib;
+package latmod.lib.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,12 +6,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
+import latmod.lib.util.LMFileUtils;
+import latmod.lib.util.LMStringUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNullableByDefault;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,87 +23,73 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Type for Lists: new TypeToken<List<E>>() {}.getType()
  */
+@ParametersAreNullableByDefault
 public class LMJsonUtils
 {
-    public static JsonDeserializationContext deserializationContext;
-    public static JsonSerializationContext serializationContext, prettySerializationContext;
-    private static Gson gson = null;
-    private static Gson gson_pretty = null;
+    public static final JsonDeserializationContext DESERIALIZATION_CONTEXT;
+    public static final JsonSerializationContext SERIALIZATION_CONTEXT, PRETTY_SERIALIZATION_CONTEXT;
+    public static final Gson GSON;
+    public static final Gson GSON_PRETTY;
 
-    public static Gson getGson(boolean pretty)
+    static
     {
-        if(gson == null || gson_pretty == null)
+        GsonBuilder gb = new GsonBuilder();
+        GSON = gb.create();
+        gb.setPrettyPrinting();
+        GSON_PRETTY = gb.create();
+
+        DESERIALIZATION_CONTEXT = new JsonDeserializationContext()
         {
-            GsonBuilder gb = new GsonBuilder();
-            gson = gb.create();
-            gb.setPrettyPrinting();
-            gson_pretty = gb.create();
-
-            deserializationContext = new JsonDeserializationContext()
+            @Override
+            public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException
             {
-                @SuppressWarnings("unchecked")
-                @Override
-                public <T> T deserialize(JsonElement json, Type typeOfT) throws JsonParseException
-                {
-                    return (T) gson.fromJson(json, typeOfT);
-                }
-            };
+                return GSON.fromJson(json, typeOfT);
+            }
+        };
 
-            serializationContext = new JsonSerializationContext()
+        SERIALIZATION_CONTEXT = new JsonSerializationContext()
+        {
+            @Override
+            public JsonElement serialize(Object src)
             {
-                @Override
-                public JsonElement serialize(Object src)
-                {
-                    return gson.toJsonTree(src);
-                }
+                return GSON.toJsonTree(src);
+            }
 
-                @Override
-                public JsonElement serialize(Object src, Type typeOfSrc)
-                {
-                    return gson.toJsonTree(src, typeOfSrc);
-                }
-            };
-
-            prettySerializationContext = new JsonSerializationContext()
+            @Override
+            public JsonElement serialize(Object src, Type typeOfSrc)
             {
-                @Override
-                public JsonElement serialize(Object src)
-                {
-                    return gson_pretty.toJsonTree(src);
-                }
+                return GSON.toJsonTree(src, typeOfSrc);
+            }
+        };
 
-                @Override
-                public JsonElement serialize(Object src, Type typeOfSrc)
-                {
-                    return gson_pretty.toJsonTree(src, typeOfSrc);
-                }
-            };
-        }
+        PRETTY_SERIALIZATION_CONTEXT = new JsonSerializationContext()
+        {
+            @Override
+            public JsonElement serialize(Object src)
+            {
+                return GSON_PRETTY.toJsonTree(src);
+            }
 
-        return pretty ? gson_pretty : gson;
+            @Override
+            public JsonElement serialize(Object src, Type typeOfSrc)
+            {
+                return GSON_PRETTY.toJsonTree(src, typeOfSrc);
+            }
+        };
     }
 
-    public static String toJson(Gson gson, JsonElement e)
+    @Nonnull
+    public static String toJson(@Nonnull Gson gson, JsonElement e)
     {
-        if(e == null)
-        {
-            return null;
-        }
-        return gson.toJson(e);
+        return gson.toJson(e == null ? JsonNull.INSTANCE : e);
     }
 
-    public static boolean toJson(Gson gson, File f, JsonElement o)
+    public static boolean toJson(@Nonnull Gson gson, @Nonnull File f, JsonElement o)
     {
-        if(o == null)
-        {
-            return false;
-        }
-
         try
         {
             String s = toJson(gson, o);
@@ -114,26 +104,30 @@ public class LMJsonUtils
         return false;
     }
 
+    @Nonnull
     public static String toJson(JsonElement o)
     {
-        return toJson(getGson(false), o);
+        return toJson(GSON, o);
     }
 
-    public static boolean toJson(File f, JsonElement o)
+    public static boolean toJson(@Nonnull File f, JsonElement o)
     {
-        return toJson(getGson(true), f, o);
+        return toJson(GSON_PRETTY, f, o);
     }
 
+    @Nonnull
     public static JsonElement fromJson(String json)
     {
         return (json == null || json.isEmpty()) ? JsonNull.INSTANCE : new JsonParser().parse(json);
     }
 
+    @Nonnull
     public static JsonElement fromJson(Reader json)
     {
         return (json == null) ? JsonNull.INSTANCE : new JsonParser().parse(json);
     }
 
+    @Nonnull
     public static JsonElement fromJson(File json)
     {
         try
@@ -149,48 +143,35 @@ public class LMJsonUtils
         }
         catch(Exception ex)
         {
+            return JsonNull.INSTANCE;
         }
-        return JsonNull.INSTANCE;
-    }
-
-    public static JsonArray join(JsonArray... a)
-    {
-        JsonArray a1 = new JsonArray();
-
-        for(JsonArray anA : a)
-        {
-            if(anA != null)
-            {
-                for(int j = 0; j < anA.size(); j++)
-                {
-                    a1.add(anA.get(j));
-                }
-            }
-        }
-
-        return a1;
     }
 
     // -- //
 
-    public static JsonArray toIntArray(int... ai)
+    @Nonnull
+    public static JsonElement toIntArray(int... ai)
     {
         if(ai == null)
         {
-            return null;
+            return JsonNull.INSTANCE;
         }
+
         JsonArray a = new JsonArray();
         if(ai.length == 0)
         {
             return a;
         }
+
         for(int anAi : ai)
         {
             a.add(new JsonPrimitive(anAi));
         }
+
         return a;
     }
 
+    @Nullable
     public static int[] fromIntArray(JsonElement e)
     {
         if(e == null || e.isJsonNull())
@@ -216,24 +197,29 @@ public class LMJsonUtils
         return new int[] {e.getAsInt()};
     }
 
-    public static JsonArray toNumberArray(Number[] ai)
+    @Nonnull
+    public static JsonElement toNumberArray(Number[] ai)
     {
         if(ai == null)
         {
-            return null;
+            return JsonNull.INSTANCE;
         }
+
         JsonArray a = new JsonArray();
         if(ai.length == 0)
         {
             return a;
         }
+
         for(Number anAi : ai)
         {
             a.add(new JsonPrimitive(anAi));
         }
+
         return a;
     }
 
+    @Nullable
     public static Number[] fromNumberArray(JsonElement e)
     {
         if(e == null || e.isJsonNull())
@@ -259,24 +245,29 @@ public class LMJsonUtils
         return new Number[] {e.getAsNumber()};
     }
 
-    public static JsonArray toStringArray(String... ai)
+    @Nonnull
+    public static JsonElement toStringArray(String... ai)
     {
         if(ai == null)
         {
-            return null;
+            return JsonNull.INSTANCE;
         }
+
         JsonArray a = new JsonArray();
         if(ai.length == 0)
         {
             return a;
         }
+
         for(String anAi : ai)
         {
             a.add(new JsonPrimitive(anAi));
         }
+
         return a;
     }
 
+    @Nullable
     public static String[] fromStringArray(JsonElement e)
     {
         if(e == null || e.isJsonNull() || !e.isJsonArray())
@@ -296,32 +287,15 @@ public class LMJsonUtils
         return ai;
     }
 
-    public static JsonObject join(JsonObject... o)
-    {
-        JsonObject o1 = new JsonObject();
-
-        for(JsonObject anO : o)
-        {
-            if(anO != null)
-            {
-                for(Map.Entry<String, JsonElement> e : anO.entrySet())
-                {
-                    o1.add(e.getKey(), e.getValue());
-                }
-            }
-        }
-
-        return o1;
-    }
-
-    public static void printPretty(JsonElement e)
-    {
-        System.out.println(toJson(getGson(true), e));
-    }
-
+    @Nonnull
     public static List<JsonElement> deserializeText(List<String> text)
     {
         List<JsonElement> elements = new ArrayList<>();
+
+        if(text == null || text.isEmpty())
+        {
+            return elements;
+        }
 
         StringBuilder sb = new StringBuilder();
         int inc = 0;
