@@ -335,7 +335,7 @@ public class LMStringUtils
         StringBuilder sb = new StringBuilder();
         if(s.length == 1)
         {
-            return s[0];
+            return String.valueOf(s[0]);
         }
         for(int i = 0; i < s.length; i++)
         {
