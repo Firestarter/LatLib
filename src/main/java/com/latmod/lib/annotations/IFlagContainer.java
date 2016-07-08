@@ -5,7 +5,7 @@ package com.latmod.lib.annotations;
  */
 public interface IFlagContainer extends IAnnotationContainer
 {
-    void setFlag(byte flag, boolean b);
+    int getFlags();
 
-    boolean getFlag(byte flag);
+    void setFlags(int flags);
 }

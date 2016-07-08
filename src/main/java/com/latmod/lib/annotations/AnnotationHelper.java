@@ -53,12 +53,7 @@ public class AnnotationHelper
             if(container instanceof IFlagContainer)
             {
                 IFlagContainer fc = (IFlagContainer) container;
-
-                for(byte flag : ((Flags) a).value())
-                {
-                    fc.setFlag(flag, true);
-                }
-
+                fc.setFlags(((Flags) a).value());
                 return true;
             }
 

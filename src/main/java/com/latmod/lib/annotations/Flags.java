@@ -15,27 +15,27 @@ public @interface Flags
     /**
      * Will be synced with client
      */
-    byte SYNC = 0;
+    int SYNC = 1;
     /**
      * Will be hidden from config gui
      */
-    byte HIDDEN = 1;
+    int HIDDEN = 2;
     /**
      * Will be visible in config gui, but uneditable
      */
-    byte CANT_EDIT = 2;
+    int CANT_EDIT = 4;
     /**
      * Can add new config entries
      */
-    byte CAN_ADD = 3;
+    int CAN_ADD = 8;
     /**
      * Will be excluded from writing / reading from files
      */
-    byte EXCLUDED = 4;
+    int EXCLUDED = 16;
     /**
      * Use slider whenever that is available
      */
-    byte USE_SLIDER = 5;
+    int USE_SLIDER = 32;
 
-    byte[] value();
+    int value();
 }
