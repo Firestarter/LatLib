@@ -16,6 +16,23 @@ public class Bits
     private static final int MAX_SHORT = 0xFFFF;
     private static final long MAX_INT = 0xFFFFFFFFL;
 
+    public static boolean getFlag(int flags, int flag)
+    {
+        return (flags & flag) != 0;
+    }
+
+    public static int setFlag(int flags, int flag, boolean v)
+    {
+        if(v)
+        {
+            return flags | flag;
+        }
+        else
+        {
+            return flags & ~flag;
+        }
+    }
+
     public static int toInt(@Nonnull boolean[] b)
     {
         int d = 0;

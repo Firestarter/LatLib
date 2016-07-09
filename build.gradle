@@ -23,19 +23,28 @@ group = "com.latmod.latlib"
 version = "1.0.2"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
-mainClassName = 'com.Main'
+mainClassName = 'com.latmod.lib.Main'
 
 shadowJar {
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
     classifier = 'all'
 }
-build.dependsOn(shadowJar)
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.latmod.lib.Main'
+        attributes 'Main-Class': mainClassName
     }
 }
 
@@ -45,7 +54,11 @@ task sourceJar(type: Jar) {
     classifier = "sources"
 }
 
+/*
 task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
     classifier = "javadoc"
 }
+*/
+
+build.dependsOn(shadowJar, sourceJar/*, javadocJar*/)
